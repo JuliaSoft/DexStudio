@@ -2,6 +2,11 @@ package com.juliasoft.dexstudio.tree;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+/**
+ * Tree node
+ * @author Zanoncello Matteo
+ *
+ */
 @SuppressWarnings("serial")
 public class DexTreeNode extends DefaultMutableTreeNode implements Comparable<DexTreeNode>
 {

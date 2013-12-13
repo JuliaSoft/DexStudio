@@ -18,17 +18,20 @@ import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.dexstudio.DexFrame;
 
+/**
+ * Tree menu for the navigation
+ * @author Zanoncello Matteo
+ *
+ */
 @SuppressWarnings("serial")
 public class DexTree extends JScrollPane
 {
 	private JTree tree;
 	
+	/**
+	 * Constructor
+	 */
 	public DexTree()
-	{
-		initLayout();
-	}
-	
-	private void initLayout()
 	{
 		this.setPreferredSize(new Dimension(300, 600));
 		DexTreeRoot rootNode = new DexTreeRoot("<No dex file loaded>");
@@ -62,7 +65,6 @@ public class DexTree extends JScrollPane
         
         this.setViewportView(tree);
 	}
-
 	
 	private void mouseRightPressed(MouseEvent e)
 	{
@@ -102,7 +104,11 @@ public class DexTree extends JScrollPane
 		}
 	}
 	
-	
+	/**
+	 * Update the content of the tree
+	 * @param dexGen		The Amalia DexGen file reference
+	 * @param rootLabel		Name for the root node
+	 */
 	public void updateLayout(DexGen dexGen, String rootLabel)
 	{
 		DexTreeRoot rootNode = new DexTreeRoot(rootLabel);
@@ -113,16 +119,8 @@ public class DexTree extends JScrollPane
         treeModel.nodeStructureChanged(rootNode);
 	}
 	
-	public void updateLayout(String name)
-	{	
-		DexTreeRoot rootNode = new DexTreeRoot(name);
-        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
-        tree.setModel(treeModel);
-        treeModel.nodeStructureChanged(rootNode);
-	}
-	
 	/**
-	 * Returns an array of all the classes, methods and annotations nodes in the tree
+	 * Returns an array of all the class nodes in the tree
 	 * @return
 	 */
 	public ArrayList<DexTreeNode> getNodeArray()
@@ -133,11 +131,6 @@ public class DexTree extends JScrollPane
 		return nodes;
 	}
 	
-	/**
-	 * Returns an array of all the class,method and annotation nodes contained under the giver node
-	 * @param node
-	 * @param nodes
-	 */
 	private void getSubTreeNodeArray(DexTreeNode node, ArrayList<DexTreeNode> nodes)
 	{
 		if(node.getChildCount() == 0)
@@ -156,6 +149,11 @@ public class DexTree extends JScrollPane
 		
 	}
 	
+	/**
+	 * Return the ClassGen file of the specified Type
+	 * @param type		The specified Type
+	 * @return
+	 */
 	public ClassGen getClassGen(Type type)
 	{
 		DexTreeRoot root = (DexTreeRoot) tree.getModel().getRoot();

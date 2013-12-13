@@ -11,6 +11,12 @@ import javax.swing.tree.TreePath;
 
 import com.juliasoft.dexstudio.DexFrame;
 
+
+/**
+ * Popup menu of the tree
+ * @author Zanoncello Matteo
+ *
+ */
 @SuppressWarnings("serial")
 public class DexTreePopup extends JPopupMenu
 {
