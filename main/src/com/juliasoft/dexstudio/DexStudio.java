@@ -7,8 +7,9 @@ package com.juliasoft.dexstudio;
  */
 public class DexStudio
 {
-	public static void main(String[] args)
-	{
-		new DexFrame().openApk();
-	}
+        public static void main(String[] args)
+        {
+                new DexFrame().openApk();
+        }
 }
+
