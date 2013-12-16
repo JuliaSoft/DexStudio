@@ -38,8 +38,6 @@ public class DexFrame extends JFrame implements DexVisualizable
 	 */
 	public DexFrame()
 	{
-		super("DEXplorer");
-		
 		//Setting the layout
 		this.setLayout(new BorderLayout());
 		this.setBounds(100, 100, 1000, 600);

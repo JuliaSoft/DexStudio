@@ -78,9 +78,7 @@ public class DexMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
-				String str = JOptionPane.showInputDialog("LOG:");
-				((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)).log(str);
+				JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
 			}
 		});
 		
