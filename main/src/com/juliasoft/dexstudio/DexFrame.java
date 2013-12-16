@@ -13,6 +13,7 @@ import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
+import com.juliasoft.dexstudio.log.DexLog;
 import com.juliasoft.dexstudio.menu.DexMenu;
 import com.juliasoft.dexstudio.menu.DexOpenApk;
 import com.juliasoft.dexstudio.tab.DexTab;
@@ -30,6 +31,7 @@ public class DexFrame extends JFrame implements DexVisualizable
 {
 	private DexTree tree = new DexTree();
 	private DexTabManager tabManager = new DexTabManager();
+	private DexLog log = new DexLog();
 
 	/**
 	 * Constructor
@@ -43,12 +45,15 @@ public class DexFrame extends JFrame implements DexVisualizable
 		this.setBounds(100, 100, 1000, 600);
 		this.setResizable(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setTitle("DEXplorer");
-		this.setIconImage(new ImageIcon("imags/logo.png").getImage());
+		this.setTitle("DexStudio");
+		this.setIconImage(new ImageIcon("imgs/logo.png").getImage());
 		this.setJMenuBar(new DexMenu());
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tree, tabManager);
-		splitPane.setFocusable(false);
-		this.getContentPane().add(splitPane, BorderLayout.CENTER);
+		JSplitPane splitPane1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tree, tabManager);
+		splitPane1.setFocusable(false);
+		splitPane1.setPreferredSize(splitPane1.getMaximumSize());
+		JSplitPane splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPane1, log);
+		splitPane2.setFocusable(false);
+		this.getContentPane().add(splitPane2, BorderLayout.CENTER);
 		this.setVisible(true);
 		this.revalidate();
 	}
@@ -93,6 +98,15 @@ public class DexFrame extends JFrame implements DexVisualizable
 		else if(obj instanceof Annotation)
 			return new DexTab(this, (Annotation)obj);
 		return null;
+	}
+	
+	/**
+	 * Add a string in the logger console
+	 * @param str	The adding string
+	 */
+	public void log(String str)
+	{
+		log.log(str);
 	}
 	
 	/**

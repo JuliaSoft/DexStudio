@@ -78,17 +78,19 @@ public class DexMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
+				//JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
+				String str = JOptionPane.showInputDialog("LOG:");
+				((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)).log(str);
 			}
 		});
 		
-		DexMenuItem menuInfoAbout = new DexMenuItem("About DEXplorer");
+		DexMenuItem menuInfoAbout = new DexMenuItem("About DexStudio");
 		menuInfoAbout.setIcon(new ImageIcon("imgs/menu/info.png"));
 		menuInfoAbout.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(null, "DEXplorer v.1.0.0\n\nDeveloped by:\nAncona Eugenio\nZanoncello Matteo\n", "About DEXplorer", JOptionPane.PLAIN_MESSAGE, new ImageIcon("imgs/logo.png"));
+				JOptionPane.showMessageDialog(null, "DexStudio v.1.0.0\n\nDeveloped by:\nAncona Eugenio\nZanoncello Matteo\n", "About DEXplorer", JOptionPane.PLAIN_MESSAGE, new ImageIcon("imgs/logo.png"));
 			}
 		});
 		
