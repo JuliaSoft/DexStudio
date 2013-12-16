@@ -7,11 +7,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
+/**
+ * Logger console
+ * @author Zanoncello Matteo
+ *
+ */
 @SuppressWarnings("serial")
 public class DexLog extends JPanel
 {
-	JTextPane log = new JTextPane();
+	private JTextPane log = new JTextPane();
 	
+	/**
+	 * Constructor
+	 */
 	public DexLog()
 	{
 		super(new BorderLayout());
@@ -22,6 +30,10 @@ public class DexLog extends JPanel
 		this.setPreferredSize(this.getMinimumSize());
 	}
 	
+	/**
+	 * Append log string to the console
+	 * @param str
+	 */
 	public void log(String str)
 	{
 		if(log.getText() == "")

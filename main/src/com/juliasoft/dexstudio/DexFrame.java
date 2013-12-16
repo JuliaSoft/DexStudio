@@ -132,10 +132,4 @@ public class DexFrame extends JFrame implements DexVisualizable
 	{
 		return this.tree;
 	}
-	
-	public static void main(String[] args)
-	{
-		new DexFrame().openApk();
-	}
-
 }
