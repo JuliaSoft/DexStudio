@@ -98,7 +98,7 @@ public class DexTree extends JScrollPane
 				tree.expandPath(path);
 			}
 		}
-		else
+		else if(!(node instanceof DexTreeRoot) && !(node instanceof DexTreeField))
 		{
 			((DexFrame) SwingUtilities.getWindowAncestor(this)).changeSelectedTab(node.getUserObject());
 		}
