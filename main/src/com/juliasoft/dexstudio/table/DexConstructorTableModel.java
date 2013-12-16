@@ -1,19 +1,21 @@
 package com.juliasoft.dexstudio.table;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
+import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 
 public class DexConstructorTableModel implements TableModel
 {
 	private Object [][] data;
-	private String[] columnNames = { "Flags", "Signature" };
+	private String[] columnNames = { "Flags", "Signature", "Annotations"};
 	
 	public DexConstructorTableModel(ClassGen clazz)
 	{
@@ -34,6 +36,7 @@ public class DexConstructorTableModel implements TableModel
 			
 			data[i][0] = AccessFlag.decodeToHuman(meth.getFlags(), false);
 			data[i][1] = meth;
+			data[i][2] = new HashSet<Annotation>(meth.getAnnotations());
 			i++;
 		}
 		
@@ -63,6 +66,7 @@ public class DexConstructorTableModel implements TableModel
 		
 		case 0: return String.class;
 		case 1: return MethodGen.class;
+		case 2: return HashSet.class;
 		default: throw new IllegalArgumentException();
 		
 		
@@ -72,7 +76,7 @@ public class DexConstructorTableModel implements TableModel
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		
-		return (columnIndex == 1)? true : false;
+		return (columnIndex == 0)? false : true;
 	}
 
 	@Override

@@ -1,12 +1,15 @@
 package com.juliasoft.dexstudio.table;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
+import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.Type;
@@ -14,7 +17,7 @@ import com.juliasoft.amalia.dex.codegen.Type;
 public class DexFieldTableModel implements TableModel {
 
 	private Object[][] data;
-	private String[] columnNames = {"Flags", "Type", "Name"};
+	private String[] columnNames = {"Flags", "Type", "Name", "Annotations"};
 	
 	public DexFieldTableModel(ClassGen clazz){
 		
@@ -29,6 +32,7 @@ public class DexFieldTableModel implements TableModel {
 			data[i][0] = AccessFlag.decodeToHuman(field.getFlags(), true);
 			data[i][1] = field.getType();
 			data[i][2] = field.getName();
+			data[i][3] = new HashSet<Annotation>(field.getAnnotations());
 			
 			i++;
 			
@@ -48,6 +52,7 @@ public class DexFieldTableModel implements TableModel {
 		case 0: 
 		case 2: return String.class;
 		case 1: return Type.class;
+		case 3: return HashSet.class;
 		default: throw new IllegalArgumentException();
 		
 		}
@@ -75,7 +80,12 @@ public class DexFieldTableModel implements TableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		return (column == 1)? true : false;
+		switch (column){
+		case 1:
+		case 3: return true;
+		default: return false;
+		
+		}
 	}
 
 	@Override

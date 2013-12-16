@@ -3,6 +3,7 @@ package com.juliasoft.dexstudio.tab;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.InputEvent;
+import java.util.Collection;
 
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
@@ -10,6 +11,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
+import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.ParamGen;
@@ -34,6 +36,7 @@ public class DexMethodHeader extends JTextPane
 	private ClassGen[] params;
 	private MethodGen meth;
 	private ClassGen returnType;
+	private Annotation[] annotations;
 	
 	public DexMethodHeader(DexFrame frame, MethodGen meth)
 	{
@@ -60,8 +63,42 @@ public class DexMethodHeader extends JTextPane
 		
 		this.ownerClass = frame.getTree().getClassGen(meth.getOwnerClass());
 		
+		Collection<Annotation> anns = meth.getAnnotations();
+		
+		String annots;
+		
+		if(anns.isEmpty())
+		
+		annots = "";
+		
+		else{
+			
+			annotations = new Annotation[anns.size()];
+			
+			int i=0;
+			for(Annotation ann : anns)
+				
+				annotations[i++] = ann;
+			
+			annots = "<b>annotations:</b> ";
+			
+			boolean separator = false;
+			for(i=0; i < annotations.length; i++){
+				
+				if(separator)
+					
+					annots += ", ";
+				else 
+					separator = true;
+				
+				annots += "<a href='ann"+ i +"'>"  + "@" + Library.printType(annotations[i].getType())+ "</a>";
+				
+			}
+				
+		}
+		
 		String clazz = "<div class='description'>" + pakName + "." + ((ownerClass != null)?"<a href=\"ownerclass\">":"") + shortName +((ownerClass != null)?"</a>":"") + "</div>";
-		String description = "<div class='class'><b>" + AccessFlag.decodeToHuman(meth.getFlags(), false)+ "</b> " + printLinkSignature() + "</div>";
+		String description = "<div class='class'><b>" + AccessFlag.decodeToHuman(meth.getFlags(), false)+ "</b> " + printLinkSignature() + "<br />"+ annots + "</div>";
 		
 		this.setContentType("text/html");
 		this.setText(htmlFormat + clazz + description + closeFormat);
@@ -97,8 +134,14 @@ public class DexMethodHeader extends JTextPane
 						((DexFrame) SwingUtilities.getWindowAncestor(DexMethodHeader.this)).changeSelectedTab(params[index]);
 						
 					}
+					
+					else if (code.matches("ann[0-9]+")){
 						
+						int index = Integer.parseInt(code.substring(3));
 						
+						((DexFrame) SwingUtilities.getWindowAncestor(DexMethodHeader.this)).changeSelectedTab(annotations[index]);
+						
+					}
 					
 				}
 				

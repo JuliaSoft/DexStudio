@@ -1,14 +1,15 @@
 package com.juliasoft.dexstudio.cell;
 
+import java.util.Collection;
+
 import javax.swing.JTextPane;
 
-import com.juliasoft.amalia.dex.codegen.ClassGen;
-import com.juliasoft.amalia.dex.codegen.Type;
+import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.utils.Library;
 
 @SuppressWarnings("serial")
-public class DexTypeCell extends JTextPane{
+public class DexAnnotationCell extends JTextPane{
 	
 	private final String fontSize = getFont().getSize() + "pt";
 	private final String color = "rgb("+getForeground().getRed() + ", "+getForeground().getGreen() + ", "+getForeground().getBlue() +")";
@@ -16,28 +17,42 @@ public class DexTypeCell extends JTextPane{
 	private final String htmlFormat = "<html><head><style type=\"text/css\">body{font-family:"+ fontName + "; font-weight:normal; font-size:"+ fontSize +"pt;color:" + color + ";}</style></head><body>";
 	private final String closeFormat = "</body></html>";
 	
-	private ClassGen clazz; 
+	private Annotation[] annots;
 	
-	public DexTypeCell(Type type, DexFrame frame){
+	public DexAnnotationCell(Collection<Annotation> annotations, DexFrame frame){
 		
 		super();
 		this.setContentType("text/html");
 		
+		if(annotations != null){
 		
-		clazz = frame.getTree().getClassGen(type);
-		
-		String text = ((clazz != null)?"<a href='type'>":"") + Library.printType(type)+ ((clazz != null)?"</a>" : "");
-		
-		this.setText(htmlFormat + text + closeFormat);
-		
+			annots = new Annotation[annotations.size()];
+				
+				
+			int i=0;
+			for(Annotation ann : annotations)
+				
+				annots[i++] = ann;
+			
+			String text = new String();
+			
+			
+			i=0;
+			for(Annotation ann : annotations){
+			
+				 text += ("<a href='ann"+ i +"'>" + "@" + Library.printType(ann.getType())+ "</a>");
+				 i++;
+			}
+			
+			this.setText(htmlFormat + text + closeFormat);
+		}
 		
 	}
 
-	public ClassGen getClazz(){
+	public Annotation[] getAnnotations(){
 		
-		return clazz;
+		return annots;
 		
 	}
-
 	
 }

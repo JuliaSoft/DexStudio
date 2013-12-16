@@ -2,9 +2,8 @@ package com.juliasoft.dexstudio.table;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.event.InputEvent;
+import java.util.HashSet;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
@@ -15,11 +14,13 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.dexstudio.cell.DexAnnotationCell;
+import com.juliasoft.dexstudio.cell.DexClassCell;
 import com.juliasoft.dexstudio.cell.DexMethodCell;
-import com.juliasoft.dexstudio.cell.DexTypeCell;
 
 @SuppressWarnings("serial")
 public class DexEditorRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
@@ -64,7 +65,7 @@ public class DexEditorRenderer extends AbstractCellEditor implements TableCellRe
 				
 			else if(value instanceof Type){
 				
-				cell = new DexTypeCell((Type)value, frame);
+				cell = new DexClassCell((Type)value, frame);
 				HyperlinkCellListener listener = new HyperlinkCellListener(cell);
 				cell.addHyperlinkListener(listener);
 			}
@@ -74,6 +75,14 @@ public class DexEditorRenderer extends AbstractCellEditor implements TableCellRe
 				cell = new DexMethodCell((MethodGen)value, frame);
 				HyperlinkCellListener listener = new HyperlinkCellListener(cell);
 				cell.addHyperlinkListener(listener);
+			}
+			
+			else if (value instanceof HashSet<?>){
+				
+				cell = new DexAnnotationCell((HashSet<Annotation>)value, frame);
+				HyperlinkCellListener listener = new HyperlinkCellListener(cell);
+				cell.addHyperlinkListener(listener);
+				
 			}
 				
 			else throw new IllegalArgumentException();
@@ -126,10 +135,12 @@ public class DexEditorRenderer extends AbstractCellEditor implements TableCellRe
 					
 					frame.changeSelectedTab(((DexMethodCell)cell).getMethod());
 				
-				else if (code.equals("returntype"))
+				else if (code.equals("returnclass")){
 					
 					frame.changeSelectedTab(((DexMethodCell)cell).getReturnTypeClass());
 				
+					
+				}
 				else if (code.matches("par[0-9]+")){
 					
 					int index = Integer.parseInt(code.substring(3));
@@ -137,63 +148,20 @@ public class DexEditorRenderer extends AbstractCellEditor implements TableCellRe
 					frame.changeSelectedTab(((DexMethodCell)cell).getParams()[index]);
 					
 				}
-
-				else if (code.equals("type"))
-					
-					frame.changeSelectedTab(((DexTypeCell)cell).getClazz());
 				
-			}
-			
-			
-			
-			//RIGHT CLICK
-			
-			else if(e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED) && ((mask & InputEvent.BUTTON2_MASK)== mask)){
-				
-				
-				String code = e.getDescription();
-				Point eventPosition = MouseInfo.getPointerInfo().getLocation();
-				
-				
-				if(code.equals("meth")){
-					
-					DexTablePopup menu = new DexTablePopup(frame, ((DexMethodCell)cell).getMethod());
-					menu.setLocation(eventPosition);
-					menu.setInvoker(cell);
-					menu.setVisible(true);
-					
-					
-				}
-				
-				else if (code.equals("returntype")){
-					
-					DexTablePopup menu = new DexTablePopup(frame, (((DexMethodCell)cell).getReturnTypeClass()));
-					menu.setLocation(eventPosition);
-					menu.setInvoker(cell);
-					menu.setVisible(true);
-					
-				}
-				
-				else if (code.matches("par[0-9]+")){
+				else if (code.matches("ann[0-9]+")){
 					
 					int index = Integer.parseInt(code.substring(3));
-					
-					DexTablePopup menu = new DexTablePopup(frame, (((DexMethodCell)cell).getParams()[index]));
-					menu.setLocation(eventPosition);
-					menu.setInvoker(cell);
-					menu.setVisible(true);
-					
-				}
-
-				else if (code.equals("type")){
-					
-					DexTablePopup menu = new DexTablePopup(frame, (((DexTypeCell)cell).getClazz()));
-					menu.setLocation(eventPosition);
-					menu.setInvoker(cell);
-					menu.setVisible(true);
-					
-				}
 				
+					frame.changeSelectedTab(((DexAnnotationCell)cell).getAnnotations()[index]);
+
+				}
+					
+				else if (code.equals("type"))
+					
+					frame.changeSelectedTab(((DexClassCell)cell).getClazz());
+				
+			
 			}
 				
 		}

@@ -3,6 +3,7 @@ package com.juliasoft.dexstudio.tab;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.InputEvent;
+import java.util.Collection;
 
 import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
@@ -11,6 +12,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
+import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.TypeList;
@@ -31,12 +33,13 @@ public class DexClassHeader extends JTextPane
 	
 	private ClassGen superClass;
 	private ClassGen[] interfaces;
+	private Annotation[] annotations;
 	
 	public DexClassHeader(DexFrame frame, ClassGen clazz)
 	{
 		this.superClass = frame.getTree().getClassGen(clazz.getSuperclass());
 		TypeList interfList = clazz.getInterfaces();
-		
+		Collection<Annotation> annList = clazz.getAnnotations();
 		
 		int i = 0;
 		if(interfList != null){
@@ -48,6 +51,18 @@ public class DexClassHeader extends JTextPane
 				interfaces[i++] = frame.getTree().getClassGen(interf);
 			
 		} 
+		
+		i=0;
+		if(!annList.isEmpty()){
+			
+			annotations = new Annotation[annList.size()];
+			
+			for(Annotation ann : annList)
+				
+				annotations[i++] = ann;
+			
+			
+		}
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBackground(Color.WHITE);
@@ -62,15 +77,16 @@ public class DexClassHeader extends JTextPane
 		String name = (AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags())? " <b>interface</b> " : " <b>class</b> ") + Library.shortName(className) + "<br />";
 		String extendz = "<b>extends:</b> " + ((superClass != null)?"<a href='superclass'>": "") + Library.shortName(clazz.getSuperclass().getName().replace('/', '.')) + ((superClass != null)? "</a>" : "") + "<br />";
 		String implementz = "<b>implements:</b> ";
+		String annots = "<b>annotations:</b> ";
 		
-		i = 0;
+		i=0;
 		boolean separator = false;
-		
 		if (interfList == null)
 			
 			implementz = "";
 			
 		else {
+			
 			
 			for(Type interf : interfList){
 				
@@ -82,9 +98,30 @@ public class DexClassHeader extends JTextPane
 				i++;
 			}
 			
+			implementz += "<br />";
+			
 		}
 		
-		String description = "<div class='description'>" + flags + name + extendz + implementz + "</div>";
+		separator = false;
+		
+		if (annList.isEmpty())
+			
+			annots = "";
+			
+		else {
+			
+			for(i=0; i< annotations.length; i++){
+				
+				if(separator)
+					annots += ", ";
+				else separator = true;
+				
+				annots += ("<a href='ann"+ i +"'>"  + "@" + Library.printType(annotations[i].getType())+ "</a>");
+			}
+			
+		}
+		
+		String description = "<div class='description'>" + flags + name + extendz + implementz + annots + "</div>";
 		
 		
 		this.setContentType("text/html");
@@ -117,6 +154,14 @@ public class DexClassHeader extends JTextPane
 					
 						((DexFrame) SwingUtilities.getWindowAncestor(DexClassHeader.this)).changeSelectedTab(interfaces[index]);
 					
+					}
+					
+					else if(code.matches("ann[0-9]+")){
+						
+						int index = Integer.parseInt(code.substring(3));
+						
+						((DexFrame) SwingUtilities.getWindowAncestor(DexClassHeader.this)).changeSelectedTab(annotations[index]);
+						
 					}
 				}
 				

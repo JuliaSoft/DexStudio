@@ -12,7 +12,7 @@ import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.cell.DexMethodCell;
-import com.juliasoft.dexstudio.cell.DexTypeCell;
+import com.juliasoft.dexstudio.cell.DexClassCell;
 
 public class DexTableCellRenderer implements TableCellRenderer{
 
@@ -43,7 +43,7 @@ public class DexTableCellRenderer implements TableCellRenderer{
 				
 			else if(value instanceof Type)
 				
-				cell = new DexTypeCell((Type)value, frame);
+				cell = new DexClassCell((Type)value, frame);
 			
 			else if(value instanceof MethodGen)
 				

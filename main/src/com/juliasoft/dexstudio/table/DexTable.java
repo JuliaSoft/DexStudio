@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -62,10 +63,12 @@ public class DexTable extends JPanel
 		table.setDefaultRenderer(String.class, editRend);
 		table.setDefaultRenderer(MethodGen.class, editRend);
 		table.setDefaultRenderer(FieldGen.class, editRend);
+		table.setDefaultRenderer(HashSet.class, editRend);
 		table.setDefaultEditor(String.class, editRend);
 		table.setDefaultEditor(Type.class, editRend);
 		table.setDefaultEditor(MethodGen.class, editRend);
 		table.setDefaultEditor(FieldGen.class, editRend);
+		table.setDefaultEditor(HashSet.class, editRend);
 		table.setRowHeight(20);
 		table.setShowGrid(false);
 		table.setIntercellSpacing(new Dimension(0,0));

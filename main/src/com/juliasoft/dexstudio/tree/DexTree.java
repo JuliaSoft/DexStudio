@@ -13,6 +13,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.amalia.dex.codegen.Type;
@@ -182,4 +183,10 @@ public class DexTree extends JScrollPane
 		}
 		return null;
 	}
+	
+	public Annotation getAnnotation(Type type){
+		//TODO
+		return null;
+	}
+	
 }
