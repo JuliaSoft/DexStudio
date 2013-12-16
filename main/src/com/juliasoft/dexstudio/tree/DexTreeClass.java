@@ -2,6 +2,11 @@ package com.juliasoft.dexstudio.tree;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.dexstudio.utils.Library;
 
+/**
+ * Class node
+ * @author Zanoncello Matteo
+ *
+ */
 @SuppressWarnings("serial")
 public class DexTreeClass extends DexTreeNode
 {

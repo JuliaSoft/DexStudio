@@ -2,6 +2,11 @@ package com.juliasoft.dexstudio.tree;
 
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 
+/**
+ * Field node
+ * @author Zanoncello Matteo
+ *
+ */
 @SuppressWarnings("serial")
 public class DexTreeField extends DexTreeNode
 {

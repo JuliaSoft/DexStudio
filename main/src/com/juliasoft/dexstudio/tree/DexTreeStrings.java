@@ -2,6 +2,11 @@ package com.juliasoft.dexstudio.tree;
 
 import java.util.Set;
 
+/**
+ * Strings node
+ * @author Zanoncello Matteo
+ *
+ */
 @SuppressWarnings("serial")
 public class DexTreeStrings extends DexTreeNode
 {

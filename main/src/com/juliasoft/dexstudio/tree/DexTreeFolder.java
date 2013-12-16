@@ -1,6 +1,10 @@
 package com.juliasoft.dexstudio.tree;
 
-
+/**
+ * Folder node
+ * @author Zanoncello Matteo
+ *
+ */
 @SuppressWarnings("serial")
 public class DexTreeFolder extends DexTreeNode
 {

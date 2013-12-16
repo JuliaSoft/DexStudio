@@ -1,5 +1,6 @@
 package com.juliasoft.dexstudio;
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
 import java.io.File;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
+import com.juliasoft.dexstudio.log.DexLog;
 import com.juliasoft.dexstudio.menu.DexMenu;
 import com.juliasoft.dexstudio.menu.DexOpenApk;
 import com.juliasoft.dexstudio.tab.DexTab;
@@ -30,25 +32,27 @@ public class DexFrame extends JFrame implements DexVisualizable
 {
 	private DexTree tree = new DexTree();
 	private DexTabManager tabManager = new DexTabManager();
+	private DexLog log = new DexLog();
 
 	/**
 	 * Constructor
 	 */
 	public DexFrame()
 	{
-		super("DEXplorer");
-		
 		//Setting the layout
 		this.setLayout(new BorderLayout());
-		this.setBounds(100, 100, 1000, 600);
+		this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setResizable(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setTitle("DEXplorer");
-		this.setIconImage(new ImageIcon("imags/logo.png").getImage());
+		this.setTitle("DexStudio");
+		this.setIconImage(new ImageIcon("imgs/logo.png").getImage());
 		this.setJMenuBar(new DexMenu());
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tree, tabManager);
-		splitPane.setFocusable(false);
-		this.getContentPane().add(splitPane, BorderLayout.CENTER);
+		JSplitPane splitPane1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tree, tabManager);
+		splitPane1.setFocusable(false);
+		splitPane1.setPreferredSize(splitPane1.getMaximumSize());
+		JSplitPane splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPane1, log);
+		splitPane2.setFocusable(false);
+		this.getContentPane().add(splitPane2, BorderLayout.CENTER);
 		this.setVisible(true);
 		this.revalidate();
 	}
@@ -96,6 +100,15 @@ public class DexFrame extends JFrame implements DexVisualizable
 	}
 	
 	/**
+	 * Add a string in the logger console
+	 * @param str	The adding string
+	 */
+	public void log(String str)
+	{
+		log.log(str);
+	}
+	
+	/**
 	 * Open a file browser to choose the apk file to open
 	 */
 	public void openApk()
@@ -120,10 +133,4 @@ public class DexFrame extends JFrame implements DexVisualizable
 	{
 		return this.tree;
 	}
-	
-	public static void main(String[] args)
-	{
-		new DexFrame().openApk();
-	}
-
 }

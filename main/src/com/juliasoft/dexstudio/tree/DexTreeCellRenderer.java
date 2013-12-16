@@ -9,6 +9,11 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 
+/**
+ * Cell Renderer for the tree
+ * @author Zanoncello Matteo
+ *
+ */
 @SuppressWarnings("serial")
 public class DexTreeCellRenderer extends DefaultTreeCellRenderer
 {

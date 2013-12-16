@@ -16,6 +16,11 @@ import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.ParamGen;
 
+/**
+ * Visitor of the DexGen file for the built of the tree
+ * @author Zanoncello Matteo
+ *
+ */
 public class DexTreeVisitor implements DexGenVisitor
 {
     private final Stack<DefaultMutableTreeNode> nodeStack = new Stack<>();

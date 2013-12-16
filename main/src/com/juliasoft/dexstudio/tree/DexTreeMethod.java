@@ -4,6 +4,11 @@ import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.TypeList;
 import com.juliasoft.dexstudio.utils.Library;
 
+/**
+ * Method node
+ * @author Zanoncello Matteo
+ *
+ */
 @SuppressWarnings("serial")
 public class DexTreeMethod extends DexTreeNode
 {
