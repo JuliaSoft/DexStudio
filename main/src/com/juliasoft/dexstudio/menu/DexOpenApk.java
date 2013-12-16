@@ -80,8 +80,8 @@ public class DexOpenApk extends JDialog
 		this.add(progress, BorderLayout.CENTER);
 		this.add(bottom, BorderLayout.SOUTH);
 		
-		
-		new DexOpenApkSwingWorker().execute();
+		worker = new DexOpenApkSwingWorker();
+		worker.execute();
 	}
 	
 	/**

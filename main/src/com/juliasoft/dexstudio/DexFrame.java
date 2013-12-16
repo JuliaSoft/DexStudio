@@ -1,5 +1,6 @@
 package com.juliasoft.dexstudio;
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
 import java.io.File;
 import java.util.Set;
 
@@ -40,7 +41,7 @@ public class DexFrame extends JFrame implements DexVisualizable
 	{
 		//Setting the layout
 		this.setLayout(new BorderLayout());
-		this.setBounds(100, 100, 1000, 600);
+		this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setResizable(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("DexStudio");
