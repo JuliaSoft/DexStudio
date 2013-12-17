@@ -38,8 +38,14 @@ public class DexAnnotationCell extends JTextPane{
 			
 			
 			i=0;
+			boolean separator = false;
 			for(Annotation ann : annotations){
 			
+				if(separator)					
+					text += ", ";
+				
+				else separator = true;
+				
 				 text += ("<a href='ann"+ i +"'>" + "@" + Library.printType(ann.getType())+ "</a>");
 				 i++;
 			}

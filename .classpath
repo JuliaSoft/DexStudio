@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="main/src"/>
-	<classpathentry kind="lib" path="lib/glazedlists_java15-1.9.0-javadoc.jar"/>
-	<classpathentry kind="lib" path="lib/glazedlists_java15-1.9.0.jar"/>
-	<classpathentry kind="lib" path="/home/eugenio/workspace/DexStudio/miglayout15-swing.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Amalia"/>
 	<classpathentry kind="output" path="bin"/>

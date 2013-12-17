@@ -50,6 +50,7 @@ public class DexEditorRenderer extends AbstractCellEditor implements TableCellRe
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	private Component getComponent(Object value, int row, int column){
 		
 		JTextPane cell;
