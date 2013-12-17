@@ -10,6 +10,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 @SuppressWarnings("serial")
 public class DexTreeNode extends DefaultMutableTreeNode implements Comparable<DexTreeNode>
 {
+	private DexTreeStatus status = DexTreeStatus.UNMODIFIED;
+	
 	@Override
 	public int compareTo(DexTreeNode node)
 	{
@@ -17,5 +19,15 @@ public class DexTreeNode extends DefaultMutableTreeNode implements Comparable<De
 		if(cmp == 0)
 			return 1;
 		return cmp;
+	}
+
+	public DexTreeStatus getStatus()
+	{
+		return status;
+	}
+
+	public void setStatus(DexTreeStatus status)
+	{
+		this.status = status;
 	}
 }

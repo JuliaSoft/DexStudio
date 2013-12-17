@@ -153,7 +153,7 @@ public class DexTree extends JScrollPane
 		}
 	}
 	
-	public ClassGen getClassGen(Type type)
+	public DexTreeClass getClassNode(Type type)
 	{
 		DexTreeRoot root = (DexTreeRoot) tree.getModel().getRoot();
 		DexTreeFolder classes = (DexTreeFolder) root.getChildAt(1);
@@ -172,7 +172,7 @@ public class DexTree extends JScrollPane
 				// If the type is the same
 				if(classGen.getType().equals(type))
 				{
-					return classGen;
+					return clazz;
 				}
 			}
 		}

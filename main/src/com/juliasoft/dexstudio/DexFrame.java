@@ -89,7 +89,6 @@ public class DexFrame extends JFrame implements DexVisualizable
 			tabManager.changeTab(tab);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private DexTab createTab(DexTreeNode node)
 	{
 		if(node instanceof DexTreeStrings)
