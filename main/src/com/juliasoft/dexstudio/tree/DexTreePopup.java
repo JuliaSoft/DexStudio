@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import com.juliasoft.dexstudio.DexFrame;
@@ -19,14 +18,14 @@ import com.juliasoft.dexstudio.DexFrame;
 @SuppressWarnings("serial")
 public class DexTreePopup extends JPopupMenu
 {
-	private DefaultMutableTreeNode node;
+	private DexTreeNode node;
 	private JTree tree;
 	DexTreePopupItem changeTab, newTab, expand;
 	
 	public DexTreePopup(JTree tree, Object node)
 	{
 		this.tree = tree;
-		this.node = (DefaultMutableTreeNode) node;
+		this.node = (DexTreeNode) node;
 		initLayout();
 	}
 	
@@ -38,7 +37,7 @@ public class DexTreePopup extends JPopupMenu
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				((DexFrame) SwingUtilities.getWindowAncestor(tree)).changeSelectedTab(node.getUserObject());
+				((DexFrame) SwingUtilities.getWindowAncestor(tree)).changeSelectedTab(node);
 			}
 		});
 		newTab = new DexTreePopupItem("Open in a new tab");
@@ -47,7 +46,7 @@ public class DexTreePopup extends JPopupMenu
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				((DexFrame) SwingUtilities.getWindowAncestor(tree)).openNewTab(node.getUserObject());
+				((DexFrame) SwingUtilities.getWindowAncestor(tree)).openNewTab(node);
 			}
 		});
 		if(tree.isExpanded(new TreePath(node.getPath())))

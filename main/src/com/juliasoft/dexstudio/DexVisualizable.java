@@ -1,5 +1,7 @@
 package com.juliasoft.dexstudio;
 
+import com.juliasoft.dexstudio.tree.DexTreeNode;
+
 public interface DexVisualizable
 {
 	/**
@@ -10,7 +12,7 @@ public interface DexVisualizable
 	 *            The object to open in the new tab. This object must be an
 	 *            instance of ClassGen, MethodGen, Annotation or a Set<Strings>
 	 */
-	public void openNewTab(Object obj);
+	public void openNewTab(DexTreeNode node);
 	
 	/**
 	 * Change the selected tab in the tab manager with a new one. The content of
@@ -20,5 +22,5 @@ public interface DexVisualizable
 	 *            The object to open in the tab. This object must be an instance
 	 *            of ClassGen, MethodGen, Annotation or a Set<Strings>
 	 */
-	public void changeSelectedTab(Object obj);
+	public void changeSelectedTab(DexTreeNode node);
 }

@@ -21,6 +21,11 @@ import com.juliasoft.dexstudio.menu.DexOpenApk;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.tab.DexTabManager;
 import com.juliasoft.dexstudio.tree.DexTree;
+import com.juliasoft.dexstudio.tree.DexTreeAnnotation;
+import com.juliasoft.dexstudio.tree.DexTreeClass;
+import com.juliasoft.dexstudio.tree.DexTreeMethod;
+import com.juliasoft.dexstudio.tree.DexTreeNode;
+import com.juliasoft.dexstudio.tree.DexTreeStrings;
 
 /**
  * Main frame of the project.
@@ -72,16 +77,16 @@ public class DexFrame extends JFrame implements DexVisualizable
 	}
 	
 	@Override
-	public void openNewTab(Object obj)
+	public void openNewTab(DexTreeNode node)
 	{
-		DexTab tab = createTab(obj);
+		DexTab tab = createTab(node);
 		tabManager.addTab(tab);
 	}
 	
 	@Override
-	public void changeSelectedTab(Object obj)
+	public void changeSelectedTab(DexTreeNode node)
 	{
-		DexTab tab = createTab(obj);
+		DexTab tab = createTab(node);
 		if(tabManager.getSelectedIndex() == -1)
 			tabManager.addTab(tab);
 		else
@@ -89,16 +94,16 @@ public class DexFrame extends JFrame implements DexVisualizable
 	}
 	
 	@SuppressWarnings("unchecked")
-	private DexTab createTab(Object obj)
+	private DexTab createTab(DexTreeNode node)
 	{
-		if(obj instanceof Set<?>)
-			return new DexTab(this, (Set<String>) obj);
-		else if(obj instanceof ClassGen)
-			return new DexTab(this, (ClassGen) obj);
-		else if(obj instanceof MethodGen)
-			return new DexTab(this, (MethodGen) obj);
-		else if(obj instanceof Annotation)
-			return new DexTab(this, (Annotation) obj);
+		if(node instanceof DexTreeStrings)
+			return new DexTab(this, (DexTreeStrings) node);
+		else if(node instanceof DexTreeClass)
+			return new DexTab(this, (DexTreeStrings) node);
+		else if(node instanceof DexTreeMethod)
+			return new DexTab(this, (DexTreeMethod) node);
+		else if(node instanceof DexTreeAnnotation)
+			return new DexTab(this, (DexTreeAnnotation) ndoe);
 		return null;
 	}
 	

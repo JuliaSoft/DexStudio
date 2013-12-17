@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
@@ -81,7 +80,7 @@ public class DexTree extends JScrollPane
 		// Get the selected element of the tree
 		TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
 		tree.setSelectionPath(path);
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+		DexTreeNode node = (DexTreeNode) path.getLastPathComponent();
 		if(node instanceof DexTreeFolder | node instanceof DexTreePackage)
 		{
 			if(tree.isExpanded(path))
@@ -95,7 +94,7 @@ public class DexTree extends JScrollPane
 		}
 		else
 		{
-			((DexFrame) SwingUtilities.getWindowAncestor(this)).changeSelectedTab(node.getUserObject());
+			((DexFrame) SwingUtilities.getWindowAncestor(this)).changeSelectedTab(node);
 		}
 	}
 	

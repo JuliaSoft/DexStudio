@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.dexstudio.tree.DexTreeNode;
 
 /**
  * Search dialog of DexStudio
@@ -53,7 +54,7 @@ public class DexSearch extends JDialog implements WindowListener
 			public void actionPerformed(ActionEvent e)
 			{
 				// Open the selected file
-				Object content = list.getValueAt(list.getSelectedRow(), 1);
+				DexTreeNode content = (DexTreeNode) list.getValueAt(list.getSelectedRow(), 1);
 				if(content != null)
 				{
 					frame.changeSelectedTab(content);
