@@ -6,8 +6,8 @@ import javax.swing.JTabbedPane;
 
 /**
  * Tab manager of the project
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexTabManager extends JTabbedPane
@@ -20,6 +20,7 @@ public class DexTabManager extends JTabbedPane
 		this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		this.setBackground(Color.WHITE);
 	}
+	
 	/**
 	 * Remove all the visualized tabs
 	 */
@@ -30,7 +31,9 @@ public class DexTabManager extends JTabbedPane
 	
 	/**
 	 * Add a new DexTab
-	 * @param tab	The DexTab instance
+	 * 
+	 * @param tab
+	 *            The DexTab instance
 	 */
 	public void addTab(DexTab tab)
 	{
@@ -41,7 +44,9 @@ public class DexTabManager extends JTabbedPane
 	
 	/**
 	 * Change the content of the current tab
-	 * @param tab	The DexTab instance
+	 * 
+	 * @param tab
+	 *            The DexTab instance
 	 */
 	public void changeTab(DexTab tab)
 	{
@@ -51,5 +56,4 @@ public class DexTabManager extends JTabbedPane
 		this.update(getGraphics());
 		this.repaint();
 	}
-	
 }

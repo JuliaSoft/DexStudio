@@ -13,101 +13,99 @@ import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 
-public class DexFieldTableModel implements TableModel {
-
+public class DexFieldTableModel implements TableModel
+{
 	private Object[][] data;
-	private String[] columnNames = {"Flags", "Type", "Name", "Annotations"};
+	private String[] columnNames = { "Flags", "Type", "Name", "Annotations" };
 	
-	public DexFieldTableModel(ClassGen clazz){
-		
-		List<FieldGen> fields  = new ArrayList<FieldGen>();
+	public DexFieldTableModel(ClassGen clazz)
+	{
+		List<FieldGen> fields = new ArrayList<FieldGen>();
 		fields.addAll(clazz.getStatic_fields());
 		fields.addAll(clazz.getInstance_fields());
-		
 		data = new Object[fields.size()][columnNames.length];
-		int i=0;
-		for(FieldGen field : fields){
-			
+		int i = 0;
+		for(FieldGen field : fields)
+		{
 			data[i][0] = AccessFlag.decodeToHuman(field.getFlags(), true);
 			data[i][1] = field.getType();
 			data[i][2] = field.getName();
 			data[i][3] = new HashSet<Annotation>(field.getAnnotations());
-			
 			i++;
-			
 		}
-		
 	}
 	
 	@Override
-	public void addTableModelListener(TableModelListener arg0) {
-
-	}
-
+	public void addTableModelListener(TableModelListener arg0)
+	{}
+	
 	@Override
-	public Class<?> getColumnClass(int column) {
-		
-		switch(column){
-		case 0: 
-		case 2: return String.class;
-		case 1: return Type.class;
-		case 3: return HashSet.class;
-		default: throw new IllegalArgumentException();
-		
+	public Class<?> getColumnClass(int column)
+	{
+		switch(column)
+		{
+			case 0:
+			case 2:
+				return String.class;
+			case 1:
+				return Type.class;
+			case 3:
+				return HashSet.class;
+			default:
+				throw new IllegalArgumentException();
 		}
 	}
-
+	
 	@Override
-	public int getColumnCount() {
+	public int getColumnCount()
+	{
 		return columnNames.length;
 	}
-
+	
 	@Override
-	public String getColumnName(int column) {
+	public String getColumnName(int column)
+	{
 		return columnNames[column];
 	}
-
+	
 	@Override
-	public int getRowCount() {
+	public int getRowCount()
+	{
 		return data.length;
 	}
-
+	
 	@Override
-	public Object getValueAt(int row, int column) {
+	public Object getValueAt(int row, int column)
+	{
 		return data[row][column];
 	}
-
+	
 	@Override
-	public boolean isCellEditable(int row, int column) {
-		switch (column){
-		case 1:
-		case 3: return true;
-		default: return false;
-		
+	public boolean isCellEditable(int row, int column)
+	{
+		switch(column)
+		{
+			case 1:
+			case 3:
+				return true;
+			default:
+				return false;
 		}
 	}
-
-	@Override
-	public void removeTableModelListener(TableModelListener arg0) {
-
-	}
-
-	@Override
-	public void setValueAt(Object value, int row, int column) throws IllegalArgumentException{
-		
-		/*if ( column == 0 && value instanceof String )
-			
-			data[row][column] = (String)value;
-		
-		else if ( column == 1 && value instanceof Type )
-					
-			data[row][column] = (Type)value;
-		
-		else if ( column == 2 && value instanceof FieldGen )
-			
-			data[row][column] = (FieldGen)value;
-		
-		else throw new IllegalArgumentException();*/
-	}
 	
+	@Override
+	public void removeTableModelListener(TableModelListener arg0)
+	{}
+	
+	@Override
+	public void setValueAt(Object value, int row, int column) throws IllegalArgumentException
+	{
+		/*
+		 * if ( column == 0 && value instanceof String ) data[row][column] =
+		 * (String)value; else if ( column == 1 && value instanceof Type )
+		 * data[row][column] = (Type)value; else if ( column == 2 && value
+		 * instanceof FieldGen ) data[row][column] = (FieldGen)value; else throw
+		 * new IllegalArgumentException();
+		 */
+	}
 }

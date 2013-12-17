@@ -17,12 +17,12 @@ import com.juliasoft.dexstudio.DexFrame;
 
 /**
  * Search dialog of DexStudio
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexSearch extends JDialog implements WindowListener
-{	
+{
 	private DexFrame frame;
 	private DexSearchList list;
 	private DexSearchTextField searchBar;
@@ -30,13 +30,12 @@ public class DexSearch extends JDialog implements WindowListener
 	public DexSearch(final DexFrame frame)
 	{
 		this.frame = frame;
-		
-		//Setting Layout
+		// Setting Layout
 		this.setIconImage(new ImageIcon("imgs/logo.png").getImage());
 		frame.setEnabled(false);
 		int width = frame.getSize().width;
 		int height = frame.getSize().height;
-		this.setBounds(width/3, height/3, width/2, height/2);
+		this.setBounds(width / 3, height / 3, width / 2, height / 2);
 		this.setVisible(true);
 		this.setAlwaysOnTop(true);
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
@@ -47,14 +46,13 @@ public class DexSearch extends JDialog implements WindowListener
 		list = new DexSearchList();
 		searchBar = new DexSearchTextField(frame, this, list);
 		searchBar.requestFocus();
-		
 		JButton ok = new JButton("Ok");
 		ok.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//Open the selected file
+				// Open the selected file
 				Object content = list.getValueAt(list.getSelectedRow(), 1);
 				if(content != null)
 				{
@@ -64,7 +62,6 @@ public class DexSearch extends JDialog implements WindowListener
 				}
 			}
 		});
-		
 		JButton cancel = new JButton("Cancel");
 		cancel.addActionListener(new ActionListener()
 		{
@@ -75,7 +72,6 @@ public class DexSearch extends JDialog implements WindowListener
 				DexSearch.this.dispatchEvent(new WindowEvent(DexSearch.this, WindowEvent.WINDOW_CLOSING));
 			}
 		});
-		
 		JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		bottom.add(ok);
 		bottom.add(cancel);
@@ -92,20 +88,26 @@ public class DexSearch extends JDialog implements WindowListener
 	}
 	
 	@Override
-	public void windowOpened(WindowEvent e){}
-
+	public void windowOpened(WindowEvent e)
+	{}
+	
 	@Override
-	public void windowClosed(WindowEvent e){}
-
+	public void windowClosed(WindowEvent e)
+	{}
+	
 	@Override
-	public void windowIconified(WindowEvent e) {}
-
+	public void windowIconified(WindowEvent e)
+	{}
+	
 	@Override
-	public void windowDeiconified(WindowEvent e) {}
-
+	public void windowDeiconified(WindowEvent e)
+	{}
+	
 	@Override
-	public void windowActivated(WindowEvent e) {}
-
+	public void windowActivated(WindowEvent e)
+	{}
+	
 	@Override
-	public void windowDeactivated(WindowEvent e) {}
+	public void windowDeactivated(WindowEvent e)
+	{}
 }

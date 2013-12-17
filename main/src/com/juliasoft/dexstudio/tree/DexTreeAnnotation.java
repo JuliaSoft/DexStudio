@@ -5,8 +5,8 @@ import com.juliasoft.dexstudio.utils.Library;
 
 /**
  * Annotation node
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexTreeAnnotation extends DexTreeNode
@@ -20,6 +20,6 @@ public class DexTreeAnnotation extends DexTreeNode
 	public String toString()
 	{
 		Annotation ann = (Annotation) this.getUserObject();
-		return "@"+ Library.printType(ann.getType());
+		return "@" + Library.printType(ann.getType());
 	}
 }

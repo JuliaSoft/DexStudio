@@ -33,56 +33,52 @@ public class DexTree extends JScrollPane
 	{
 		this.setPreferredSize(new Dimension(300, 600));
 		DexTreeRoot rootNode = new DexTreeRoot("<No dex file loaded>");
-	    DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
-        tree = new JTree(treeModel);
-        tree.setCellRenderer(new DexTreeCellRenderer());
-        tree.setToggleClickCount(0);
-        
-        tree.addMouseListener(new MouseAdapter()
-        {	
-        	public void mousePressed(MouseEvent e)
-        	{
-        		if(e.isPopupTrigger())
-            	{
-            		mouseRightPressed(e);
-            	}
-        	}
-        	
-        	public void mouseReleased(MouseEvent e)
-        	{
-        		if(e.isPopupTrigger())
-            	{
-            		mouseRightPressed(e);
-            	}
-        		else if(e.getClickCount() == 2)
-        		{
-        			mouseDoubleClicked(e);
-        		}
-        	}
-        });
-        
-        this.setViewportView(tree);
+		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+		tree = new JTree(treeModel);
+		tree.setCellRenderer(new DexTreeCellRenderer());
+		tree.setToggleClickCount(0);
+		tree.addMouseListener(new MouseAdapter()
+		{
+			public void mousePressed(MouseEvent e)
+			{
+				if(e.isPopupTrigger())
+				{
+					mouseRightPressed(e);
+				}
+			}
+			
+			public void mouseReleased(MouseEvent e)
+			{
+				if(e.isPopupTrigger())
+				{
+					mouseRightPressed(e);
+				}
+				else if(e.getClickCount() == 2)
+				{
+					mouseDoubleClicked(e);
+				}
+			}
+		});
+		this.setViewportView(tree);
 	}
-
 	
 	private void mouseRightPressed(MouseEvent e)
 	{
-		//Get the selected element of the tree
+		// Get the selected element of the tree
 		TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
 		tree.setSelectionPath(path);
 		Object node = path.getLastPathComponent();
-		
-		//If I can really visualize a tab for the selected element
+		// If I can really visualize a tab for the selected element
 		if(!(node instanceof DexTreeRoot))
 		{
-			//Open the popup menu
+			// Open the popup menu
 			new DexTreePopup(tree, node).show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 	
 	private void mouseDoubleClicked(MouseEvent e)
 	{
-		//Get the selected element of the tree
+		// Get the selected element of the tree
 		TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
 		tree.setSelectionPath(path);
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
@@ -103,27 +99,28 @@ public class DexTree extends JScrollPane
 		}
 	}
 	
-	
 	public void updateLayout(DexGen dexGen, String rootLabel)
 	{
 		DexTreeRoot rootNode = new DexTreeRoot(rootLabel);
-        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
-        tree.setModel(treeModel);
-        DexTreeVisitor treeModelvisitor = new DexTreeVisitor(rootNode);
-        dexGen.accept(treeModelvisitor);
-        treeModel.nodeStructureChanged(rootNode);
+		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+		tree.setModel(treeModel);
+		DexTreeVisitor treeModelvisitor = new DexTreeVisitor(rootNode);
+		dexGen.accept(treeModelvisitor);
+		treeModel.nodeStructureChanged(rootNode);
 	}
 	
 	public void updateLayout(String name)
-	{	
+	{
 		DexTreeRoot rootNode = new DexTreeRoot(name);
-        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
-        tree.setModel(treeModel);
-        treeModel.nodeStructureChanged(rootNode);
+		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+		tree.setModel(treeModel);
+		treeModel.nodeStructureChanged(rootNode);
 	}
 	
 	/**
-	 * Returns an array of all the classes, methods and annotations nodes in the tree
+	 * Returns an array of all the classes, methods and annotations nodes in the
+	 * tree
+	 * 
 	 * @return
 	 */
 	public ArrayList<DexTreeNode> getNodeArray()
@@ -135,7 +132,9 @@ public class DexTree extends JScrollPane
 	}
 	
 	/**
-	 * Returns an array of all the class,method and annotation nodes contained under the giver node
+	 * Returns an array of all the class,method and annotation nodes contained
+	 * under the giver node
+	 * 
 	 * @param node
 	 * @param nodes
 	 */
@@ -143,8 +142,7 @@ public class DexTree extends JScrollPane
 	{
 		if(node.getChildCount() == 0)
 			return;
-		
-		for(int i=0; i<node.getChildCount(); i++)
+		for(int i = 0; i < node.getChildCount(); i++)
 		{
 			DexTreeNode child = (DexTreeNode) node.getChildAt(i);
 			Object obj = child.getUserObject();
@@ -154,27 +152,25 @@ public class DexTree extends JScrollPane
 			}
 			getSubTreeNodeArray(child, nodes);
 		}
-		
 	}
 	
 	public ClassGen getClassGen(Type type)
 	{
 		DexTreeRoot root = (DexTreeRoot) tree.getModel().getRoot();
 		DexTreeFolder classes = (DexTreeFolder) root.getChildAt(1);
-		
-		//For every package
-		for(int i=0; i<classes.getChildCount(); i++)
+		// For every package
+		for(int i = 0; i < classes.getChildCount(); i++)
 		{
-			//Get the package
+			// Get the package
 			DexTreePackage pack = (DexTreePackage) classes.getChildAt(i);
-			//For every class in the package
-			for(int j=0; j<pack.getChildCount(); j++)
+			// For every class in the package
+			for(int j = 0; j < pack.getChildCount(); j++)
 			{
-				//Get the class
+				// Get the class
 				DexTreeClass clazz = (DexTreeClass) pack.getChildAt(j);
-				//Get the ClassGen
+				// Get the ClassGen
 				ClassGen classGen = (ClassGen) clazz.getUserObject();
-				//If the type is the same
+				// If the type is the same
 				if(classGen.getType().equals(type))
 				{
 					return classGen;
@@ -184,9 +180,9 @@ public class DexTree extends JScrollPane
 		return null;
 	}
 	
-	public Annotation getAnnotation(Type type){
-		//TODO
+	public Annotation getAnnotation(Type type)
+	{
+		// TODO
 		return null;
 	}
-	
 }

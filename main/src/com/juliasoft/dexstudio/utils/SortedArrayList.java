@@ -11,9 +11,9 @@ public class SortedArrayList<E> extends ArrayList<E>
 	public boolean add(E value)
 	{
 		boolean result = super.add(value);
-        Comparable<E> cmp = (Comparable<E>) value;
-        for (int i = size()-1; i > 0 && cmp.compareTo(get(i-1)) < 0; i--)
-            Collections.swap(this, i, i-1);
-        return result;
+		Comparable<E> cmp = (Comparable<E>) value;
+		for(int i = size() - 1; i > 0 && cmp.compareTo(get(i - 1)) < 0; i--)
+			Collections.swap(this, i, i - 1);
+		return result;
 	}
 }

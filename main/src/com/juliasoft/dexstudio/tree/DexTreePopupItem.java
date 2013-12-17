@@ -7,15 +7,17 @@ import javax.swing.JMenuItem;
 
 /**
  * Item for the popup menu of navigation tree
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexTreePopupItem extends JMenuItem
 {
 	/**
 	 * String constructor
-	 * @param name	The name of the menu item
+	 * 
+	 * @param name
+	 *            The name of the menu item
 	 */
 	public DexTreePopupItem(String name)
 	{

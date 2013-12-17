@@ -7,15 +7,17 @@ import javax.swing.JMenuItem;
 
 /**
  * Menu item of the frame
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexMenuItem extends JMenuItem
 {
 	/**
 	 * Stirng constructor
-	 * @param name	The name of the menu item
+	 * 
+	 * @param name
+	 *            The name of the menu item
 	 */
 	public DexMenuItem(String name)
 	{

@@ -14,60 +14,45 @@ import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.cell.DexMethodCell;
 import com.juliasoft.dexstudio.cell.DexClassCell;
 
-public class DexTableCellRenderer implements TableCellRenderer{
-
+public class DexTableCellRenderer implements TableCellRenderer
+{
 	private JTextPane[][] components;
 	private DexFrame frame;
 	
-	public DexTableCellRenderer(int rows, int columns, DexFrame frame){
-		
+	public DexTableCellRenderer(int rows, int columns, DexFrame frame)
+	{
 		this.frame = frame;
 		components = new JTextPane[rows][columns];
-		
 	}
 	
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column) {
-		
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	{
 		JTextPane cell;
-		
-		if(components[row][column] == null){
-		
-			if(value instanceof String){
-				
+		if(components[row][column] == null)
+		{
+			if(value instanceof String)
+			{
 				cell = new JTextPane();
-				cell.setText((String)value);
-				
+				cell.setText((String) value);
 			}
-				
 			else if(value instanceof Type)
-				
-				cell = new DexClassCell((Type)value, frame);
-			
+				cell = new DexClassCell((Type) value, frame);
 			else if(value instanceof MethodGen)
-				
-				cell = new DexMethodCell((MethodGen)value, frame);
-				
-			else throw new IllegalArgumentException();
-				
-			cell.setBackground((row % 2 == 0)? Color.WHITE : new Color(238, 238, 239));
-			cell.setBorder(BorderFactory.createMatteBorder(2,3,2,2,(row % 2 == 0)? Color.WHITE : new Color(238, 238, 239) ));
-
-			
+				cell = new DexMethodCell((MethodGen) value, frame);
+			else
+				throw new IllegalArgumentException();
+			cell.setBackground((row % 2 == 0) ? Color.WHITE : new Color(238, 238, 239));
+			cell.setBorder(BorderFactory.createMatteBorder(2, 3, 2, 2, (row % 2 == 0) ? Color.WHITE : new Color(238, 238, 239)));
 			components[row][column] = cell;
 			return cell;
 		}
 		else
-			
 			return components[row][column];
-		
 	}
-
-	public JTextPane getComponent(int row, int column){
-		
+	
+	public JTextPane getComponent(int row, int column)
+	{
 		return components[row][column];
-		
 	}
-
 }

@@ -11,26 +11,21 @@ import com.juliasoft.dexstudio.utils.Library;
 @SuppressWarnings("serial")
 public class DexAnnotationHeader extends JTextPane
 {
-	private final String color = "rgb("+getForeground().getRed() + ", "+getForeground().getGreen() + ", "+getForeground().getBlue() +")";
+	private final String color = "rgb(" + getForeground().getRed() + ", " + getForeground().getGreen() + ", " + getForeground().getBlue() + ")";
 	private final String fontName = getFont().getName();
 	private final String descriptionFontSize = "14px";
 	private final String pakFontSize = "14pt";
-	private final String descriptionStyle = ".description{font-family:" + fontName + "; font-size:" + descriptionFontSize + "; color:"+ color +"; font-weight:normal;}";
-	private final String pakStyle = ".pak{font-family:" + fontName + "; font-size:" + pakFontSize + "; color:"+ color +"; font-weight:normal;}";
-	private final String htmlFormat = "<html><head><style type=\"text/css\">" + descriptionStyle  + pakStyle + "</style></head><body>";
+	private final String descriptionStyle = ".description{font-family:" + fontName + "; font-size:" + descriptionFontSize + "; color:" + color + "; font-weight:normal;}";
+	private final String pakStyle = ".pak{font-family:" + fontName + "; font-size:" + pakFontSize + "; color:" + color + "; font-weight:normal;}";
+	private final String htmlFormat = "<html><head><style type=\"text/css\">" + descriptionStyle + pakStyle + "</style></head><body>";
 	private final String closeFormat = "</body></html>";
 	
 	public DexAnnotationHeader(Annotation ann)
 	{
-		
 		this.setBackground(Color.WHITE);
-		
 		String annName = ann.getType().getName();
-		
 		String pakage = "<div class='pak'>" + annName.substring(1, annName.lastIndexOf('/')).replace('/', '.') + "</div>";
-		
-		String description = "<div class='description'>" + "<b>Annotation Type</b> "+ "@" +  Library.printType(ann.getType()) + "</div>";
-		
+		String description = "<div class='description'>" + "<b>Annotation Type</b> " + "@" + Library.printType(ann.getType()) + "</div>";
 		this.setContentType("text/html");
 		this.setText(htmlFormat + pakage + description + closeFormat);
 		this.setAlignmentY(Component.LEFT_ALIGNMENT);
@@ -38,6 +33,5 @@ public class DexAnnotationHeader extends JTextPane
 		this.setEditable(false);
 		this.setHighlighter(null);
 		this.setMaximumSize(this.getPreferredSize());
-		
 	}
 }

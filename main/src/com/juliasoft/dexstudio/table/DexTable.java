@@ -22,8 +22,8 @@ import com.juliasoft.dexstudio.DexFrame;
 
 /**
  * Table model for all the visualized table in the project
+ * 
  * @author Ancona Eugenio, Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexTable extends JPanel
@@ -32,8 +32,11 @@ public class DexTable extends JPanel
 	
 	/**
 	 * Constructor
-	 * @param frame	The DexFrame reference
-	 * @param model	The model of the table to visualize
+	 * 
+	 * @param frame
+	 *            The DexFrame reference
+	 * @param model
+	 *            The model of the table to visualize
 	 */
 	public DexTable(DexFrame frame, TableModel model)
 	{
@@ -44,8 +47,7 @@ public class DexTable extends JPanel
 			this.setVisible(false);
 			return;
 		}
-		
-		//Setting Layout
+		// Setting Layout
 		this.setBackground(new Color(0.8f, 0.8f, 0.8f));
 		this.setBorder(BorderFactory.createMatteBorder(20, 0, 0, 0, Color.white));
 		this.setAlignmentX(LEFT_ALIGNMENT);
@@ -57,7 +59,9 @@ public class DexTable extends JPanel
 		table.getTableHeader().setBackground(new Color(222, 227, 233));
 		table.setAutoCreateRowSorter(true);
 		table.getTableHeader().setReorderingAllowed(false);
-		//DexTableCellRenderer renderer = new DexTableCellRenderer(model.getRowCount(), model.getColumnCount(), frame);
+		// DexTableCellRenderer renderer = new
+		// DexTableCellRenderer(model.getRowCount(), model.getColumnCount(),
+		// frame);
 		DexEditorRenderer editRend = new DexEditorRenderer(frame, model.getRowCount(), model.getColumnCount());
 		table.setDefaultRenderer(Type.class, editRend);
 		table.setDefaultRenderer(String.class, editRend);
@@ -71,13 +75,12 @@ public class DexTable extends JPanel
 		table.setDefaultEditor(HashSet.class, editRend);
 		table.setRowHeight(20);
 		table.setShowGrid(false);
-		table.setIntercellSpacing(new Dimension(0,0));
+		table.setIntercellSpacing(new Dimension(0, 0));
 		table.setCellSelectionEnabled(false);
 		MouseAdapter mouse = new ActiveTableListener();
 		table.addMouseMotionListener(mouse);
 		table.addMouseListener(mouse);
-		
-		//Setting the content
+		// Setting the content
 		JLabel title = new JLabel();
 		title.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
 		if(model instanceof DexFieldTableModel)
@@ -86,49 +89,41 @@ public class DexTable extends JPanel
 			table.getColumnModel().getColumn(0).setPreferredWidth(120);
 			table.getColumnModel().getColumn(0).setMaxWidth(150);
 		}
-		else 
-		if(model instanceof DexConstructorTableModel)
+		else if(model instanceof DexConstructorTableModel)
 		{
 			title.setText("Constructor Summary");
 			table.getColumnModel().getColumn(0).setPreferredWidth(120);
 			table.getColumnModel().getColumn(0).setMaxWidth(150);
 		}
-		else
-		if(model instanceof DexMethodTableModel)
+		else if(model instanceof DexMethodTableModel)
 		{
 			title.setText("Method Summary");
 			table.getColumnModel().getColumn(0).setPreferredWidth(120);
 			table.getColumnModel().getColumn(0).setMaxWidth(150);
 		}
-		else
-		if(model instanceof DexValueTableModel)
+		else if(model instanceof DexValueTableModel)
 		{
 			title.setText("Value Summary");
 		}
-		else
-		if(model instanceof DexCodeTableModel)
+		else if(model instanceof DexCodeTableModel)
 		{
 			title.setText("Code");
 			table.getColumnModel().getColumn(0).setPreferredWidth(120);
 			table.getColumnModel().getColumn(0).setMaxWidth(150);
 		}
-		else
-		if(model instanceof DexStringTableModel)
+		else if(model instanceof DexStringTableModel)
 		{
 			title.setText("String Summary");
 		}
 		content.add(table.getTableHeader());
 		content.add(table);
-		
 		this.add(title, BorderLayout.NORTH);
 		this.add(content, BorderLayout.CENTER);
 		this.setMaximumSize(new Dimension(999999, this.getPreferredSize().height));
 	}
 	
 	/**
-	 * 
 	 * @author Ancona Eugenio
-	 *
 	 */
 	private class ActiveTableListener extends MouseAdapter
 	{
@@ -143,7 +138,7 @@ public class DexTable extends JPanel
 		{
 			activeCell(e);
 		}
-
+		
 		@Override
 		public void mouseMoved(MouseEvent e)
 		{
@@ -153,18 +148,17 @@ public class DexTable extends JPanel
 		private void activeCell(MouseEvent e)
 		{
 			Point p = e.getPoint();
-			if (p != null)
+			if(p != null)
 			{
 				int row = table.rowAtPoint(p);
 				int column = table.columnAtPoint(p);
-				
 				if(row != table.getEditingRow() || column != table.getEditingColumn())
 				{
 					if(table.isEditing())
 					{
 						if(!table.getCellEditor().stopCellEditing())
 							table.getCellEditor().cancelCellEditing();
-					}	
+					}
 					else
 					{
 						if(row != -1 && column != -1 && table.isCellEditable(row, column))
@@ -175,6 +169,3 @@ public class DexTable extends JPanel
 		}
 	}
 }
-	
-	
-

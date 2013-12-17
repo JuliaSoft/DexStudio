@@ -14,103 +14,93 @@ import com.juliasoft.amalia.dex.codegen.MethodGen;
 
 public class DexConstructorTableModel implements TableModel
 {
-	private Object [][] data;
-	private String[] columnNames = { "Flags", "Signature", "Annotations"};
+	private Object[][] data;
+	private String[] columnNames = { "Flags", "Signature", "Annotations" };
 	
 	public DexConstructorTableModel(ClassGen clazz)
 	{
 		List<MethodGen> dirMeth = clazz.getDirect_methods();
 		List<MethodGen> constructors = new ArrayList<MethodGen>();
-		
-		for(MethodGen meth : dirMeth){
-			
-			if(meth.isConstructor()){
-				
+		for(MethodGen meth : dirMeth)
+		{
+			if(meth.isConstructor())
+			{
 				constructors.add(meth);
 			}
 		}
-		
-		int i=0;
+		int i = 0;
 		data = new Object[constructors.size()][columnNames.length];
-		for(MethodGen meth : constructors){
-			
+		for(MethodGen meth : constructors)
+		{
 			data[i][0] = AccessFlag.decodeToHuman(meth.getFlags(), false);
 			data[i][1] = meth;
 			data[i][2] = new HashSet<Annotation>(meth.getAnnotations());
 			i++;
 		}
-		
 	}
-
+	
 	@Override
-	public int getRowCount() {
-		
+	public int getRowCount()
+	{
 		return data.length;
 	}
-
+	
 	@Override
-	public int getColumnCount() {
-		
+	public int getColumnCount()
+	{
 		return columnNames.length;
 	}
-
+	
 	@Override
-	public String getColumnName(int columnIndex) {
-		
+	public String getColumnName(int columnIndex)
+	{
 		return columnNames[columnIndex];
 	}
-
+	
 	@Override
-	public Class<?> getColumnClass(int column) {
-		switch(column){
-		
-		case 0: return String.class;
-		case 1: return MethodGen.class;
-		case 2: return HashSet.class;
-		default: throw new IllegalArgumentException();
-		
-		
+	public Class<?> getColumnClass(int column)
+	{
+		switch(column)
+		{
+			case 0:
+				return String.class;
+			case 1:
+				return MethodGen.class;
+			case 2:
+				return HashSet.class;
+			default:
+				throw new IllegalArgumentException();
 		}
 	}
-
+	
 	@Override
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		
-		return (columnIndex == 0)? false : true;
+	public boolean isCellEditable(int rowIndex, int columnIndex)
+	{
+		return (columnIndex == 0) ? false : true;
 	}
-
+	
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		
+	public Object getValueAt(int rowIndex, int columnIndex)
+	{
 		return data[rowIndex][columnIndex];
 	}
-
+	
 	@Override
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
-		/*if(columnIndex == 0 && aValue instanceof String)
-			
-			data[rowIndex][columnIndex] = (String) aValue;
-		
-		else if(columnIndex == 1 && aValue instanceof MethodGen)
-			
-			data[rowIndex][columnIndex] = (MethodGen) aValue;
-
-		else
-			
-			throw new IllegalArgumentException();*/
-		
-		
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex)
+	{
+		/*
+		 * if(columnIndex == 0 && aValue instanceof String)
+		 * data[rowIndex][columnIndex] = (String) aValue; else if(columnIndex ==
+		 * 1 && aValue instanceof MethodGen) data[rowIndex][columnIndex] =
+		 * (MethodGen) aValue; else throw new IllegalArgumentException();
+		 */
 	}
-
+	
 	@Override
-	public void addTableModelListener(TableModelListener l) {
-		
-	}
-
+	public void addTableModelListener(TableModelListener l)
+	{}
+	
 	@Override
-	public void removeTableModelListener(TableModelListener l) {
-		
-	}
-
+	public void removeTableModelListener(TableModelListener l)
+	{}
 }

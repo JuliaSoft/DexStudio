@@ -19,8 +19,8 @@ import com.juliasoft.dexstudio.utils.DexProgress;
 
 /**
  * TextField for the search dialog
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexSearchTextField extends JTextField implements KeyListener
@@ -31,9 +31,13 @@ public class DexSearchTextField extends JTextField implements KeyListener
 	
 	/**
 	 * Constructor
-	 * @param frame		The DexFrame reference
-	 * @param dialog	The DexSearch reference
-	 * @param list		The DexSearchList reference
+	 * 
+	 * @param frame
+	 *            The DexFrame reference
+	 * @param dialog
+	 *            The DexSearch reference
+	 * @param list
+	 *            The DexSearchList reference
 	 */
 	public DexSearchTextField(DexFrame frame, DexSearch dialog, DexSearchList list)
 	{
@@ -44,10 +48,11 @@ public class DexSearchTextField extends JTextField implements KeyListener
 		this.getDocument().addDocumentListener(new DexSearchDocumentListener());
 		this.addKeyListener(this);
 	}
-
+	
 	@Override
-	public void keyTyped(KeyEvent e) {}
-
+	public void keyTyped(KeyEvent e)
+	{}
+	
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
@@ -55,34 +60,37 @@ public class DexSearchTextField extends JTextField implements KeyListener
 		int sel = list.getSelectedRow();
 		switch(e.getKeyCode())
 		{
-		case KeyEvent.VK_UP:
-			if(sel > 0){
-				list.setRowSelectionInterval(sel - 1, sel - 1);
-			}
-			break;
-		case KeyEvent.VK_DOWN:
-			if(sel < list.getRowCount() - 1){
-				list.setRowSelectionInterval(sel + 1, sel + 1);
-			}
-			break;
-		case KeyEvent.VK_ENTER:
-			if(sel != -1)
-			{
-				DexTreeNode node = (DexTreeNode)list.getModel().getValueAt(sel, 1);
-				frame.changeSelectedTab(node.getUserObject());
-				dialog.setVisible(false);
-				dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));
-			}
+			case KeyEvent.VK_UP:
+				if(sel > 0)
+				{
+					list.setRowSelectionInterval(sel - 1, sel - 1);
+				}
+				break;
+			case KeyEvent.VK_DOWN:
+				if(sel < list.getRowCount() - 1)
+				{
+					list.setRowSelectionInterval(sel + 1, sel + 1);
+				}
+				break;
+			case KeyEvent.VK_ENTER:
+				if(sel != -1)
+				{
+					DexTreeNode node = (DexTreeNode) list.getModel().getValueAt(sel, 1);
+					frame.changeSelectedTab(node.getUserObject());
+					dialog.setVisible(false);
+					dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));
+				}
 		}
 	}
-
+	
 	@Override
-	public void keyReleased(KeyEvent e) {}
+	public void keyReleased(KeyEvent e)
+	{}
 	
 	/**
 	 * DocumentListener for DeexSearchTextField
+	 * 
 	 * @author Zanoncello Matteo
-	 *
 	 */
 	public class DexSearchDocumentListener implements DocumentListener
 	{
@@ -99,7 +107,7 @@ public class DexSearchTextField extends JTextField implements KeyListener
 		{
 			search();
 		}
-
+		
 		@Override
 		public void removeUpdate(DocumentEvent e)
 		{
@@ -107,7 +115,8 @@ public class DexSearchTextField extends JTextField implements KeyListener
 		}
 		
 		@Override
-		public void changedUpdate(DocumentEvent e) {}
+		public void changedUpdate(DocumentEvent e)
+		{}
 		
 		private synchronized void search()
 		{
@@ -122,8 +131,8 @@ public class DexSearchTextField extends JTextField implements KeyListener
 		
 		/**
 		 * SwingWorker for the search function
+		 * 
 		 * @author Zanoncello Matteo
-		 *
 		 */
 		public class DexSearchSwingWorker extends SwingWorker<TreeSet<DexTreeNode>, DexProgress>
 		{
@@ -133,7 +142,7 @@ public class DexSearchTextField extends JTextField implements KeyListener
 			{
 				this.str = str;
 			}
-
+			
 			@Override
 			protected TreeSet<DexTreeNode> doInBackground() throws Exception
 			{
@@ -142,14 +151,11 @@ public class DexSearchTextField extends JTextField implements KeyListener
 					list.updateRows(new TreeSet<DexTreeNode>(), "");
 					return null;
 				}
-				
 				TreeSet<DexTreeNode> results = new TreeSet<DexTreeNode>();
-				
 				for(DexTreeNode node : nodes)
 				{
 					if(Thread.currentThread().isInterrupted())
 						return null;
-					
 					if(node.toString().toLowerCase().startsWith(str.toLowerCase()))
 					{
 						results.add(node);
@@ -170,7 +176,7 @@ public class DexSearchTextField extends JTextField implements KeyListener
 					}
 					list.updateRows(results, str);
 				}
-				catch (InterruptedException | ExecutionException e)
+				catch(InterruptedException | ExecutionException e)
 				{
 					e.printStackTrace();
 				}
@@ -178,9 +184,7 @@ public class DexSearchTextField extends JTextField implements KeyListener
 			
 			@Override
 			public void process(List<DexProgress> list)
-			{
-				
-			}
+			{}
 			
 			public void stop()
 			{
@@ -189,7 +193,6 @@ public class DexSearchTextField extends JTextField implements KeyListener
 					Thread.currentThread().interrupt();
 				}
 			}
-			
 		}
 	}
 }

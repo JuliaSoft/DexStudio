@@ -14,7 +14,6 @@ public class DexTablePopup extends JPopupMenu
 {
 	private Object obj;
 	private DexFrame frame;
-	
 	DexTablePopupItem changeTab, newTab, expand;
 	
 	public DexTablePopup(DexFrame frame, Object obj)
@@ -35,7 +34,6 @@ public class DexTablePopup extends JPopupMenu
 				frame.changeSelectedTab(obj);
 			}
 		});
-		
 		newTab = new DexTablePopupItem("Open in a new tab");
 		newTab.addActionListener(new ActionListener()
 		{
@@ -45,12 +43,10 @@ public class DexTablePopup extends JPopupMenu
 				frame.openNewTab(obj);
 			}
 		});
-		
 		if(obj instanceof ClassGen || obj instanceof MethodGen)
 		{
 			this.add(changeTab);
 			this.add(newTab);
 		}
 	}
-	
 }

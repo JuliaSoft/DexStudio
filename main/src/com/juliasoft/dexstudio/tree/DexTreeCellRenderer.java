@@ -11,8 +11,8 @@ import com.juliasoft.amalia.dex.codegen.ClassGen;
 
 /**
  * Cell Renderer for the tree
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexTreeCellRenderer extends DefaultTreeCellRenderer
@@ -30,7 +30,7 @@ public class DexTreeCellRenderer extends DefaultTreeCellRenderer
 	
 	public DexTreeCellRenderer()
 	{
-		//Initializing images
+		// Initializing images
 		root_ico = new ImageIcon("imgs/tree/root.png");
 		folder_close_ico = new ImageIcon("imgs/tree/folder_close.png");
 		folder_open_ico = new ImageIcon("imgs/tree/folder_open.png");
@@ -46,13 +46,11 @@ public class DexTreeCellRenderer extends DefaultTreeCellRenderer
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus)
 	{
-		//Default render
+		// Default render
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-		
-		//Customizing
+		// Customizing
 		if(value instanceof DexTreeRoot)
 			setIcon(root_ico);
-		
 		else if(value instanceof DexTreeFolder)
 		{
 			if(expanded)
@@ -60,31 +58,26 @@ public class DexTreeCellRenderer extends DefaultTreeCellRenderer
 			else
 				setIcon(folder_close_ico);
 		}
-		
 		else if(value instanceof DexTreePackage)
 			setIcon(package_ico);
-		
 		else if(value instanceof DexTreeStrings)
 			setIcon(strings_ico);
-		
 		else if(value instanceof DexTreeClass)
 		{
-			ClassGen clazz = (ClassGen)((DexTreeClass) value).getUserObject();
-			if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags()))	//Se la classe ?? un interfaccia
+			ClassGen clazz = (ClassGen) ((DexTreeClass) value).getUserObject();
+			if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags())) // Se la classe
+																	// ?? un
+																	// interfaccia
 				setIcon(interface_ico);
 			else
 				setIcon(class_ico);
 		}
-		
 		else if(value instanceof DexTreeMethod)
 			setIcon(method_ico);
-		
 		else if(value instanceof DexTreeField)
 			setIcon(field_ico);
-		
 		else if(value instanceof DexTreeAnnotation)
 			setIcon(annotation_ico);
-		
-        return this;
+		return this;
 	}
 }

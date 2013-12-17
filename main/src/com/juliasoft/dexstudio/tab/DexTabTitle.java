@@ -8,15 +8,17 @@ import javax.swing.JPanel;
 
 /**
  * Panel for the top of every tab, with a title and a close button
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexTabTitle extends JPanel
 {
 	/**
 	 * Constructor
-	 * @param tab	The DexTab instance
+	 * 
+	 * @param tab
+	 *            The DexTab instance
 	 */
 	public DexTabTitle(DexTab tab)
 	{
@@ -29,5 +31,4 @@ public class DexTabTitle extends JPanel
 		this.add(title);
 		this.add(close);
 	}
-	
 }

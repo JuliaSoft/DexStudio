@@ -2,8 +2,8 @@ package com.juliasoft.dexstudio.tree;
 
 /**
  * Root node
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexTreeRoot extends DexTreeNode

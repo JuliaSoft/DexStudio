@@ -11,18 +11,16 @@ import javax.swing.tree.TreePath;
 
 import com.juliasoft.dexstudio.DexFrame;
 
-
 /**
  * Popup menu of the tree
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexTreePopup extends JPopupMenu
 {
 	private DefaultMutableTreeNode node;
 	private JTree tree;
-	
 	DexTreePopupItem changeTab, newTab, expand;
 	
 	public DexTreePopup(JTree tree, Object node)
@@ -43,7 +41,6 @@ public class DexTreePopup extends JPopupMenu
 				((DexFrame) SwingUtilities.getWindowAncestor(tree)).changeSelectedTab(node.getUserObject());
 			}
 		});
-		
 		newTab = new DexTreePopupItem("Open in a new tab");
 		newTab.addActionListener(new ActionListener()
 		{
@@ -53,7 +50,6 @@ public class DexTreePopup extends JPopupMenu
 				((DexFrame) SwingUtilities.getWindowAncestor(tree)).openNewTab(node.getUserObject());
 			}
 		});
-		
 		if(tree.isExpanded(new TreePath(node.getPath())))
 		{
 			expand = new DexTreePopupItem("Collapse");
@@ -78,7 +74,6 @@ public class DexTreePopup extends JPopupMenu
 				}
 			});
 		}
-		
 		if(node instanceof DexTreeClass || node instanceof DexTreeMethod || node instanceof DexTreeAnnotation || node instanceof DexTreeStrings)
 		{
 			this.add(changeTab);
@@ -87,5 +82,4 @@ public class DexTreePopup extends JPopupMenu
 		if(!node.isLeaf())
 			this.add(expand);
 	}
-	
 }

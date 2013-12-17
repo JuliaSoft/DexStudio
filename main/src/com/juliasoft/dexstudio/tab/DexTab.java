@@ -23,8 +23,8 @@ import com.juliasoft.dexstudio.utils.Library;
 
 /**
  * Tab where DexGen elements' informations are visualized
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexTab extends JScrollPane
@@ -34,8 +34,11 @@ public class DexTab extends JScrollPane
 	
 	/**
 	 * Constructor of ClassGen tab
-	 * @param frame	The DexFrame reference
-	 * @param clazz	The ClassGen instance
+	 * 
+	 * @param frame
+	 *            The DexFrame reference
+	 * @param clazz
+	 *            The ClassGen instance
 	 */
 	public DexTab(DexFrame frame, ClassGen clazz)
 	{
@@ -49,21 +52,27 @@ public class DexTab extends JScrollPane
 	
 	/**
 	 * Constructor of MethodGen tab
-	 * @param frame	The DexFrame reference
-	 * @param clazz	The MethodGen instance
+	 * 
+	 * @param frame
+	 *            The DexFrame reference
+	 * @param clazz
+	 *            The MethodGen instance
 	 */
 	public DexTab(DexFrame frame, MethodGen meth)
 	{
 		initLayout();
-		title = (meth.isConstructor())? Library.printType(meth.getOwnerClass()) + "()" : meth.getName() + "()";
+		title = (meth.isConstructor()) ? Library.printType(meth.getOwnerClass()) + "()" : meth.getName() + "()";
 		content.add(new DexMethodHeader(frame, meth));
 		content.add(new DexTable(frame, new DexCodeTableModel(meth)));
 	}
 	
 	/**
 	 * Constructor of Annotation tab
-	 * @param frame	The DexFrame reference
-	 * @param clazz	The Annotation instance
+	 * 
+	 * @param frame
+	 *            The DexFrame reference
+	 * @param clazz
+	 *            The Annotation instance
 	 */
 	public DexTab(DexFrame frame, Annotation ann)
 	{
@@ -75,8 +84,11 @@ public class DexTab extends JScrollPane
 	
 	/**
 	 * Constructor of Strings tab
-	 * @param frame	The DexFrame reference
-	 * @param clazz	The Set of the strings
+	 * 
+	 * @param frame
+	 *            The DexFrame reference
+	 * @param clazz
+	 *            The Set of the strings
 	 */
 	public DexTab(DexFrame frame, Set<String> strs)
 	{
@@ -100,10 +112,11 @@ public class DexTab extends JScrollPane
 	
 	/**
 	 * Get the title of the tab
+	 * 
 	 * @return
 	 */
 	public String getTitle()
-	{	
+	{
 		return title;
 	}
 }

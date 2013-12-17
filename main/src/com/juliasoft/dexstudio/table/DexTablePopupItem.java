@@ -10,7 +10,9 @@ public class DexTablePopupItem extends JMenuItem
 {
 	/**
 	 * String constructor
-	 * @param name	The name of the menu item
+	 * 
+	 * @param name
+	 *            The name of the menu item
 	 */
 	public DexTablePopupItem(String name)
 	{

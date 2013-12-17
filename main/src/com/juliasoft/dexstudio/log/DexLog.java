@@ -9,8 +9,8 @@ import javax.swing.JTextPane;
 
 /**
  * Logger console
+ * 
  * @author Zanoncello Matteo
- *
  */
 @SuppressWarnings("serial")
 public class DexLog extends JPanel
@@ -32,6 +32,7 @@ public class DexLog extends JPanel
 	
 	/**
 	 * Append log string to the console
+	 * 
 	 * @param str
 	 */
 	public void log(String str)
