@@ -3,7 +3,6 @@ package com.juliasoft.dexstudio;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.io.File;
-import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -11,10 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.juliasoft.amalia.dex.codegen.Annotation;
-import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
-import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.log.DexLog;
 import com.juliasoft.dexstudio.menu.DexMenu;
 import com.juliasoft.dexstudio.menu.DexOpenApk;
@@ -103,7 +99,7 @@ public class DexFrame extends JFrame implements DexVisualizable
 		else if(node instanceof DexTreeMethod)
 			return new DexTab(this, (DexTreeMethod) node);
 		else if(node instanceof DexTreeAnnotation)
-			return new DexTab(this, (DexTreeAnnotation) ndoe);
+			return new DexTab(this, (DexTreeAnnotation) node);
 		return null;
 	}
 	
