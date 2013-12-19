@@ -89,9 +89,14 @@ public class DexOpenApk extends JDialog
 	 */
 	class DexOpenApkSwingWorker extends SwingWorker<DexGen, DexProgress>
 	{
+		Thread bgThread;
+		
 		@Override
 		public DexGen doInBackground()
 		{
+			//Saving the background thread
+			bgThread = Thread.currentThread();
+			
 			// Converting file in a DexGen
 			try
 			{
@@ -110,7 +115,7 @@ public class DexOpenApk extends JDialog
 				if(Thread.currentThread().isInterrupted())
 					return null;
 				this.publish(new DexProgress("Generating DexGen...", 70));
-				DexGen dexGen = new DexGen(dexFile);
+				DexGen dexGen = DexGen.fromDexFile(dexFile);
 				if(Thread.currentThread().isInterrupted())
 					return null;
 				this.publish(new DexProgress("Finalizing...", 100));
@@ -123,6 +128,10 @@ public class DexOpenApk extends JDialog
 			catch(CodegenException e)
 			{
 				e.printStackTrace();
+			}
+			catch(InterruptedException e)
+			{
+				return null;
 			}
 			return null;
 		}
@@ -159,8 +168,9 @@ public class DexOpenApk extends JDialog
 		 */
 		public void stop()
 		{
-			// Stop the backgound process
-			Thread.currentThread().interrupt();
+			//Stop the background thread
+			if(bgThread != null)
+				bgThread.interrupt();
 		}
 	};
 }

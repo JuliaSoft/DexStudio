@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.InputEvent;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
@@ -15,7 +16,6 @@ import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.Type;
-import com.juliasoft.amalia.dex.codegen.TypeList;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.utils.Library;
 
@@ -37,7 +37,7 @@ public class DexClassHeader extends JTextPane
 	public DexClassHeader(DexFrame frame, ClassGen clazz)
 	{
 		this.superClass = frame.getTree().getClassGen(clazz.getSuperclass());
-		TypeList interfList = clazz.getInterfaces();
+		List<Type> interfList = clazz.getInterfaces();
 		Collection<Annotation> annList = clazz.getAnnotations();
 		int i = 0;
 		if(interfList != null)
