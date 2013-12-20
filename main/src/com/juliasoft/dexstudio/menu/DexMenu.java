@@ -33,7 +33,7 @@ public class DexMenu extends JMenuBar
 	public DexMenu()
 	{
 		// Menu Items
-		menuFileOpen = new DexMenuItem("Open");
+		menuFileOpen = new DexMenuItem("Open apk");
 		menuFileOpen.setAccelerator(KeyStroke.getKeyStroke('O', KeyEvent.CTRL_DOWN_MASK));
 		menuFileOpen.setIcon(new ImageIcon("imgs/menu/open.png"));
 		menuFileOpen.addActionListener(new ActionListener()
@@ -47,7 +47,7 @@ public class DexMenu extends JMenuBar
 				updateItems();
 			}
 		});
-		menuFileSave = new DexMenuItem("Save");
+		menuFileSave = new DexMenuItem("Save apk");
 		menuFileSave.setAccelerator(KeyStroke.getKeyStroke('S', KeyEvent.CTRL_DOWN_MASK));
 		menuFileSave.setIcon(new ImageIcon("imgs/menu/save.png"));
 		menuFileSave.addActionListener(new ActionListener()
@@ -58,7 +58,7 @@ public class DexMenu extends JMenuBar
 				JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
 			}
 		});
-		menuFileClose = new DexMenuItem("Close");
+		menuFileClose = new DexMenuItem("Close apk");
 		menuFileClose.setIcon(new ImageIcon("imgs/menu/close.png"));
 		menuFileClose.addActionListener(new ActionListener()
 		{
@@ -83,7 +83,7 @@ public class DexMenu extends JMenuBar
 		});
 		menuCompareOpen = new DexMenuItem("Compare Apk");
 		menuCompareOpen.setAccelerator(KeyStroke.getKeyStroke('C', KeyEvent.CTRL_DOWN_MASK));
-		menuCompareOpen.setIcon(new ImageIcon("imgs/menu/compare.png"));
+		menuCompareOpen.setIcon(new ImageIcon("imgs/menu/open.png"));
 		menuCompareOpen.addActionListener(new ActionListener()
 		{
 			@Override
@@ -187,5 +187,6 @@ public class DexMenu extends JMenuBar
 		menuFileClose.setEnabled(open);
 		menuCompareOpen.setEnabled(open && !compare);
 		menuCompareClose.setEnabled(open && compare);
+		menuNavigateSearch.setEnabled(open);
 	}
 }
