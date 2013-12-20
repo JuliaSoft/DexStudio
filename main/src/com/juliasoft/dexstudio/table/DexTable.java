@@ -18,6 +18,7 @@ import javax.swing.table.TableModel;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.Type;
+import com.juliasoft.amalia.dex.codegen.cst.Constant;
 import com.juliasoft.dexstudio.DexFrame;
 
 /**
@@ -68,6 +69,7 @@ public class DexTable extends JPanel
 		table.setDefaultRenderer(MethodGen.class, editRend);
 		table.setDefaultRenderer(FieldGen.class, editRend);
 		table.setDefaultRenderer(HashSet.class, editRend);
+		table.setDefaultRenderer(Constant.class, editRend);
 		table.setDefaultEditor(String.class, editRend);
 		table.setDefaultEditor(Type.class, editRend);
 		table.setDefaultEditor(MethodGen.class, editRend);

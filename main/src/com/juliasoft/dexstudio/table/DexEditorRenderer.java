@@ -17,6 +17,7 @@ import javax.swing.table.TableCellRenderer;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.Type;
+import com.juliasoft.amalia.dex.codegen.cst.Constant;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.cell.DexAnnotationCell;
 import com.juliasoft.dexstudio.cell.DexClassCell;
@@ -75,8 +76,18 @@ public class DexEditorRenderer extends AbstractCellEditor implements TableCellRe
 				HyperlinkCellListener listener = new HyperlinkCellListener(cell);
 				cell.addHyperlinkListener(listener);
 			}
-			else
+			else if (value instanceof Constant){
+				
+				cell = new JTextPane();
+				cell.setText(((Constant)value).toHuman());
+				
+			}
+			
+			else{
+				
 				throw new IllegalArgumentException();
+				
+			}
 			cell.setBackground((row % 2 == 0) ? Color.WHITE : new Color(238, 238, 239));
 			cell.setBorder(BorderFactory.createMatteBorder(2, 3, 2, 2, (row % 2 == 0) ? Color.WHITE : new Color(238, 238, 239)));
 			cell.setEditable(false);
