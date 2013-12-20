@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -127,6 +128,11 @@ public class DexFrame extends JFrame implements DexVisualizable
 		if(read == JFileChooser.CANCEL_OPTION)
 			return;
 		File f = chooser.getSelectedFile();
+		if( ! f.getPath().endsWith(".apk"))
+		{
+			JOptionPane.showMessageDialog(null, "Invalid file extension");
+			return;
+		}
 		new DexOpenApk(this, f);
 		menu.open(true);
 		menu.updateItems();

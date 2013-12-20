@@ -13,7 +13,6 @@ import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.cst.Constant;
-import com.juliasoft.amalia.dex.codegen.cst.StringValue;
 
 public class DexFieldTableModel implements TableModel
 {

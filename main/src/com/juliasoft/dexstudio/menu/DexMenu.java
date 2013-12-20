@@ -118,7 +118,7 @@ public class DexMenu extends JMenuBar
 			}
 		});
 		menuInfoHelp = new DexMenuItem("Help");
-		menuNavigateSearch.setAccelerator(KeyStroke.getKeyStroke('H', KeyEvent.CTRL_DOWN_MASK));
+		menuInfoHelp.setAccelerator(KeyStroke.getKeyStroke('H', KeyEvent.CTRL_DOWN_MASK));
 		menuInfoHelp.setIcon(new ImageIcon("imgs/menu/help.png"));
 		menuInfoHelp.addActionListener(new ActionListener()
 		{
@@ -129,7 +129,7 @@ public class DexMenu extends JMenuBar
 			}
 		});
 		menuInfoAbout = new DexMenuItem("About DexStudio");
-		menuNavigateSearch.setAccelerator(KeyStroke.getKeyStroke('I', KeyEvent.CTRL_DOWN_MASK));
+		menuInfoAbout.setAccelerator(KeyStroke.getKeyStroke('I', KeyEvent.CTRL_DOWN_MASK));
 		menuInfoAbout.setIcon(new ImageIcon("imgs/menu/info.png"));
 		menuInfoAbout.addActionListener(new ActionListener()
 		{
