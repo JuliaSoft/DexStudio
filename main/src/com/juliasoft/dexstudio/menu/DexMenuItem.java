@@ -23,7 +23,7 @@ public class DexMenuItem extends JMenuItem
 	{
 		super(name);
 		this.setMinimumSize(new Dimension(this.getPreferredSize().width, 30));
-		this.setPreferredSize(new Dimension(150, 30));
+		this.setPreferredSize(new Dimension(200, 30));
 		this.setFont(new Font(this.getFont().getName(), Font.PLAIN, 12));
 	}
 }

@@ -12,17 +12,21 @@ import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.Type;
+import com.juliasoft.amalia.dex.codegen.cst.Constant;
 
 public class DexFieldTableModel implements TableModel
 {
 	private Object[][] data;
-	private String[] columnNames = { "Flags", "Type", "Name", "Annotations" };
+	private String[] columnNames = { "Flags", "Type", "Name", "Initalization", "Annotations" };
 	
 	public DexFieldTableModel(ClassGen clazz)
 	{
 		List<FieldGen> fields = new ArrayList<FieldGen>();
 		fields.addAll(clazz.getStatic_fields());
 		fields.addAll(clazz.getInstance_fields());
+		
+		Object[] staticValues =  clazz.getStaticValues().toArray();
+		
 		data = new Object[fields.size()][columnNames.length];
 		int i = 0;
 		for(FieldGen field : fields)
@@ -30,7 +34,8 @@ public class DexFieldTableModel implements TableModel
 			data[i][0] = AccessFlag.decodeToHuman(field.getFlags(), true);
 			data[i][1] = field.getType();
 			data[i][2] = field.getName();
-			data[i][3] = new HashSet<Annotation>(field.getAnnotations());
+			data[i][3] = (i < staticValues.length)? ((Constant)staticValues[i]) : "<not initialized>";
+			data[i][4] = new HashSet<Annotation>(field.getAnnotations());
 			i++;
 		}
 	}
@@ -49,7 +54,9 @@ public class DexFieldTableModel implements TableModel
 				return String.class;
 			case 1:
 				return Type.class;
-			case 3:
+			case 3: 
+				return Constant.class;
+			case 4:
 				return HashSet.class;
 			default:
 				throw new IllegalArgumentException();
@@ -86,7 +93,7 @@ public class DexFieldTableModel implements TableModel
 		switch(column)
 		{
 			case 1:
-			case 3:
+			case 4:
 				return true;
 			default:
 				return false;
@@ -99,13 +106,5 @@ public class DexFieldTableModel implements TableModel
 	
 	@Override
 	public void setValueAt(Object value, int row, int column) throws IllegalArgumentException
-	{
-		/*
-		 * if ( column == 0 && value instanceof String ) data[row][column] =
-		 * (String)value; else if ( column == 1 && value instanceof Type )
-		 * data[row][column] = (Type)value; else if ( column == 2 && value
-		 * instanceof FieldGen ) data[row][column] = (FieldGen)value; else throw
-		 * new IllegalArgumentException();
-		 */
-	}
+	{}
 }

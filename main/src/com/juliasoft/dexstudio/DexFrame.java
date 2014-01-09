@@ -7,6 +7,7 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -34,6 +35,7 @@ public class DexFrame extends JFrame implements DexVisualizable
 	private DexTree tree = new DexTree();
 	private DexTabManager tabManager = new DexTabManager();
 	private DexLog log = new DexLog();
+	private DexMenu menu = new DexMenu();
 	
 	/**
 	 * Constructor
@@ -47,7 +49,7 @@ public class DexFrame extends JFrame implements DexVisualizable
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("DexStudio");
 		this.setIconImage(new ImageIcon("imgs/logo.png").getImage());
-		this.setJMenuBar(new DexMenu());
+		this.setJMenuBar(menu);
 		JSplitPane splitPane1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tree, tabManager);
 		splitPane1.setFocusable(false);
 		splitPane1.setPreferredSize(splitPane1.getMaximumSize());
@@ -126,7 +128,20 @@ public class DexFrame extends JFrame implements DexVisualizable
 		if(read == JFileChooser.CANCEL_OPTION)
 			return;
 		File f = chooser.getSelectedFile();
+		if( ! f.getPath().endsWith(".apk"))
+		{
+			JOptionPane.showMessageDialog(null, "Invalid file extension");
+			return;
+		}
 		new DexOpenApk(this, f);
+		menu.open(true);
+		menu.updateItems();
+	}
+	
+	public void closeApk()
+	{
+		this.tabManager.cleanTabs();
+		this.tree.cleanTree();
 	}
 	
 	/**

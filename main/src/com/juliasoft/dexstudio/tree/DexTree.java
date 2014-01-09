@@ -92,7 +92,7 @@ public class DexTree extends JScrollPane
 				tree.expandPath(path);
 			}
 		}
-		else
+		else if(node instanceof DexTreeClass || node instanceof DexTreeMethod || node instanceof DexTreeAnnotation || node instanceof DexTreeStrings)
 		{
 			((DexFrame) SwingUtilities.getWindowAncestor(this)).changeSelectedTab(node);
 		}
@@ -108,9 +108,9 @@ public class DexTree extends JScrollPane
 		treeModel.nodeStructureChanged(rootNode);
 	}
 	
-	public void updateLayout(String name)
+	public void cleanTree()
 	{
-		DexTreeRoot rootNode = new DexTreeRoot(name);
+		DexTreeRoot rootNode = new DexTreeRoot("<No dex file loaded>");
 		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		tree.setModel(treeModel);
 		treeModel.nodeStructureChanged(rootNode);

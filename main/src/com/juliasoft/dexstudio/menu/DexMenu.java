@@ -22,13 +22,18 @@ import com.juliasoft.dexstudio.search.DexSearch;
 @SuppressWarnings("serial")
 public class DexMenu extends JMenuBar
 {
+	private boolean open = false;
+	private boolean compare = false;
+	
+	private DexMenuItem menuFileOpen, menuFileSave, menuFileClose, menuFileExit, menuCompareOpen, menuCompareClose, menuNavigateSearch, menuInfoHelp, menuInfoAbout;
+	
 	/**
 	 * Constructor
 	 */
 	public DexMenu()
 	{
 		// Menu Items
-		DexMenuItem menuFileOpen = new DexMenuItem("Open");
+		menuFileOpen = new DexMenuItem("Open apk");
 		menuFileOpen.setAccelerator(KeyStroke.getKeyStroke('O', KeyEvent.CTRL_DOWN_MASK));
 		menuFileOpen.setIcon(new ImageIcon("imgs/menu/open.png"));
 		menuFileOpen.addActionListener(new ActionListener()
@@ -36,10 +41,13 @@ public class DexMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)).closeApk();
 				((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)).openApk();
+				open(true);
+				updateItems();
 			}
 		});
-		DexMenuItem menuFileSave = new DexMenuItem("Save");
+		menuFileSave = new DexMenuItem("Save apk");
 		menuFileSave.setAccelerator(KeyStroke.getKeyStroke('S', KeyEvent.CTRL_DOWN_MASK));
 		menuFileSave.setIcon(new ImageIcon("imgs/menu/save.png"));
 		menuFileSave.addActionListener(new ActionListener()
@@ -50,10 +58,22 @@ public class DexMenu extends JMenuBar
 				JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
 			}
 		});
-		DexMenuItem menuFileClose = new DexMenuItem("Close");
-		menuFileClose.setAccelerator(KeyStroke.getKeyStroke('Q', KeyEvent.CTRL_DOWN_MASK));
+		menuFileClose = new DexMenuItem("Close apk");
 		menuFileClose.setIcon(new ImageIcon("imgs/menu/close.png"));
 		menuFileClose.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)).closeApk();
+				open(false);
+				updateItems();
+			}
+		});
+		menuFileExit = new DexMenuItem("Exit");
+		menuFileExit.setAccelerator(KeyStroke.getKeyStroke('Q', KeyEvent.CTRL_DOWN_MASK));
+		menuFileExit.setIcon(new ImageIcon("imgs/menu/exit.png"));
+		menuFileExit.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -61,7 +81,32 @@ public class DexMenu extends JMenuBar
 				((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)).dispose();
 			}
 		});
-		DexMenuItem menuNavigateSearch = new DexMenuItem("Search");
+		menuCompareOpen = new DexMenuItem("Compare Apk");
+		menuCompareOpen.setAccelerator(KeyStroke.getKeyStroke('C', KeyEvent.CTRL_DOWN_MASK));
+		menuCompareOpen.setIcon(new ImageIcon("imgs/menu/open.png"));
+		menuCompareOpen.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
+				compare(true);
+				updateItems();
+			}
+		});
+		menuCompareClose = new DexMenuItem("Close comparation");
+		menuCompareClose.setIcon(new ImageIcon("imgs/menu/close.png"));
+		menuCompareClose.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
+				compare(false);
+				updateItems();
+			}
+		});
+		menuNavigateSearch = new DexMenuItem("Search");
 		menuNavigateSearch.setAccelerator(KeyStroke.getKeyStroke('F', KeyEvent.CTRL_DOWN_MASK));
 		menuNavigateSearch.setIcon(new ImageIcon("imgs/menu/search.png"));
 		menuNavigateSearch.addActionListener(new ActionListener()
@@ -72,7 +117,8 @@ public class DexMenu extends JMenuBar
 				new DexSearch(((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)));
 			}
 		});
-		DexMenuItem menuInfoHelp = new DexMenuItem("Help");
+		menuInfoHelp = new DexMenuItem("Help");
+		menuInfoHelp.setAccelerator(KeyStroke.getKeyStroke('H', KeyEvent.CTRL_DOWN_MASK));
 		menuInfoHelp.setIcon(new ImageIcon("imgs/menu/help.png"));
 		menuInfoHelp.addActionListener(new ActionListener()
 		{
@@ -82,7 +128,8 @@ public class DexMenu extends JMenuBar
 				JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
 			}
 		});
-		DexMenuItem menuInfoAbout = new DexMenuItem("About DexStudio");
+		menuInfoAbout = new DexMenuItem("About DexStudio");
+		menuInfoAbout.setAccelerator(KeyStroke.getKeyStroke('I', KeyEvent.CTRL_DOWN_MASK));
 		menuInfoAbout.setIcon(new ImageIcon("imgs/menu/info.png"));
 		menuInfoAbout.addActionListener(new ActionListener()
 		{
@@ -96,15 +143,50 @@ public class DexMenu extends JMenuBar
 		JMenu menuFile = new JMenu("File");
 		menuFile.add(menuFileOpen);
 		menuFile.add(menuFileSave);
-		menuFile.addSeparator();
 		menuFile.add(menuFileClose);
+		menuFile.addSeparator();
+		menuFile.add(menuFileExit);
+		JMenu menuCompare = new JMenu("Compare");
+		menuCompare.add(menuCompareOpen);
+		menuCompare.add(menuCompareClose);
 		JMenu menuNavigate = new JMenu("Navigate");
 		menuNavigate.add(menuNavigateSearch);
 		JMenu menuInfo = new JMenu("?");
 		menuInfo.add(menuInfoHelp);
 		menuInfo.add(menuInfoAbout);
 		this.add(menuFile);
+		this.add(menuCompare);
 		this.add(menuNavigate);
 		this.add(menuInfo);
+		updateItems();
+	}
+	
+	public boolean isOpen()
+	{
+		return open;
+	}
+	
+	public boolean isCompare()
+	{
+		return compare;
+	}
+	
+	public void open(boolean value)
+	{
+		open = value;
+	}
+	
+	public void compare(boolean value)
+	{
+		compare = value;
+	}
+	
+	public void updateItems()
+	{
+		menuFileSave.setEnabled(open);
+		menuFileClose.setEnabled(open);
+		menuCompareOpen.setEnabled(open && !compare);
+		menuCompareClose.setEnabled(open && compare);
+		menuNavigateSearch.setEnabled(open);
 	}
 }

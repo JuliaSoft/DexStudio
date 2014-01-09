@@ -135,7 +135,7 @@ public class DexSearchList extends JTable
 			if(node.getUserObject() instanceof ClassGen)
 			{
 				ClassGen obj = (ClassGen) node.getUserObject();
-				String pkg = obj.toHuman().substring(obj.toHuman().lastIndexOf('.'));
+				String pkg = obj.toHuman().substring(0, obj.toHuman().lastIndexOf('.'));
 				label.setText("<html><b>" + str.substring(0, search.length()) + "</b>" + str.substring(search.length()) + " : <span style='color: #999999;'>" + pkg + "</span></html>");
 			}
 			else if(node.getUserObject() instanceof Set<?>)
