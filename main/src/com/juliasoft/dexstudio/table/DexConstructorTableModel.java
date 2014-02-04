@@ -10,6 +10,7 @@ import javax.swing.table.TableModel;
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
+import com.juliasoft.amalia.dex.codegen.Const;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 
 public class DexConstructorTableModel implements TableModel
@@ -32,7 +33,7 @@ public class DexConstructorTableModel implements TableModel
 		data = new Object[constructors.size()][columnNames.length];
 		for(MethodGen meth : constructors)
 		{
-			data[i][0] = AccessFlag.decodeToHuman(meth.getFlags(), false);
+			data[i][0] = AccessFlag.decodeToHuman(meth.getFlags(), false, Const.FLAG_USE_METHOD);
 			data[i][1] = meth;
 			data[i][2] = new HashSet<Annotation>(meth.getAnnotations());
 			i++;

@@ -9,6 +9,8 @@ public class DexStudio
 {
 	public static void main(String[] args)
 	{
-		new DexFrame().openApk();
+	    DexFrame df = new DexFrame();
+	    df.setVisible(true);
+	    df.openApk();
 	}
 }

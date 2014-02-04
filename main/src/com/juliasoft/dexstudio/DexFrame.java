@@ -3,6 +3,7 @@ package com.juliasoft.dexstudio;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.io.File;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -11,18 +12,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.juliasoft.amalia.dex.codegen.Annotation;
+import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
+import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.log.DexLog;
 import com.juliasoft.dexstudio.menu.DexMenu;
 import com.juliasoft.dexstudio.menu.DexOpenApk;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.tab.DexTabManager;
 import com.juliasoft.dexstudio.tree.DexTree;
-import com.juliasoft.dexstudio.tree.DexTreeAnnotation;
-import com.juliasoft.dexstudio.tree.DexTreeClass;
-import com.juliasoft.dexstudio.tree.DexTreeMethod;
-import com.juliasoft.dexstudio.tree.DexTreeNode;
-import com.juliasoft.dexstudio.tree.DexTreeStrings;
 
 /**
  * Main frame of the project.
@@ -75,32 +74,33 @@ public class DexFrame extends JFrame implements DexVisualizable
 	}
 	
 	@Override
-	public void openNewTab(DexTreeNode node)
+	public void openNewTab(Object obj)
 	{
-		DexTab tab = createTab(node);
+		DexTab tab = createTab(obj);
 		tabManager.addTab(tab);
 	}
 	
 	@Override
-	public void changeSelectedTab(DexTreeNode node)
+	public void changeSelectedTab(Object obj)
 	{
-		DexTab tab = createTab(node);
+		DexTab tab = createTab(obj);
 		if(tabManager.getSelectedIndex() == -1)
 			tabManager.addTab(tab);
 		else
 			tabManager.changeTab(tab);
 	}
 	
-	private DexTab createTab(DexTreeNode node)
+	@SuppressWarnings("unchecked")
+	private DexTab createTab(Object obj)
 	{
-		if(node instanceof DexTreeStrings)
-			return new DexTab(this, (DexTreeStrings) node);
-		else if(node instanceof DexTreeClass)
-			return new DexTab(this, (DexTreeStrings) node);
-		else if(node instanceof DexTreeMethod)
-			return new DexTab(this, (DexTreeMethod) node);
-		else if(node instanceof DexTreeAnnotation)
-			return new DexTab(this, (DexTreeAnnotation) node);
+		if(obj instanceof Set<?>)
+			return new DexTab(this, (Set<String>) obj); //FIXME: improper cast!!
+		else if(obj instanceof ClassGen)
+			return new DexTab(this, (ClassGen) obj);
+		else if(obj instanceof MethodGen)
+			return new DexTab(this, (MethodGen) obj);
+		else if(obj instanceof Annotation)
+			return new DexTab(this, (Annotation) obj);
 		return null;
 	}
 	

@@ -10,6 +10,7 @@ import javax.swing.table.TableModel;
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
+import com.juliasoft.amalia.dex.codegen.Const;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.cst.Constant;
@@ -31,7 +32,7 @@ public class DexFieldTableModel implements TableModel
 		int i = 0;
 		for(FieldGen field : fields)
 		{
-			data[i][0] = AccessFlag.decodeToHuman(field.getFlags(), true);
+			data[i][0] = AccessFlag.decodeToHuman(field.getFlags(), true, Const.FLAG_USE_FIELD);
 			data[i][1] = field.getType();
 			data[i][2] = field.getName();
 			data[i][3] = (i < staticValues.length)? ((Constant)staticValues[i]) : "<not initialized>";

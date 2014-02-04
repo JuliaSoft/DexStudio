@@ -76,7 +76,7 @@ public class DexSearchTextField extends JTextField implements KeyListener
 				if(sel != -1)
 				{
 					DexTreeNode node = (DexTreeNode) list.getModel().getValueAt(sel, 1);
-					frame.changeSelectedTab(node);
+					frame.changeSelectedTab(node.getUserObject());
 					dialog.setVisible(false);
 					dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));
 				}

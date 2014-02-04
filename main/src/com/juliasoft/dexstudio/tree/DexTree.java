@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
@@ -80,7 +81,7 @@ public class DexTree extends JScrollPane
 		// Get the selected element of the tree
 		TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
 		tree.setSelectionPath(path);
-		DexTreeNode node = (DexTreeNode) path.getLastPathComponent();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
 		if(node instanceof DexTreeFolder | node instanceof DexTreePackage)
 		{
 			if(tree.isExpanded(path))
@@ -94,7 +95,7 @@ public class DexTree extends JScrollPane
 		}
 		else if(node instanceof DexTreeClass || node instanceof DexTreeMethod || node instanceof DexTreeAnnotation || node instanceof DexTreeStrings)
 		{
-			((DexFrame) SwingUtilities.getWindowAncestor(this)).changeSelectedTab(node);
+			((DexFrame) SwingUtilities.getWindowAncestor(this)).changeSelectedTab(node.getUserObject());
 		}
 	}
 	
@@ -153,7 +154,7 @@ public class DexTree extends JScrollPane
 		}
 	}
 	
-	public DexTreeClass getClassNode(Type type)
+	public ClassGen getClassGen(Type type)
 	{
 		DexTreeRoot root = (DexTreeRoot) tree.getModel().getRoot();
 		DexTreeFolder classes = (DexTreeFolder) root.getChildAt(1);
@@ -172,7 +173,7 @@ public class DexTree extends JScrollPane
 				// If the type is the same
 				if(classGen.getType().equals(type))
 				{
-					return clazz;
+					return classGen;
 				}
 			}
 		}

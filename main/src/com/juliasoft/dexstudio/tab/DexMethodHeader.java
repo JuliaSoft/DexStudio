@@ -13,6 +13,7 @@ import javax.swing.event.HyperlinkListener;
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
+import com.juliasoft.amalia.dex.codegen.Const;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.ParamGen;
 import com.juliasoft.amalia.dex.codegen.Type;
@@ -76,7 +77,7 @@ public class DexMethodHeader extends JTextPane
 			}
 		}
 		String clazz = "<div class='description'>" + pakName + "." + ((ownerClass != null) ? "<a href=\"ownerclass\">" : "") + shortName + ((ownerClass != null) ? "</a>" : "") + "</div>";
-		String description = "<div class='class'><b>" + AccessFlag.decodeToHuman(meth.getFlags(), false) + "</b> " + printLinkSignature() + "<br />" + annots + "</div>";
+		String description = "<div class='class'><b>" + AccessFlag.decodeToHuman(meth.getFlags(), false, Const.FLAG_USE_METHOD) + "</b> " + printLinkSignature() + "<br />" + annots + "</div>";
 		this.setContentType("text/html");
 		this.setText(htmlFormat + clazz + description + closeFormat);
 		this.setAlignmentY(Component.LEFT_ALIGNMENT);
