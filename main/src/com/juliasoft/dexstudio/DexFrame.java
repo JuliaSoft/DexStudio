@@ -22,6 +22,7 @@ import com.juliasoft.dexstudio.menu.DexOpenApk;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.tab.DexTabManager;
 import com.juliasoft.dexstudio.tree.DexTree;
+import com.juliasoft.dexstudio.view.DexViewManager;
 
 /**
  * Main frame of the project.
@@ -36,25 +37,27 @@ public class DexFrame extends JFrame implements DexVisualizable
 	private DexLog log = new DexLog();
 	private DexMenu menu = new DexMenu();
 	
+	private DexViewManager viewManager = new DexViewManager();
+	
 	/**
 	 * Constructor
 	 */
 	public DexFrame()
 	{
 		// Setting the layout
-		this.setLayout(new BorderLayout());
 		this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setResizable(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("DexStudio");
 		this.setIconImage(new ImageIcon("imgs/logo.png").getImage());
 		this.setJMenuBar(menu);
-		JSplitPane splitPane1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tree, tabManager);
-		splitPane1.setFocusable(false);
-		splitPane1.setPreferredSize(splitPane1.getMaximumSize());
-		JSplitPane splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPane1, log);
-		splitPane2.setFocusable(false);
-		this.getContentPane().add(splitPane2, BorderLayout.CENTER);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabManager, log);
+		splitPane.setFocusable(false);
+		splitPane.setPreferredSize(splitPane.getMaximumSize());
+		JSplitPane contentSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, viewManager, splitPane);
+		viewManager.addView(tree);
+		contentSplitPane.setFocusable(false);
+		this.getContentPane().add(contentSplitPane, BorderLayout.CENTER);
 		this.setVisible(true);
 		this.revalidate();
 	}

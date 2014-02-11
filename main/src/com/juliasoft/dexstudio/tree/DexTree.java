@@ -6,21 +6,20 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Set;
 
-import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.dexstudio.view.DexView;
 
 @SuppressWarnings("serial")
-public class DexTree extends JScrollPane
+public class DexTree extends DexView
 {
 	private JTree tree;
 	
@@ -179,10 +178,10 @@ public class DexTree extends JScrollPane
 		}
 		return null;
 	}
-	
-	public Annotation getAnnotation(Type type)
+
+	@Override
+	public String getName()
 	{
-		// TODO
-		return null;
+		return "Packages";
 	}
 }
