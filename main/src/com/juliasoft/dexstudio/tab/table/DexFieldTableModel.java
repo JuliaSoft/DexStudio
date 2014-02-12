@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.table;
+package com.juliasoft.dexstudio.tab.table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +24,7 @@ public class DexFieldTableModel implements TableModel
 		List<FieldGen> fields = new ArrayList<FieldGen>();
 		fields.addAll(clazz.getStatic_fields());
 		fields.addAll(clazz.getInstance_fields());
-		
-		Object[] staticValues =  clazz.getStaticValues().toArray();
-		
+		Object[] staticValues = clazz.getStaticValues().toArray();
 		data = new Object[fields.size()][columnNames.length];
 		int i = 0;
 		for(FieldGen field : fields)
@@ -34,7 +32,7 @@ public class DexFieldTableModel implements TableModel
 			data[i][0] = AccessFlag.decodeToHuman(field.getFlags(), true, Const.FLAG_USE_FIELD);
 			data[i][1] = field.getType();
 			data[i][2] = field.getName();
-			data[i][3] = (i < staticValues.length)? ((Constant)staticValues[i]) : "<not initialized>";
+			data[i][3] = (i < staticValues.length) ? ((Constant) staticValues[i]) : "<not initialized>";
 			data[i][4] = new AnnotationSet(field.getAnnotations());
 			i++;
 		}
@@ -54,7 +52,7 @@ public class DexFieldTableModel implements TableModel
 				return String.class;
 			case 1:
 				return Type.class;
-			case 3: 
+			case 3:
 				return Constant.class;
 			case 4:
 				return AnnotationSet.class;

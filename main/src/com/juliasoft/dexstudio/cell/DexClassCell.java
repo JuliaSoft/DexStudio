@@ -20,7 +20,7 @@ public class DexClassCell extends JTextPane
 	{
 		super();
 		this.setContentType("text/html");
-		clazz = null; //TODO: aggiungere metodo per ottenere ClassGen da Type
+		clazz = null; // TODO: aggiungere metodo per ottenere ClassGen da Type
 		String text = ((clazz != null) ? "<a href='type'>" : "") + Library.printType(type) + ((clazz != null) ? "</a>" : "");
 		this.setText(htmlFormat + text + closeFormat);
 	}

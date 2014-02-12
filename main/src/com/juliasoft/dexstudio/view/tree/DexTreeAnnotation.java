@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.tree;
+package com.juliasoft.dexstudio.view.tree;
 
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.dexstudio.utils.Library;

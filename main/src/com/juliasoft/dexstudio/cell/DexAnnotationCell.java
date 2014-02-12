@@ -26,7 +26,6 @@ public class DexAnnotationCell extends JTextPane
 			int i = 0;
 			for(Annotation ann : annotations)
 				annots[i++] = ann;
-			
 			String text = new String();
 			i = 0;
 			boolean separator = false;

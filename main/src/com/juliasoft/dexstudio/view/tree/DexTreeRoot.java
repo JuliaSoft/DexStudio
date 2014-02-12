@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.tree;
+package com.juliasoft.dexstudio.view.tree;
 
 /**
  * Root node

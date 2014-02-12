@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.table;
+package com.juliasoft.dexstudio.tab.table;
 
 import java.util.ArrayList;
 import java.util.List;

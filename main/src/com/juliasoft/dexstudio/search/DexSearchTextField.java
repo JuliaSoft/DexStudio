@@ -18,9 +18,9 @@ import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.tab.DexTab;
-import com.juliasoft.dexstudio.tree.DexTreeNode;
 import com.juliasoft.dexstudio.utils.DexProgress;
 import com.juliasoft.dexstudio.utils.StringSet;
+import com.juliasoft.dexstudio.view.tree.DexTreeNode;
 
 /**
  * TextField for the search dialog

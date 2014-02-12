@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.tree;
+package com.juliasoft.dexstudio.view.tree;
 
 import com.juliasoft.dexstudio.utils.StringSet;
 

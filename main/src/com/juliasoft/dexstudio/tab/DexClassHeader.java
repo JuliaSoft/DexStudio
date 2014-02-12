@@ -32,12 +32,10 @@ public class DexClassHeader extends JTextPane
 	private ClassGen superClass;
 	private ClassGen[] interfaces;
 	private Annotation[] annotations;
-	
 	private DexDisplay display;
 	
 	public DexClassHeader(DexDisplay display, ClassGen clazz)
 	{
-		
 		this.display = display;
 		this.superClass = display.getTree().getClassGen(clazz.getSuperclass());
 		List<Type> interfList = clazz.getInterfaces();

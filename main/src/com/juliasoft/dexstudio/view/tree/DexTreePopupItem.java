@@ -1,12 +1,17 @@
-package com.juliasoft.dexstudio.table;
+package com.juliasoft.dexstudio.view.tree;
 
 import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.JMenuItem;
 
+/**
+ * Item for the popup menu of navigation tree
+ * 
+ * @author Zanoncello Matteo
+ */
 @SuppressWarnings("serial")
-public class DexTablePopupItem extends JMenuItem
+public class DexTreePopupItem extends JMenuItem
 {
 	/**
 	 * String constructor
@@ -14,7 +19,7 @@ public class DexTablePopupItem extends JMenuItem
 	 * @param name
 	 *            The name of the menu item
 	 */
-	public DexTablePopupItem(String name)
+	public DexTreePopupItem(String name)
 	{
 		super(name);
 		this.setMinimumSize(new Dimension(this.getPreferredSize().width, 30));

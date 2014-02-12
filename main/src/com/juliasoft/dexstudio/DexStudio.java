@@ -9,8 +9,8 @@ public class DexStudio
 {
 	public static void main(String[] args)
 	{
-	    DexFrame df = new DexFrame();
-	    df.setVisible(true);
-	    df.getMenu().openApk();
+		DexFrame df = new DexFrame();
+		df.setVisible(true);
+		df.getMenu().openApk();
 	}
 }

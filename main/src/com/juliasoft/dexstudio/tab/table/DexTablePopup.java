@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.table;
+package com.juliasoft.dexstudio.tab.table;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

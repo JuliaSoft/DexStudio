@@ -12,8 +12,8 @@ import com.juliasoft.dexstudio.log.DexLog;
 import com.juliasoft.dexstudio.menu.DexMenu;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.tab.DexTabManager;
-import com.juliasoft.dexstudio.tree.DexTree;
 import com.juliasoft.dexstudio.view.DexViewManager;
+import com.juliasoft.dexstudio.view.tree.DexTree;
 
 /**
  * Main frame of the project.

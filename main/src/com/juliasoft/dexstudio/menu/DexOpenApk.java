@@ -94,9 +94,8 @@ public class DexOpenApk extends JDialog
 		@Override
 		public DexGen doInBackground()
 		{
-			//Saving the background thread
+			// Saving the background thread
 			bgThread = Thread.currentThread();
-			
 			// Converting file in a DexGen
 			try
 			{
@@ -170,7 +169,7 @@ public class DexOpenApk extends JDialog
 		 */
 		public void stop()
 		{
-			//Stop the background thread
+			// Stop the background thread
 			if(bgThread != null)
 				bgThread.interrupt();
 		}

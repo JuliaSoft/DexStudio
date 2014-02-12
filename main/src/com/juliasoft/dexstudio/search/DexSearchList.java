@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
-import com.juliasoft.dexstudio.tree.DexTreeNode;
+import com.juliasoft.dexstudio.view.tree.DexTreeNode;
 
 /**
  * JTable with additional functions for managed the results of a search

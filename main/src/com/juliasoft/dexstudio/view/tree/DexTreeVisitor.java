@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.tree;
+package com.juliasoft.dexstudio.view.tree;
 
 import java.util.HashMap;
 import java.util.Map;

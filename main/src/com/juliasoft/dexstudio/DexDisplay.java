@@ -1,7 +1,7 @@
 package com.juliasoft.dexstudio;
 
 import com.juliasoft.dexstudio.tab.DexTab;
-import com.juliasoft.dexstudio.tree.DexTree;
+import com.juliasoft.dexstudio.view.tree.DexTree;
 
 public interface DexDisplay
 {

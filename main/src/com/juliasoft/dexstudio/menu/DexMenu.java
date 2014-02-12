@@ -26,8 +26,9 @@ public class DexMenu extends JMenuBar
 {
 	private boolean open = false;
 	private boolean compare = false;
-	
-	private DexMenuItem menuFileOpen, menuFileSave, menuFileClose, menuFileExit, menuCompareOpen, menuCompareClose, menuNavigateSearch, menuInfoHelp, menuInfoAbout;
+	private DexMenuItem menuFileOpen, menuFileSave, menuFileClose,
+			menuFileExit, menuCompareOpen, menuCompareClose,
+			menuNavigateSearch, menuInfoHelp, menuInfoAbout;
 	private DexFrame frame;
 	
 	/**
@@ -36,7 +37,6 @@ public class DexMenu extends JMenuBar
 	public DexMenu(DexFrame frame)
 	{
 		this.frame = frame;
-		
 		// Menu Items
 		menuFileOpen = new DexMenuItem("Open apk");
 		menuFileOpen.setAccelerator(KeyStroke.getKeyStroke('O', KeyEvent.CTRL_DOWN_MASK));
@@ -207,7 +207,7 @@ public class DexMenu extends JMenuBar
 		if(read == JFileChooser.CANCEL_OPTION)
 			return;
 		File f = chooser.getSelectedFile();
-		if( ! f.getPath().endsWith(".apk"))
+		if(!f.getPath().endsWith(".apk"))
 		{
 			JOptionPane.showMessageDialog(null, "Invalid file extension");
 			return;

@@ -8,7 +8,7 @@ import com.juliasoft.dexstudio.exception.ViewNotFoundException;
 
 @SuppressWarnings("serial")
 public class DexViewManager extends JTabbedPane
-{	
+{
 	public DexViewManager()
 	{
 		this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -64,7 +64,7 @@ public class DexViewManager extends JTabbedPane
 	
 	public int indexOf(String viewName)
 	{
-		int i=0;
+		int i = 0;
 		while(!this.getTitleAt(i).equals(viewName))
 		{
 			if(++i >= this.getTabCount())

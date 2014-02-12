@@ -36,7 +36,6 @@ public class DexMethodHeader extends JTextPane
 	private MethodGen meth;
 	private ClassGen returnType;
 	private Annotation[] annotations;
-	
 	private DexDisplay display;
 	
 	public DexMethodHeader(DexDisplay display, MethodGen meth)

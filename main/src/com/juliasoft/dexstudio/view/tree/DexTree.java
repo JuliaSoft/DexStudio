@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.tree;
+package com.juliasoft.dexstudio.view.tree;
 
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -99,19 +99,19 @@ public class DexTree extends DexView
 		}
 		else if(node instanceof DexTreeClass)
 		{
-			frame.changeSelectedTab(new DexTab(frame, (ClassGen)node.getUserObject()));
+			frame.changeSelectedTab(new DexTab(frame, (ClassGen) node.getUserObject()));
 		}
 		else if(node instanceof DexTreeMethod)
 		{
-			frame.changeSelectedTab(new DexTab(frame, (MethodGen)node.getUserObject()));
+			frame.changeSelectedTab(new DexTab(frame, (MethodGen) node.getUserObject()));
 		}
 		else if(node instanceof DexTreeAnnotation)
 		{
-			frame.changeSelectedTab(new DexTab(frame, (Annotation)node.getUserObject()));
+			frame.changeSelectedTab(new DexTab(frame, (Annotation) node.getUserObject()));
 		}
 		else if(node instanceof DexTreeStrings)
 		{
-			frame.changeSelectedTab(new DexTab(frame, (StringSet)node.getUserObject()));
+			frame.changeSelectedTab(new DexTab(frame, (StringSet) node.getUserObject()));
 		}
 	}
 	
@@ -195,7 +195,7 @@ public class DexTree extends DexView
 		}
 		return null;
 	}
-
+	
 	@Override
 	public String getName()
 	{

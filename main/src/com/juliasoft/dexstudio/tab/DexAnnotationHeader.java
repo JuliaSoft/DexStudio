@@ -27,21 +27,22 @@ public class DexAnnotationHeader extends JTextPane
 		String pakage = "<div class='pak'>" + annName.substring(1, annName.lastIndexOf('/')).replace('/', '.') + "</div>";
 		String description = "<div class='description'>" + "<b>Annotation Type</b> " + "@" + Library.printType(ann.getType()) + "</div>";
 		String visibility = "<div class='description'><b>Visibility:</b> ";
-		
-		switch(ann.getVisibility()){
-		case VISIBILITY_BUILD:
-			visibility += "Build"; break;
-		case VISIBILITY_RUNTIME:
-			visibility += "Runtime";break;
-		case VISIBILITY_SYSTEM:
-			visibility += "System";break;
-		case VISIBILITY_UNSPECIFIED:
-			visibility += "Unspecified";break;
-		
+		switch(ann.getVisibility())
+		{
+			case VISIBILITY_BUILD:
+				visibility += "Build";
+				break;
+			case VISIBILITY_RUNTIME:
+				visibility += "Runtime";
+				break;
+			case VISIBILITY_SYSTEM:
+				visibility += "System";
+				break;
+			case VISIBILITY_UNSPECIFIED:
+				visibility += "Unspecified";
+				break;
 		}
-		
 		visibility += "</div>";
-		
 		this.setContentType("text/html");
 		this.setText(htmlFormat + pakage + description + visibility + closeFormat);
 		this.setAlignmentY(Component.LEFT_ALIGNMENT);

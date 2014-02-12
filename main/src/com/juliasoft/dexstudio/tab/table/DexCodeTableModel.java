@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.table;
+package com.juliasoft.dexstudio.tab.table;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
