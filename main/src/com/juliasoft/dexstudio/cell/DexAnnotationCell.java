@@ -1,11 +1,9 @@
 package com.juliasoft.dexstudio.cell;
 
-import java.util.Collection;
-
 import javax.swing.JTextPane;
 
 import com.juliasoft.amalia.dex.codegen.Annotation;
-import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.dexstudio.utils.AnnotationSet;
 import com.juliasoft.dexstudio.utils.Library;
 
 @SuppressWarnings("serial")
@@ -18,7 +16,7 @@ public class DexAnnotationCell extends JTextPane
 	private final String closeFormat = "</body></html>";
 	private Annotation[] annots;
 	
-	public DexAnnotationCell(Collection<Annotation> annotations, DexFrame frame)
+	public DexAnnotationCell(AnnotationSet annotations)
 	{
 		super();
 		this.setContentType("text/html");
@@ -28,6 +26,7 @@ public class DexAnnotationCell extends JTextPane
 			int i = 0;
 			for(Annotation ann : annotations)
 				annots[i++] = ann;
+			
 			String text = new String();
 			i = 0;
 			boolean separator = false;

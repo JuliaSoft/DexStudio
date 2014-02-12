@@ -7,24 +7,29 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import javax.swing.JTree;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
+import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.Type;
-import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.dexstudio.DexDisplay;
+import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
 
 @SuppressWarnings("serial")
 public class DexTree extends DexView
 {
 	private JTree tree;
+	private DexDisplay frame;
 	
-	public DexTree()
+	public DexTree(DexDisplay frame)
 	{
+		this.frame = frame;
 		initLayout();
 	}
 	
@@ -71,7 +76,7 @@ public class DexTree extends DexView
 		if(!(node instanceof DexTreeRoot))
 		{
 			// Open the popup menu
-			new DexTreePopup(tree, node).show(e.getComponent(), e.getX(), e.getY());
+			new DexTreePopup(frame, tree, node).show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 	
@@ -92,9 +97,21 @@ public class DexTree extends DexView
 				tree.expandPath(path);
 			}
 		}
-		else if(node instanceof DexTreeClass || node instanceof DexTreeMethod || node instanceof DexTreeAnnotation || node instanceof DexTreeStrings)
+		else if(node instanceof DexTreeClass)
 		{
-			((DexFrame) SwingUtilities.getWindowAncestor(this)).changeSelectedTab(node.getUserObject());
+			frame.changeSelectedTab(new DexTab(frame, (ClassGen)node.getUserObject()));
+		}
+		else if(node instanceof DexTreeMethod)
+		{
+			frame.changeSelectedTab(new DexTab(frame, (MethodGen)node.getUserObject()));
+		}
+		else if(node instanceof DexTreeAnnotation)
+		{
+			frame.changeSelectedTab(new DexTab(frame, (Annotation)node.getUserObject()));
+		}
+		else if(node instanceof DexTreeStrings)
+		{
+			frame.changeSelectedTab(new DexTab(frame, (StringSet)node.getUserObject()));
 		}
 	}
 	

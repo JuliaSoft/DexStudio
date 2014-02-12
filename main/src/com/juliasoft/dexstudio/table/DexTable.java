@@ -1,26 +1,16 @@
 package com.juliasoft.dexstudio.table;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Arrays;
-import java.util.EventListener;
-import java.util.HashSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextPane;
-import javax.swing.event.RowSorterEvent;
-import javax.swing.event.RowSorterListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -28,11 +18,11 @@ import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.cst.Constant;
-import com.juliasoft.dexstudio.DexFrame;
-import com.juliasoft.dexstudio.DexVisualizable;
+import com.juliasoft.dexstudio.DexDisplay;
+import com.juliasoft.dexstudio.table.render.AnnotationRenderer;
 import com.juliasoft.dexstudio.table.render.DefaultDexRenderer;
-import com.juliasoft.dexstudio.table.render.DexEditorRenderer;
 import com.juliasoft.dexstudio.table.render.MethodRenderer;
+import com.juliasoft.dexstudio.utils.AnnotationSet;
 
 /**
  * Table model for all the visualized table in the project
@@ -51,9 +41,10 @@ public class DexTable extends JPanel {
      * @param model
      *            The model of the table to visualize
      */
-    public DexTable(DexVisualizable display, TableModel model)
+    public DexTable(DexDisplay display, TableModel model)
     {
-        super(new BorderLayout());
+        super();
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         table = new JTable(model);
         if (table.getRowCount() == 0)
         {
@@ -63,11 +54,13 @@ public class DexTable extends JPanel {
         // Setting Layout
         this.setBackground(new Color(0.8f, 0.8f, 0.8f));
         this.setBorder(BorderFactory.createMatteBorder(20, 0, 0, 0, Color.white));
+        this.setAlignmentY(TOP_ALIGNMENT);
         this.setAlignmentX(LEFT_ALIGNMENT);
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
         content.setBackground(Color.white);
         content.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, new Color(0.8f, 0.8f, 0.8f)));
+        content.setAlignmentX(LEFT_ALIGNMENT);
         table.setBackground(Color.WHITE);
         table.getTableHeader().setBackground(new Color(222, 227, 233));
         // table.setAutoCreateRowSorter(true);
@@ -79,18 +72,19 @@ public class DexTable extends JPanel {
         DefaultDexRenderer editRend = new DefaultDexRenderer();
         
         MethodRenderer mRend = new MethodRenderer(display);
+        AnnotationRenderer aRend = new AnnotationRenderer(display);
         
         table.setDefaultRenderer(Type.class, editRend);
         table.setDefaultRenderer(String.class, editRend);
         table.setDefaultRenderer(MethodGen.class, mRend);
         table.setDefaultRenderer(FieldGen.class, editRend);
-        table.setDefaultRenderer(HashSet.class, editRend);
+        table.setDefaultRenderer(AnnotationSet.class, aRend);
         table.setDefaultRenderer(Constant.class, editRend);
         table.setDefaultEditor(String.class, editRend);
         table.setDefaultEditor(Type.class, editRend);
         table.setDefaultEditor(MethodGen.class, mRend);
         table.setDefaultEditor(FieldGen.class, editRend);
-        table.setDefaultEditor(HashSet.class, editRend);
+        table.setDefaultEditor(AnnotationSet.class, aRend);
 
         table.setRowHeight(20);
         table.setShowGrid(false);
@@ -101,6 +95,8 @@ public class DexTable extends JPanel {
         table.addMouseListener(mouse);
         // Setting the content
         JLabel title = new JLabel();
+        title.setHorizontalAlignment(JLabel.LEFT);
+        title.setAlignmentX(LEFT_ALIGNMENT);
         title.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
         if (model instanceof DexFieldTableModel)
         {
@@ -136,8 +132,8 @@ public class DexTable extends JPanel {
         }
         content.add(table.getTableHeader());
         content.add(table);
-        this.add(title, BorderLayout.NORTH);
-        this.add(content, BorderLayout.CENTER);
+        this.add(title);
+        this.add(content);
     }
 
     /**

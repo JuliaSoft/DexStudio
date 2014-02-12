@@ -142,7 +142,9 @@ public class DexOpenApk extends JDialog
 			try
 			{
 				if(get() != null)
+				{
 					frame.updateLayout(get(), apk.getName());
+				}
 			}
 			catch(InterruptedException | ExecutionException e)
 			{

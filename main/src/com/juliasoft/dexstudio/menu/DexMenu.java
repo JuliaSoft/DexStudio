@@ -3,13 +3,15 @@ package com.juliasoft.dexstudio.menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.search.DexSearch;
@@ -26,12 +28,15 @@ public class DexMenu extends JMenuBar
 	private boolean compare = false;
 	
 	private DexMenuItem menuFileOpen, menuFileSave, menuFileClose, menuFileExit, menuCompareOpen, menuCompareClose, menuNavigateSearch, menuInfoHelp, menuInfoAbout;
+	private DexFrame frame;
 	
 	/**
 	 * Constructor
 	 */
-	public DexMenu()
+	public DexMenu(DexFrame frame)
 	{
+		this.frame = frame;
+		
 		// Menu Items
 		menuFileOpen = new DexMenuItem("Open apk");
 		menuFileOpen.setAccelerator(KeyStroke.getKeyStroke('O', KeyEvent.CTRL_DOWN_MASK));
@@ -41,9 +46,8 @@ public class DexMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)).closeApk();
-				((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)).openApk();
-				open(true);
+				closeApk();
+				openApk();
 				updateItems();
 			}
 		});
@@ -65,7 +69,7 @@ public class DexMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)).closeApk();
+				closeApk();
 				open(false);
 				updateItems();
 			}
@@ -78,7 +82,7 @@ public class DexMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)).dispose();
+				DexMenu.this.frame.dispose();
 			}
 		});
 		menuCompareOpen = new DexMenuItem("Compare Apk");
@@ -114,7 +118,7 @@ public class DexMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				new DexSearch(((DexFrame) SwingUtilities.getWindowAncestor(DexMenu.this)));
+				new DexSearch(DexMenu.this.frame);
 			}
 		});
 		menuInfoHelp = new DexMenuItem("Help");
@@ -188,5 +192,33 @@ public class DexMenu extends JMenuBar
 		menuCompareOpen.setEnabled(open && !compare);
 		menuCompareClose.setEnabled(open && compare);
 		menuNavigateSearch.setEnabled(open);
+	}
+	
+	/**
+	 * Open a file browser to choose the apk file to open
+	 */
+	public void openApk()
+	{
+		// Browse the apk file
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Android Package (APK)", "apk");
+		chooser.setFileFilter(filter);
+		int read = chooser.showOpenDialog(this);
+		if(read == JFileChooser.CANCEL_OPTION)
+			return;
+		File f = chooser.getSelectedFile();
+		if( ! f.getPath().endsWith(".apk"))
+		{
+			JOptionPane.showMessageDialog(null, "Invalid file extension");
+			return;
+		}
+		new DexOpenApk(frame, f);
+		open(true);
+		updateItems();
+	}
+	
+	public void closeApk()
+	{
+		frame.cleanLayout();
 	}
 }

@@ -2,10 +2,10 @@ package com.juliasoft.dexstudio.table;
 
 import java.util.Set;
 
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+@SuppressWarnings("serial")
 public class DexStringTableModel extends AbstractTableModel implements TableModel {
     private String[] data;
     private String[] columnNames = { "String Value" };

@@ -1,19 +1,18 @@
 package com.juliasoft.dexstudio.table;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
-import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.Const;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.cst.Constant;
+import com.juliasoft.dexstudio.utils.AnnotationSet;
 
 public class DexFieldTableModel implements TableModel
 {
@@ -36,7 +35,7 @@ public class DexFieldTableModel implements TableModel
 			data[i][1] = field.getType();
 			data[i][2] = field.getName();
 			data[i][3] = (i < staticValues.length)? ((Constant)staticValues[i]) : "<not initialized>";
-			data[i][4] = new HashSet<Annotation>(field.getAnnotations());
+			data[i][4] = new AnnotationSet(field.getAnnotations());
 			i++;
 		}
 	}
@@ -58,7 +57,7 @@ public class DexFieldTableModel implements TableModel
 			case 3: 
 				return Constant.class;
 			case 4:
-				return HashSet.class;
+				return AnnotationSet.class;
 			default:
 				throw new IllegalArgumentException();
 		}

@@ -4,7 +4,6 @@ import javax.swing.JTextPane;
 
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.Type;
-import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.utils.Library;
 
 @SuppressWarnings("serial")
@@ -17,11 +16,11 @@ public class DexClassCell extends JTextPane
 	private final String closeFormat = "</body></html>";
 	private ClassGen clazz;
 	
-	public DexClassCell(Type type, DexFrame frame)
+	public DexClassCell(Type type)
 	{
 		super();
 		this.setContentType("text/html");
-		clazz = frame.getTree().getClassGen(type);
+		clazz = null; //TODO: aggiungere metodo per ottenere ClassGen da Type
 		String text = ((clazz != null) ? "<a href='type'>" : "") + Library.printType(type) + ((clazz != null) ? "</a>" : "");
 		this.setText(htmlFormat + text + closeFormat);
 	}

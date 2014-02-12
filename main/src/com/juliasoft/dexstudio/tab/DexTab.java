@@ -1,7 +1,6 @@
 package com.juliasoft.dexstudio.tab;
 
 import java.awt.Color;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -11,7 +10,7 @@ import javax.swing.JScrollPane;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
-import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.table.DexCodeTableModel;
 import com.juliasoft.dexstudio.table.DexConstructorTableModel;
 import com.juliasoft.dexstudio.table.DexFieldTableModel;
@@ -20,6 +19,7 @@ import com.juliasoft.dexstudio.table.DexStringTableModel;
 import com.juliasoft.dexstudio.table.DexTable;
 import com.juliasoft.dexstudio.table.DexValueTableModel;
 import com.juliasoft.dexstudio.utils.Library;
+import com.juliasoft.dexstudio.utils.StringSet;
 
 /**
  * Tab where DexGen elements' informations are visualized
@@ -40,7 +40,7 @@ public class DexTab extends JScrollPane
 	 * @param clazz
 	 *            The ClassGen instance
 	 */
-	public DexTab(DexFrame frame, ClassGen clazz)
+	public DexTab(DexDisplay frame, ClassGen clazz)
 	{
 		initLayout();
 		title = Library.shortName(clazz.getType().getName());
@@ -58,7 +58,7 @@ public class DexTab extends JScrollPane
 	 * @param clazz
 	 *            The MethodGen instance
 	 */
-	public DexTab(DexFrame frame, MethodGen meth)
+	public DexTab(DexDisplay frame, MethodGen meth)
 	{
 		initLayout();
 		title = (meth.isConstructor()) ? Library.printType(meth.getOwnerClass()) + "()" : meth.getName() + "()";
@@ -74,7 +74,7 @@ public class DexTab extends JScrollPane
 	 * @param clazz
 	 *            The Annotation instance
 	 */
-	public DexTab(DexFrame frame, Annotation ann)
+	public DexTab(DexDisplay frame, Annotation ann)
 	{
 		initLayout();
 		title = Library.printType(ann.getType());
@@ -90,7 +90,7 @@ public class DexTab extends JScrollPane
 	 * @param clazz
 	 *            The Set of the strings
 	 */
-	public DexTab(DexFrame frame, Set<String> strs)
+	public DexTab(DexDisplay frame, StringSet strs)
 	{
 		initLayout();
 		title = "Strings";

@@ -6,15 +6,16 @@ import javax.swing.event.HyperlinkEvent.EventType;
 import javax.swing.event.HyperlinkListener;
 
 import com.juliasoft.amalia.dex.codegen.MethodGen;
-import com.juliasoft.dexstudio.DexVisualizable;
+import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.cell.DexMethodCell;
+import com.juliasoft.dexstudio.tab.DexTab;
 
 @SuppressWarnings("serial")
 public class MethodRenderer extends AbstractDexEditorRenderer {
 
-    private final DexVisualizable display;
+    private final DexDisplay display;
 
-    public MethodRenderer(DexVisualizable display)
+    public MethodRenderer(DexDisplay display)
     {
         this.display = display;
     }
@@ -34,7 +35,7 @@ public class MethodRenderer extends AbstractDexEditorRenderer {
             {
                 if (e.getEventType().equals(EventType.ACTIVATED))
                 {
-                    display.changeSelectedTab(value);
+                    display.changeSelectedTab(new DexTab(display, (MethodGen)value));
                 }
             }
         };

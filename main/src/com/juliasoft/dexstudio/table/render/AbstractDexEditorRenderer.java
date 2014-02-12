@@ -40,7 +40,6 @@ public abstract class AbstractDexEditorRenderer extends AbstractCellEditor imple
         return getComponent(value, row, column);
     }
 
-    @SuppressWarnings("unchecked")
     private Component getComponent(Object value, int row, int column)
     {
         this.value = value;

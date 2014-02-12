@@ -5,7 +5,6 @@ import javax.swing.JTextPane;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.ParamGen;
-import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.utils.Library;
 
 @SuppressWarnings("serial")

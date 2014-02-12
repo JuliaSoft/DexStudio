@@ -15,6 +15,7 @@ import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.ParamGen;
+import com.juliasoft.dexstudio.utils.StringSet;
 
 /**
  * Visitor of the DexGen file for the built of the tree
@@ -40,7 +41,7 @@ public class DexTreeVisitor implements DexGenVisitor
 	{
 		DexTreeFolder ctxNode = new DexTreeFolder("Context");
 		nodeStack.peek().add(ctxNode);
-		ctxNode.add(new DexTreeStrings(ctxGen.getStrings()));
+		ctxNode.add(new DexTreeStrings(new StringSet(ctxGen.getStrings())));
 		// ctxNode.add(new DexTreeTypes(ctxGen.getTypes())); //Manca il metodo
 		// getTypes()
 	}

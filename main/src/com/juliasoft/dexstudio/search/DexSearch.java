@@ -13,7 +13,12 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import com.juliasoft.amalia.dex.codegen.Annotation;
+import com.juliasoft.amalia.dex.codegen.ClassGen;
+import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.utils.StringSet;
 
 /**
  * Search dialog of DexStudio
@@ -56,7 +61,22 @@ public class DexSearch extends JDialog implements WindowListener
 				Object content = list.getValueAt(list.getSelectedRow(), 1);
 				if(content != null)
 				{
-					frame.changeSelectedTab(content);
+					if(content instanceof ClassGen)
+					{
+						frame.changeSelectedTab(new DexTab(frame, (ClassGen) content));
+					}
+					else if(content instanceof MethodGen)
+					{
+						frame.changeSelectedTab(new DexTab(frame, (MethodGen) content));
+					}
+					else if(content instanceof Annotation)
+					{
+						frame.changeSelectedTab(new DexTab(frame, (Annotation) content));
+					}
+					else if(content instanceof StringSet)
+					{
+						frame.changeSelectedTab(new DexTab(frame, (StringSet) content));
+					}
 					DexSearch.this.setVisible(false);
 					DexSearch.this.dispatchEvent(new WindowEvent(DexSearch.this, WindowEvent.WINDOW_CLOSING));
 				}

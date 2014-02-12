@@ -1,6 +1,6 @@
 package com.juliasoft.dexstudio.tree;
 
-import java.util.Set;
+import com.juliasoft.dexstudio.utils.StringSet;
 
 /**
  * Strings node
@@ -10,7 +10,7 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class DexTreeStrings extends DexTreeNode
 {
-	public DexTreeStrings(Set<String> strings)
+	public DexTreeStrings(StringSet strings)
 	{
 		this.setUserObject(strings);
 	}

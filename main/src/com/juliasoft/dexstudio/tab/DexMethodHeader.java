@@ -6,7 +6,6 @@ import java.awt.event.InputEvent;
 import java.util.Collection;
 
 import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -18,7 +17,7 @@ import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.ParamGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.TypeList;
-import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.utils.Library;
 
 @SuppressWarnings("serial")
@@ -38,23 +37,26 @@ public class DexMethodHeader extends JTextPane
 	private ClassGen returnType;
 	private Annotation[] annotations;
 	
-	public DexMethodHeader(DexFrame frame, MethodGen meth)
+	private DexDisplay display;
+	
+	public DexMethodHeader(DexDisplay display, MethodGen meth)
 	{
+		this.display = display;
 		this.meth = meth;
 		this.setBackground(Color.WHITE);
-		this.returnType = frame.getTree().getClassGen(meth.getReturnType());
+		this.returnType = display.getTree().getClassGen(meth.getReturnType());
 		TypeList parList = meth.getPrototype().getParameters();
 		if(parList != null)
 		{
 			params = new ClassGen[parList.size()];
 			int i = 0;
 			for(Type param : parList)
-				params[i++] = frame.getTree().getClassGen(param);
+				params[i++] = display.getTree().getClassGen(param);
 		}
 		String longName = meth.getOwnerClass().getName().replace('/', '.');
 		String pakName = longName.contains(".") ? longName.substring(1, longName.lastIndexOf('.')) : "[default pakage]";
 		String shortName = Library.shortName(longName);
-		this.ownerClass = frame.getTree().getClassGen(meth.getOwnerClass());
+		this.ownerClass = display.getTree().getClassGen(meth.getOwnerClass());
 		Collection<Annotation> anns = meth.getAnnotations();
 		String annots;
 		if(anns.isEmpty())
@@ -95,18 +97,18 @@ public class DexMethodHeader extends JTextPane
 				{
 					String code = e.getDescription();
 					if(code.equals("ownerclass"))
-						((DexFrame) SwingUtilities.getWindowAncestor(DexMethodHeader.this)).changeSelectedTab(ownerClass);
+						DexMethodHeader.this.display.changeSelectedTab(new DexTab(DexMethodHeader.this.display, ownerClass));
 					else if(code.equals("returntype"))
-						((DexFrame) SwingUtilities.getWindowAncestor(DexMethodHeader.this)).changeSelectedTab(returnType);
+						DexMethodHeader.this.display.changeSelectedTab(new DexTab(DexMethodHeader.this.display, returnType));
 					else if(code.matches("par[0-9]+"))
 					{
 						int index = Integer.parseInt(code.substring(3));
-						((DexFrame) SwingUtilities.getWindowAncestor(DexMethodHeader.this)).changeSelectedTab(params[index]);
+						DexMethodHeader.this.display.changeSelectedTab(new DexTab(DexMethodHeader.this.display, params[index]));
 					}
 					else if(code.matches("ann[0-9]+"))
 					{
 						int index = Integer.parseInt(code.substring(3));
-						((DexFrame) SwingUtilities.getWindowAncestor(DexMethodHeader.this)).changeSelectedTab(annotations[index]);
+						DexMethodHeader.this.display.changeSelectedTab(new DexTab(DexMethodHeader.this.display, annotations[index]));
 					}
 				}
 			}

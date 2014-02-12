@@ -64,7 +64,6 @@ public class DexLog extends JPanel {
         JScrollPane scroll = new JScrollPane(log);
         this.add(new JLabel("Log"), BorderLayout.NORTH);
         this.add(scroll, BorderLayout.CENTER);
-        this.setPreferredSize(this.getMinimumSize());
         addVisualLogAppender();
     }
 

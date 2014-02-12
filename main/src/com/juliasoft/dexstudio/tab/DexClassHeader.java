@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -16,7 +15,7 @@ import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.Type;
-import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.utils.Library;
 
 @SuppressWarnings("serial")
@@ -34,9 +33,13 @@ public class DexClassHeader extends JTextPane
 	private ClassGen[] interfaces;
 	private Annotation[] annotations;
 	
-	public DexClassHeader(DexFrame frame, ClassGen clazz)
+	private DexDisplay display;
+	
+	public DexClassHeader(DexDisplay display, ClassGen clazz)
 	{
-		this.superClass = frame.getTree().getClassGen(clazz.getSuperclass());
+		
+		this.display = display;
+		this.superClass = display.getTree().getClassGen(clazz.getSuperclass());
 		List<Type> interfList = clazz.getInterfaces();
 		Collection<Annotation> annList = clazz.getAnnotations();
 		int i = 0;
@@ -44,7 +47,7 @@ public class DexClassHeader extends JTextPane
 		{
 			this.interfaces = new ClassGen[interfList.size()];
 			for(Type interf : interfList)
-				interfaces[i++] = frame.getTree().getClassGen(interf);
+				interfaces[i++] = display.getTree().getClassGen(interf);
 		}
 		i = 0;
 		if(!annList.isEmpty())
@@ -114,16 +117,16 @@ public class DexClassHeader extends JTextPane
 				{
 					String code = e.getDescription();
 					if(code.equals("superclass"))
-						((DexFrame) SwingUtilities.getWindowAncestor(DexClassHeader.this)).changeSelectedTab(superClass);
+						DexClassHeader.this.display.changeSelectedTab(new DexTab(DexClassHeader.this.display, superClass));
 					else if(code.matches("int[0-9]+"))
 					{
 						int index = Integer.parseInt(code.substring(3));
-						((DexFrame) SwingUtilities.getWindowAncestor(DexClassHeader.this)).changeSelectedTab(interfaces[index]);
+						DexClassHeader.this.display.changeSelectedTab(new DexTab(DexClassHeader.this.display, interfaces[index]));
 					}
 					else if(code.matches("ann[0-9]+"))
 					{
 						int index = Integer.parseInt(code.substring(3));
-						((DexFrame) SwingUtilities.getWindowAncestor(DexClassHeader.this)).changeSelectedTab(annotations[index]);
+						DexClassHeader.this.display.changeSelectedTab(new DexTab(DexClassHeader.this.display, annotations[index]));
 					}
 				}
 			}

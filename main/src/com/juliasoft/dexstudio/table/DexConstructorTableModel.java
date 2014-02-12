@@ -1,17 +1,16 @@
 package com.juliasoft.dexstudio.table;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
-import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.Const;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
+import com.juliasoft.dexstudio.utils.AnnotationSet;
 
 public class DexConstructorTableModel implements TableModel
 {
@@ -35,7 +34,7 @@ public class DexConstructorTableModel implements TableModel
 		{
 			data[i][0] = AccessFlag.decodeToHuman(meth.getFlags(), false, Const.FLAG_USE_METHOD);
 			data[i][1] = meth;
-			data[i][2] = new HashSet<Annotation>(meth.getAnnotations());
+			data[i][2] = new AnnotationSet(meth.getAnnotations());
 			i++;
 		}
 	}
@@ -68,7 +67,7 @@ public class DexConstructorTableModel implements TableModel
 			case 1:
 				return MethodGen.class;
 			case 2:
-				return HashSet.class;
+				return AnnotationSet.class;
 			default:
 				throw new IllegalArgumentException();
 		}

@@ -5,11 +5,15 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.amalia.dex.codegen.Annotation;
+import com.juliasoft.amalia.dex.codegen.ClassGen;
+import com.juliasoft.amalia.dex.codegen.MethodGen;
+import com.juliasoft.dexstudio.DexDisplay;
+import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.utils.StringSet;
 
 /**
  * Popup menu of the tree
@@ -21,10 +25,12 @@ public class DexTreePopup extends JPopupMenu
 {
 	private DefaultMutableTreeNode node;
 	private JTree tree;
-	DexTreePopupItem changeTab, newTab, expand;
+	private DexTreePopupItem changeTab, newTab, expand;
+	private DexDisplay display;
 	
-	public DexTreePopup(JTree tree, Object node)
+	public DexTreePopup(DexDisplay display, JTree tree, Object node)
 	{
+		this.display = display;
 		this.tree = tree;
 		this.node = (DefaultMutableTreeNode) node;
 		initLayout();
@@ -38,7 +44,23 @@ public class DexTreePopup extends JPopupMenu
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				((DexFrame) SwingUtilities.getWindowAncestor(tree)).changeSelectedTab(node.getUserObject());
+				Object obj = node.getUserObject();
+				if(obj instanceof ClassGen)
+				{
+					display.changeSelectedTab(new DexTab(display, (ClassGen) node.getUserObject()));
+				}
+				else if(obj instanceof MethodGen)
+				{
+					display.changeSelectedTab(new DexTab(display, (MethodGen) node.getUserObject()));
+				}
+				else if(obj instanceof Annotation)
+				{
+					display.changeSelectedTab(new DexTab(display, (Annotation) node.getUserObject()));
+				}
+				else if(obj instanceof StringSet)
+				{
+					display.changeSelectedTab(new DexTab(display, (StringSet) node.getUserObject()));
+				}
 			}
 		});
 		newTab = new DexTreePopupItem("Open in a new tab");
@@ -47,7 +69,23 @@ public class DexTreePopup extends JPopupMenu
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				((DexFrame) SwingUtilities.getWindowAncestor(tree)).openNewTab(node.getUserObject());
+				Object obj = node.getUserObject();
+				if(obj instanceof ClassGen)
+				{
+					display.openNewTab(new DexTab(display, (ClassGen) node.getUserObject()));
+				}
+				else if(obj instanceof MethodGen)
+				{
+					display.openNewTab(new DexTab(display, (MethodGen) node.getUserObject()));
+				}
+				else if(obj instanceof Annotation)
+				{
+					display.openNewTab(new DexTab(display, (Annotation) node.getUserObject()));
+				}
+				else if(obj instanceof StringSet)
+				{
+					display.openNewTab(new DexTab(display, (StringSet) node.getUserObject()));
+				}
 			}
 		});
 		if(tree.isExpanded(new TreePath(node.getPath())))
