@@ -1,9 +1,12 @@
 package com.juliasoft.dexstudio.menu;
 
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -15,6 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.search.DexSearch;
+import com.juliasoft.dexstudio.view.DexViewDiff;
 
 /**
  * The menu bar of the frame
@@ -25,10 +29,11 @@ import com.juliasoft.dexstudio.search.DexSearch;
 public class DexMenu extends JMenuBar
 {
 	private boolean open = false;
-	private boolean compare = false;
+	private ArrayList<String> comparisons = new ArrayList<String>();
+	private JMenu menuCompareList;
 	private DexMenuItem menuFileOpen, menuFileSave, menuFileClose,
-			menuFileExit, menuCompareOpen, menuCompareClose,
-			menuNavigateSearch, menuInfoHelp, menuInfoAbout;
+			menuFileExit, menuCompareOpen, menuNavigateSearch, menuInfoHelp,
+			menuInfoAbout;
 	private DexFrame frame;
 	
 	/**
@@ -93,20 +98,7 @@ public class DexMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
-				compare(true);
-				updateItems();
-			}
-		});
-		menuCompareClose = new DexMenuItem("Close comparation");
-		menuCompareClose.setIcon(new ImageIcon("imgs/menu/close.png"));
-		menuCompareClose.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				JOptionPane.showMessageDialog(null, "Under Construction, sorry...");
-				compare(false);
+				compareApk();
 				updateItems();
 			}
 		});
@@ -152,7 +144,12 @@ public class DexMenu extends JMenuBar
 		menuFile.add(menuFileExit);
 		JMenu menuCompare = new JMenu("Compare");
 		menuCompare.add(menuCompareOpen);
-		menuCompare.add(menuCompareClose);
+		menuCompare.addSeparator();
+		menuCompareList = new JMenu("Show compararison");
+		menuCompareList.setMinimumSize(new Dimension(this.getPreferredSize().width, 30));
+		menuCompareList.setPreferredSize(new Dimension(200, 30));
+		menuCompareList.setFont(new Font(this.getFont().getName(), Font.PLAIN, 12));
+		menuCompare.add(menuCompareList);
 		JMenu menuNavigate = new JMenu("Navigate");
 		menuNavigate.add(menuNavigateSearch);
 		JMenu menuInfo = new JMenu("?");
@@ -165,32 +162,22 @@ public class DexMenu extends JMenuBar
 		updateItems();
 	}
 	
-	public boolean isOpen()
-	{
-		return open;
-	}
-	
-	public boolean isCompare()
-	{
-		return compare;
-	}
-	
 	public void open(boolean value)
 	{
 		open = value;
-	}
-	
-	public void compare(boolean value)
-	{
-		compare = value;
 	}
 	
 	public void updateItems()
 	{
 		menuFileSave.setEnabled(open);
 		menuFileClose.setEnabled(open);
-		menuCompareOpen.setEnabled(open && !compare);
-		menuCompareClose.setEnabled(open && compare);
+		menuCompareList.setEnabled(!comparisons.isEmpty());
+		menuCompareList.removeAll();
+		for(String str : comparisons)
+		{
+			DexMenuItem item = new DexMenuItem(str.substring(str.lastIndexOf('/') + 1, str.lastIndexOf('.')));
+			menuCompareList.add(item);
+		}
 		menuNavigateSearch.setEnabled(open);
 	}
 	
@@ -214,6 +201,44 @@ public class DexMenu extends JMenuBar
 		}
 		new DexOpenApk(frame, f);
 		open(true);
+		updateItems();
+	}
+	
+	public void compareApk()
+	{
+		// Browse the apk file
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Android Package (APK)", "apk");
+		chooser.setFileFilter(filter);
+		int read = chooser.showOpenDialog(this);
+		if(read == JFileChooser.CANCEL_OPTION)
+			return;
+		File f = chooser.getSelectedFile();
+		if(!f.getPath().endsWith(".apk"))
+		{
+			JOptionPane.showMessageDialog(null, "Invalid file extension");
+			return;
+		}
+		String abs = f.getAbsolutePath();
+		for(String str : comparisons)
+		{
+			if(abs.equals(str))
+				return;
+		}
+		comparisons.add(abs);
+		frame.getViewManager().addView(new DexViewDiff(frame, null, abs));
+		updateItems();
+	}
+	
+	public void removeCompare(String abs)
+	{
+		int i = 0;
+		while(i < comparisons.size() && !comparisons.get(i).equals(abs))
+			i++;
+		if(i < comparisons.size())
+		{
+			comparisons.remove(i);
+		}
 		updateItems();
 	}
 	

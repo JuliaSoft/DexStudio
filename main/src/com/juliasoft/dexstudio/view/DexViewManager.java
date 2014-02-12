@@ -23,6 +23,7 @@ public class DexViewManager extends JTabbedPane
 	public void addView(int pos, final DexView view)
 	{
 		this.insertTab(view.getName(), null, view, null, pos);
+		this.setTabComponentAt(pos, view.getTabTitle());
 	}
 	
 	public void removeView(int pos) throws ViewNotFoundException

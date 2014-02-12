@@ -114,4 +114,9 @@ public class DexFrame extends JFrame implements DexDisplay
 	{
 		return this.menu;
 	}
+	
+	public DexViewManager getViewManager()
+	{
+		return this.viewManager;
+	}
 }

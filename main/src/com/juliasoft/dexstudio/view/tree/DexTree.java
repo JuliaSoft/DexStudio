@@ -1,11 +1,16 @@
 package com.juliasoft.dexstudio.view.tree;
 
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -200,5 +205,17 @@ public class DexTree extends DexView
 	public String getName()
 	{
 		return "Packages";
+	}
+	
+	@Override
+	public JPanel getTabTitle()
+	{
+		JPanel res = new JPanel(new GridBagLayout());
+		res.setOpaque(false);
+		JLabel title = new JLabel(this.getName());
+		title.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+		GridBagConstraints gbc = new GridBagConstraints();
+		res.add(title, gbc);
+		return res;
 	}
 }

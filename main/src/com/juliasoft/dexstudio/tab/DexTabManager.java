@@ -68,26 +68,18 @@ public class DexTabManager extends JTabbedPane
 	{
 		int pos = this.getSelectedIndex();
 		this.removeTabAt(pos);
-		this.update(getGraphics());
-		this.repaint();
-
 		this.insertTab(tab.getTitle(), null, tab, null, pos);
 		this.setTabComponentAt(pos, makeTabTitle(tab));
 		this.setSelectedIndex(pos);
-		this.update(getGraphics());
-		this.repaint();
 	}
 	
 	private JPanel makeTabTitle(final DexTab tab)
 	{
 		JPanel result = new JPanel(new GridBagLayout());
 		result.setOpaque(false);
-		
 		JLabel icon = new JLabel(tab.getIco());
-		
 		JLabel title = new JLabel(tab.getTitle());
 		title.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-		
 		JButton close = new JButton(new ImageIcon("imgs/tab/close.png"));
 		close.setPreferredSize(new Dimension(17, 17));
 		close.setToolTipText("close this tab");
@@ -106,12 +98,10 @@ public class DexTabManager extends JTabbedPane
 				DexTabManager.this.removeTabAt(DexTabManager.this.indexOfTab(tab.getTitle()));
 			}
 		});
-		
 		GridBagConstraints gbc = new GridBagConstraints();
 		result.add(icon, gbc);
 		result.add(title, gbc);
 		result.add(close, gbc);
-		
 		return result;
 	}
 	

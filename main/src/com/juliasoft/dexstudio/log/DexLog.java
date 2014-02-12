@@ -64,14 +64,12 @@ public class DexLog extends JPanel
 	public DexLog()
 	{
 		super(new BorderLayout());
-		log.setEditable(false);	
+		log.setEditable(false);
 		JPanel header = new JPanel(new BorderLayout());
 		JScrollPane scroll = new JScrollPane(log);
-		
 		selection.addItem("Option 1");
 		selection.addItem("Option 2");
 		selection.addItem("Option 3");
-		
 		header.add(new JLabel("Log"), BorderLayout.WEST);
 		header.add(selection, BorderLayout.EAST);
 		this.add(header, BorderLayout.NORTH);

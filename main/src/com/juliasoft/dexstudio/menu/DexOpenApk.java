@@ -1,7 +1,6 @@
 package com.juliasoft.dexstudio.menu;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -55,14 +54,12 @@ public class DexOpenApk extends JDialog
 		this.setAlwaysOnTop(true);
 		frame.setEnabled(false);
 		this.setLayout(new BorderLayout());
-		int width = frame.getSize().width;
-		int height = frame.getSize().height;
-		this.setBounds(width / 3, height / 3, width / 2, height / 4);
+		this.setBounds(frame.getSize().width / 2 - 200, frame.getSize().height / 2 - 60, 400, 120);
 		this.setVisible(true);
 		step = new JLabel();
 		step.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		progress = new JProgressBar();
-		progress.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		progress.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		progress.setValue(0);
 		JButton cancel = new JButton("Cancel");
 		cancel.addActionListener(new ActionListener()
@@ -73,9 +70,10 @@ public class DexOpenApk extends JDialog
 				worker.stop();
 			}
 		});
-		JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		bottom.add(cancel);
-		this.add(step, BorderLayout.NORTH);
+		JPanel bottom = new JPanel(new BorderLayout());
+		bottom.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		bottom.add(step, BorderLayout.WEST);
+		bottom.add(cancel, BorderLayout.EAST);
 		this.add(progress, BorderLayout.CENTER);
 		this.add(bottom, BorderLayout.SOUTH);
 		worker = new DexOpenApkSwingWorker();
