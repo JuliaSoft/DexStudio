@@ -4,13 +4,19 @@ import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexDisplay;
+import com.juliasoft.dexstudio.tab.header.DexAnnotationHeader;
+import com.juliasoft.dexstudio.tab.header.DexClassHeader;
+import com.juliasoft.dexstudio.tab.header.DexMethodHeader;
+import com.juliasoft.dexstudio.tab.header.DexStringHeader;
 import com.juliasoft.dexstudio.tab.table.DexCodeTableModel;
 import com.juliasoft.dexstudio.tab.table.DexConstructorTableModel;
 import com.juliasoft.dexstudio.tab.table.DexFieldTableModel;
@@ -31,6 +37,7 @@ public class DexTab extends JScrollPane
 {
 	private JPanel content;
 	private String title;
+	private ImageIcon ico;
 	
 	/**
 	 * Constructor of ClassGen tab
@@ -48,6 +55,7 @@ public class DexTab extends JScrollPane
 		content.add(new DexTable(frame, new DexFieldTableModel(clazz)));
 		content.add(new DexTable(frame, new DexConstructorTableModel(clazz)));
 		content.add(new DexTable(frame, new DexMethodTableModel(clazz)));
+		ico = new ImageIcon((AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags())) ? "imgs/tab/interface.png" : "imgs/tab/class.png");
 	}
 	
 	/**
@@ -64,6 +72,7 @@ public class DexTab extends JScrollPane
 		title = (meth.isConstructor()) ? Library.printType(meth.getOwnerClass()) + "()" : meth.getName() + "()";
 		content.add(new DexMethodHeader(frame, meth));
 		content.add(new DexTable(frame, new DexCodeTableModel(meth)));
+		ico = new ImageIcon("imgs/tab/method.png");
 	}
 	
 	/**
@@ -80,6 +89,7 @@ public class DexTab extends JScrollPane
 		title = Library.printType(ann.getType());
 		content.add(new DexAnnotationHeader(ann));
 		content.add(new DexTable(frame, new DexValueTableModel(ann)));
+		ico = new ImageIcon("imgs/tab/annotation.png");
 	}
 	
 	/**
@@ -96,6 +106,7 @@ public class DexTab extends JScrollPane
 		title = "Strings";
 		content.add(new DexStringHeader(strs));
 		content.add(new DexTable(frame, new DexStringTableModel(strs)));
+		ico = new ImageIcon("imgs/tab/strings.png");
 	}
 	
 	private void initLayout()
@@ -118,5 +129,10 @@ public class DexTab extends JScrollPane
 	public String getTitle()
 	{
 		return title;
+	}
+	
+	public ImageIcon getIco()
+	{
+		return this.ico;
 	}
 }

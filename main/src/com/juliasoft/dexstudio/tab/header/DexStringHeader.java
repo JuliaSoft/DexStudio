@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.tab;
+package com.juliasoft.dexstudio.tab.header;
 
 import java.awt.Color;
 import java.awt.Component;

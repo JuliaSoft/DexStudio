@@ -3,6 +3,7 @@ package com.juliasoft.dexstudio.log;
 import java.awt.BorderLayout;
 import java.io.Serializable;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,6 +29,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 public class DexLog extends JPanel
 {
 	private JTextPane log = new JTextPane();
+	private JComboBox<String> selection = new JComboBox<String>();
 	
 	private final class SwingAppender extends AbstractAppender implements Appender
 	{
@@ -62,9 +64,17 @@ public class DexLog extends JPanel
 	public DexLog()
 	{
 		super(new BorderLayout());
-		log.setEditable(false);
+		log.setEditable(false);	
+		JPanel header = new JPanel(new BorderLayout());
 		JScrollPane scroll = new JScrollPane(log);
-		this.add(new JLabel("Log"), BorderLayout.NORTH);
+		
+		selection.addItem("Option 1");
+		selection.addItem("Option 2");
+		selection.addItem("Option 3");
+		
+		header.add(new JLabel("Log"), BorderLayout.WEST);
+		header.add(selection, BorderLayout.EAST);
+		this.add(header, BorderLayout.NORTH);
 		this.add(scroll, BorderLayout.CENTER);
 		addVisualLogAppender();
 	}

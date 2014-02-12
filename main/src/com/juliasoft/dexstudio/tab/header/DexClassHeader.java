@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.tab;
+package com.juliasoft.dexstudio.tab.header;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -16,6 +16,7 @@ import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.dexstudio.DexDisplay;
+import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.Library;
 
 @SuppressWarnings("serial")
