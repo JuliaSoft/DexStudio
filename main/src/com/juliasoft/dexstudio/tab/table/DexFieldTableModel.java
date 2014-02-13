@@ -23,7 +23,7 @@ public class DexFieldTableModel implements TableModel
 	{
 		List<FieldGen> fields = new ArrayList<FieldGen>();
 		fields.addAll(clazz.getStatic_fields());
-		fields.addAll(clazz.getInstance_fields());
+		fields.addAll(clazz.getInstanceFields());
 		Object[] staticValues = clazz.getStaticValues().toArray();
 		data = new Object[fields.size()][columnNames.length];
 		int i = 0;
