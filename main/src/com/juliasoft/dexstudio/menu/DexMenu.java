@@ -1,12 +1,9 @@
 package com.juliasoft.dexstudio.menu;
 
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -18,7 +15,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.search.DexSearch;
-import com.juliasoft.dexstudio.view.DexViewDiff;
 
 /**
  * The menu bar of the frame
@@ -29,8 +25,6 @@ import com.juliasoft.dexstudio.view.DexViewDiff;
 public class DexMenu extends JMenuBar
 {
 	private boolean open = false;
-	private ArrayList<String> comparisons = new ArrayList<String>();
-	private JMenu menuCompareList;
 	private DexMenuItem menuFileOpen, menuFileSave, menuFileClose,
 			menuFileExit, menuCompareOpen, menuNavigateSearch, menuInfoHelp,
 			menuInfoAbout;
@@ -144,12 +138,6 @@ public class DexMenu extends JMenuBar
 		menuFile.add(menuFileExit);
 		JMenu menuCompare = new JMenu("Compare");
 		menuCompare.add(menuCompareOpen);
-		menuCompare.addSeparator();
-		menuCompareList = new JMenu("Show compararison");
-		menuCompareList.setMinimumSize(new Dimension(this.getPreferredSize().width, 30));
-		menuCompareList.setPreferredSize(new Dimension(200, 30));
-		menuCompareList.setFont(new Font(this.getFont().getName(), Font.PLAIN, 12));
-		menuCompare.add(menuCompareList);
 		JMenu menuNavigate = new JMenu("Navigate");
 		menuNavigate.add(menuNavigateSearch);
 		JMenu menuInfo = new JMenu("?");
@@ -171,13 +159,7 @@ public class DexMenu extends JMenuBar
 	{
 		menuFileSave.setEnabled(open);
 		menuFileClose.setEnabled(open);
-		menuCompareList.setEnabled(!comparisons.isEmpty());
-		menuCompareList.removeAll();
-		for(String str : comparisons)
-		{
-			DexMenuItem item = new DexMenuItem(str.substring(str.lastIndexOf('/') + 1, str.lastIndexOf('.')));
-			menuCompareList.add(item);
-		}
+		menuCompareOpen.setEnabled(open);
 		menuNavigateSearch.setEnabled(open);
 	}
 	
@@ -219,26 +201,7 @@ public class DexMenu extends JMenuBar
 			JOptionPane.showMessageDialog(null, "Invalid file extension");
 			return;
 		}
-		String abs = f.getAbsolutePath();
-		for(String str : comparisons)
-		{
-			if(abs.equals(str))
-				return;
-		}
-		comparisons.add(abs);
-		frame.getViewManager().addView(new DexViewDiff(frame, null, abs));
-		updateItems();
-	}
-	
-	public void removeCompare(String abs)
-	{
-		int i = 0;
-		while(i < comparisons.size() && !comparisons.get(i).equals(abs))
-			i++;
-		if(i < comparisons.size())
-		{
-			comparisons.remove(i);
-		}
+		new DexOpenApk(frame, frame.getDexGen(), f);
 		updateItems();
 	}
 	

@@ -3,15 +3,20 @@ package com.juliasoft.dexstudio.view.tree;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -21,7 +26,9 @@ import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.Type;
-import com.juliasoft.dexstudio.DexDisplay;
+import com.juliasoft.amalia.dex.codegen.diff.DexDiff;
+import com.juliasoft.dexstudio.DexFrame;
+import com.juliasoft.dexstudio.exception.ViewNotFoundException;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
@@ -35,13 +42,16 @@ import com.juliasoft.dexstudio.view.tree.node.DexTreeRoot;
 import com.juliasoft.dexstudio.view.tree.node.DexTreeStrings;
 
 @SuppressWarnings("serial")
-public class DexTree extends DexView
+public class DexCmp extends DexView
 {
-	private JTree tree;
-	private DexDisplay frame;
+	private String abs;
+	private DexFrame frame;
 	
-	public DexTree(DexDisplay frame)
+	private JTree tree;
+	
+	public DexCmp(DexFrame frame, DexDiff diff, String abs)
 	{
+		this.abs = abs;
 		this.frame = frame;
 		initLayout();
 	}
@@ -52,7 +62,7 @@ public class DexTree extends DexView
 		DexTreeRoot rootNode = new DexTreeRoot("<No dex file loaded>");
 		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		tree = new JTree(treeModel);
-		tree.setCellRenderer(new DexTreeCellRenderer());
+		tree.setCellRenderer(new DexCmpCellRenderer());
 		tree.setToggleClickCount(0);
 		tree.addMouseListener(new MouseAdapter()
 		{
@@ -77,6 +87,12 @@ public class DexTree extends DexView
 			}
 		});
 		this.setViewportView(tree);
+	}
+	
+	@Override
+	public String getName()
+	{
+		return this.abs.substring(abs.lastIndexOf('/') + 1, abs.lastIndexOf('.'));
 	}
 	
 	private void mouseRightPressed(MouseEvent e)
@@ -133,7 +149,7 @@ public class DexTree extends DexView
 		DexTreeRoot rootNode = new DexTreeRoot(rootLabel);
 		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		tree.setModel(treeModel);
-		DexTreeVisitor treeModelvisitor = new DexTreeVisitor(rootNode);
+		DexCmpVisitor treeModelvisitor = new DexCmpVisitor(rootNode);
 		dexGen.accept(treeModelvisitor);
 		treeModel.nodeStructureChanged(rootNode);
 	}
@@ -210,20 +226,42 @@ public class DexTree extends DexView
 	}
 	
 	@Override
-	public String getName()
-	{
-		return "Packages";
-	}
-	
-	@Override
 	public JPanel getTabTitle()
 	{
 		JPanel res = new JPanel(new GridBagLayout());
 		res.setOpaque(false);
+		JLabel icon = new JLabel(new ImageIcon("imgs/tab/cmp.png"));
 		JLabel title = new JLabel(this.getName());
 		title.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+		JButton close = new JButton(new ImageIcon("imgs/tab/close.png"));
+		close.setPreferredSize(new Dimension(17, 17));
+		close.setToolTipText("close this tab");
+		close.setUI(new BasicButtonUI());
+		close.setContentAreaFilled(false);
+		close.setFocusable(false);
+		close.setBorder(BorderFactory.createEtchedBorder());
+		close.setBorderPainted(false);
+		close.addMouseListener(closeButtonMouseListener);
+		close.setRolloverEnabled(true);
+		close.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					frame.getViewManager().removeView(DexCmp.this.getName());
+				}
+				catch(ViewNotFoundException e1)
+				{
+					e1.printStackTrace();
+				}
+			}
+		});
 		GridBagConstraints gbc = new GridBagConstraints();
+		res.add(icon, gbc);
 		res.add(title, gbc);
+		res.add(close, gbc);
 		return res;
 	}
 }

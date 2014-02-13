@@ -8,6 +8,14 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeAnnotation;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeClass;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeField;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeFolder;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeMethod;
+import com.juliasoft.dexstudio.view.tree.node.DexTreePackage;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeRoot;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeStrings;
 
 /**
  * Cell Renderer for the tree

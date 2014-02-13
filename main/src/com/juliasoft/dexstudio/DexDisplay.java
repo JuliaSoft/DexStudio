@@ -1,5 +1,6 @@
 package com.juliasoft.dexstudio;
 
+import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.view.tree.DexTree;
 
@@ -26,4 +27,6 @@ public interface DexDisplay
 	public void changeSelectedTab(DexTab tab);
 	
 	public DexTree getTree();
+	
+	public DexGen getDexGen();
 }

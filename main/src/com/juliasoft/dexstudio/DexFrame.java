@@ -29,6 +29,8 @@ public class DexFrame extends JFrame implements DexDisplay
 	private DexLog log = new DexLog();
 	private DexMenu menu = new DexMenu(this);
 	
+	private DexGen dexGen;
+	
 	/**
 	 * Constructor
 	 */
@@ -69,6 +71,7 @@ public class DexFrame extends JFrame implements DexDisplay
 	 */
 	public void updateLayout(DexGen dexGen, String rootName)
 	{
+		this.dexGen = dexGen;
 		this.cleanLayout();
 		this.tree.updateLayout(dexGen, rootName);
 	}
@@ -88,15 +91,10 @@ public class DexFrame extends JFrame implements DexDisplay
 			tabManager.changeTab(tab);
 	}
 	
-	/**
-	 * Add a string in the logger console
-	 * 
-	 * @param str
-	 *            The adding string
-	 */
-	public void log(String str)
+	@Override
+	public DexGen getDexGen()
 	{
-		log.log(str);
+		return dexGen;
 	}
 	
 	/**

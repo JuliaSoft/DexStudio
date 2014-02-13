@@ -66,11 +66,12 @@ public class DexViewManager extends JTabbedPane
 	public int indexOf(String viewName)
 	{
 		int i = 0;
-		while(!this.getTitleAt(i).equals(viewName))
+		while(i<this.getTabCount())
 		{
-			if(++i >= this.getTabCount())
-				return -1;
+			if(this.getTitleAt(i).equals(viewName))
+				return i;
+			i++;
 		}
-		return i;
+		return -1;
 	}
 }

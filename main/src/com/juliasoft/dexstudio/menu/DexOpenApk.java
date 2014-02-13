@@ -19,10 +19,12 @@ import javax.swing.SwingWorker;
 import com.juliasoft.amalia.apk.ApkReader;
 import com.juliasoft.amalia.dex.codegen.CodegenException;
 import com.juliasoft.amalia.dex.codegen.DexGen;
+import com.juliasoft.amalia.dex.codegen.diff.SimpleDexDiff;
 import com.juliasoft.amalia.dex.file.DexFile;
 import com.juliasoft.amalia.dex.file.DexReader;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.utils.DexProgress;
+import com.juliasoft.dexstudio.view.tree.DexCmp;
 
 /**
  * Waiting dialog for the opening function
@@ -32,25 +34,37 @@ import com.juliasoft.dexstudio.utils.DexProgress;
 @SuppressWarnings("serial")
 public class DexOpenApk extends JDialog
 {
+	public static final int MOD_OPEN_APK = 0;
+	public static final int MOD_CMP_APK = 1;
+	
 	private File apk;
 	private DexFrame frame;
 	private JLabel step;
 	private JProgressBar progress;
 	private DexOpenApkSwingWorker worker;
+	private int mod;
+	private DexGen base;
 	
-	/**
-	 * Constructor.
-	 * 
-	 * @param frame
-	 *            The parent frame in which the dialog is displayed
-	 * @param apk
-	 *            The Apk to open
-	 */
+	
 	public DexOpenApk(DexFrame frame, File apk)
 	{
 		this.frame = frame;
 		this.apk = apk;
-		// Setting layout
+		this.mod = MOD_OPEN_APK;
+		initLayout();
+	}
+	
+	public DexOpenApk(DexFrame frame, DexGen base, File apk)
+	{
+		this.frame = frame;
+		this.apk = apk;
+		this.base = base;
+		this.mod = MOD_CMP_APK;
+		initLayout();
+	}
+	
+	private void initLayout()
+	{
 		this.setAlwaysOnTop(true);
 		frame.setEnabled(false);
 		this.setLayout(new BorderLayout());
@@ -140,7 +154,15 @@ public class DexOpenApk extends JDialog
 			{
 				if(get() != null)
 				{
-					frame.updateLayout(get(), apk.getName());
+					switch(mod)
+					{
+						case MOD_OPEN_APK:
+							frame.updateLayout(get(), apk.getName());
+							break;
+						case MOD_CMP_APK:
+							frame.getViewManager().addView(new DexCmp(frame, new SimpleDexDiff(base, get()), apk.getAbsolutePath()));
+							break;
+					}
 				}
 			}
 			catch(InterruptedException | ExecutionException e)
