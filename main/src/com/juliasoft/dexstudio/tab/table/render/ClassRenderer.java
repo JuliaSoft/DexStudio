@@ -3,10 +3,12 @@ package com.juliasoft.dexstudio.tab.table.render;
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.event.HyperlinkEvent.EventType;
 
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.cell.DexClassCell;
+import com.juliasoft.dexstudio.tab.DexTab;
 
 @SuppressWarnings("serial")
 public class ClassRenderer extends AbstractDexEditorRenderer
@@ -25,14 +27,15 @@ public class ClassRenderer extends AbstractDexEditorRenderer
 		{
 			throw new IllegalArgumentException("value");
 		}
-		DexClassCell cell = new DexClassCell((Type) value);
+		DexClassCell cell = new DexClassCell((Type) value, display);
 		HyperlinkListener hll = new HyperlinkListener()
 		{
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent e)
 			{
-				display.changeSelectedTab(null); // TODO: aggiungere metodo per
-													// ottenere ClassGen da Type
+				if(e.getEventType().equals(EventType.ACTIVATED))
+				
+					display.changeSelectedTab(new DexTab(display, display.getDexGen().getClassGen((Type)value)));
 			}
 		};
 		cell.addHyperlinkListener(hll);

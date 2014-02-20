@@ -117,4 +117,9 @@ public class DexFrame extends JFrame implements DexDisplay
 	{
 		return this.viewManager;
 	}
+	
+	public DexLog getLog()
+	{
+		return this.log;
+	}
 }

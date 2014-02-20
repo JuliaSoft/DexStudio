@@ -46,6 +46,7 @@ public class DexMenu extends JMenuBar
 			public void actionPerformed(ActionEvent e)
 			{
 				closeApk();
+				DexMenu.this.frame.getLog().clean();
 				openApk();
 				updateItems();
 			}
