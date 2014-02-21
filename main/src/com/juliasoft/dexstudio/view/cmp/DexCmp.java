@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.view.tree;
+package com.juliasoft.dexstudio.view.cmp;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -32,14 +32,15 @@ import com.juliasoft.dexstudio.exception.ViewNotFoundException;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeFolder;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeNode;
-import com.juliasoft.dexstudio.view.tree.node.DexTreePackage;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeRoot;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
+import com.juliasoft.dexstudio.view.node.DexTreeClass;
+import com.juliasoft.dexstudio.view.node.DexTreeFolder;
+import com.juliasoft.dexstudio.view.node.DexTreeMethod;
+import com.juliasoft.dexstudio.view.node.DexTreeNode;
+import com.juliasoft.dexstudio.view.node.DexTreePackage;
+import com.juliasoft.dexstudio.view.node.DexTreeRoot;
+import com.juliasoft.dexstudio.view.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.tree.DexTreePopup;
 
 @SuppressWarnings("serial")
 public class DexCmp extends DexView

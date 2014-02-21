@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.view.tree.node;
+package com.juliasoft.dexstudio.view.node;
 
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.diff.DiffNode;

@@ -1,22 +1,21 @@
-package com.juliasoft.dexstudio.view.tree.node;
+package com.juliasoft.dexstudio.view.node;
 
 import com.juliasoft.amalia.dex.codegen.diff.DiffNode;
 
 /**
- * Package node
+ * Root node
  * 
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class DexTreePackage extends DexTreeNode<String>
+public class DexTreeRoot extends DexTreeNode<String>
 {
-
-	public DexTreePackage(String type)
+	public DexTreeRoot(String type)
 	{
 		super(type);
 	}
 	
-	public DexTreePackage(DiffNode<String> type)
+	public DexTreeRoot(DiffNode<String> type)
 	{
 		super(type);
 	}
@@ -24,7 +23,6 @@ public class DexTreePackage extends DexTreeNode<String>
 	@Override
 	protected String makeLabel(String type)
 	{
-		return type.replace("/", ".");
+		return type;
 	}
-
 }

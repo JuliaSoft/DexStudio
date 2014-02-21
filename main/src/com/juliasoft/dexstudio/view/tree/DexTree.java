@@ -20,19 +20,18 @@ import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
-import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeFolder;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeNode;
-import com.juliasoft.dexstudio.view.tree.node.DexTreePackage;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeRoot;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
+import com.juliasoft.dexstudio.view.node.DexTreeClass;
+import com.juliasoft.dexstudio.view.node.DexTreeFolder;
+import com.juliasoft.dexstudio.view.node.DexTreeMethod;
+import com.juliasoft.dexstudio.view.node.DexTreeNode;
+import com.juliasoft.dexstudio.view.node.DexTreePackage;
+import com.juliasoft.dexstudio.view.node.DexTreeRoot;
+import com.juliasoft.dexstudio.view.node.DexTreeStrings;
 
 @SuppressWarnings("serial")
 public class DexTree extends DexView
@@ -181,32 +180,6 @@ public class DexTree extends DexView
 			}
 			getSubTreeNodeArray(child, nodes);
 		}
-	}
-	
-	public ClassGen getClassGen(Type type)
-	{
-		DexTreeRoot root = (DexTreeRoot) tree.getModel().getRoot();
-		DexTreeFolder classes = (DexTreeFolder) root.getChildAt(1);
-		// For every package
-		for(int i = 0; i < classes.getChildCount(); i++)
-		{
-			// Get the package
-			DexTreePackage pack = (DexTreePackage) classes.getChildAt(i);
-			// For every class in the package
-			for(int j = 0; j < pack.getChildCount(); j++)
-			{
-				// Get the class
-				DexTreeClass clazz = (DexTreeClass) pack.getChildAt(j);
-				// Get the ClassGen
-				ClassGen classGen = (ClassGen) clazz.getUserObject();
-				// If the type is the same
-				if(classGen.getType().equals(type))
-				{
-					return classGen;
-				}
-			}
-		}
-		return null;
 	}
 	
 	@Override

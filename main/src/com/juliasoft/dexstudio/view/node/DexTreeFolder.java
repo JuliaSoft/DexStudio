@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.view.tree.node;
+package com.juliasoft.dexstudio.view.node;
 
 /**
  * Folder node

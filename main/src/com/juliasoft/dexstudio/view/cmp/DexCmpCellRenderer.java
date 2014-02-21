@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.view.tree;
+package com.juliasoft.dexstudio.view.cmp;
 
 import java.awt.Component;
 
@@ -8,14 +8,14 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeField;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeFolder;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.tree.node.DexTreePackage;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeRoot;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
+import com.juliasoft.dexstudio.view.node.DexTreeClass;
+import com.juliasoft.dexstudio.view.node.DexTreeField;
+import com.juliasoft.dexstudio.view.node.DexTreeFolder;
+import com.juliasoft.dexstudio.view.node.DexTreeMethod;
+import com.juliasoft.dexstudio.view.node.DexTreePackage;
+import com.juliasoft.dexstudio.view.node.DexTreeRoot;
+import com.juliasoft.dexstudio.view.node.DexTreeStrings;
 
 @SuppressWarnings("serial")
 public class DexCmpCellRenderer extends DefaultTreeCellRenderer

@@ -14,10 +14,10 @@ import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
+import com.juliasoft.dexstudio.view.node.DexTreeClass;
+import com.juliasoft.dexstudio.view.node.DexTreeMethod;
+import com.juliasoft.dexstudio.view.node.DexTreeStrings;
 
 /**
  * Popup menu of the tree

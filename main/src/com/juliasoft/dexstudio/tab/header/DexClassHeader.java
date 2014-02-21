@@ -38,7 +38,7 @@ public class DexClassHeader extends JTextPane
 	public DexClassHeader(DexDisplay display, ClassGen clazz)
 	{
 		this.display = display;
-		this.superClass = display.getTree().getClassGen(clazz.getSuperclass());
+		this.superClass = display.getDexGen().getClassGen(clazz.getSuperclass());
 		List<Type> interfList = clazz.getInterfaces();
 		Collection<Annotation> annList = clazz.getAnnotations();
 		int i = 0;
@@ -46,7 +46,7 @@ public class DexClassHeader extends JTextPane
 		{
 			this.interfaces = new ClassGen[interfList.size()];
 			for(Type interf : interfList)
-				interfaces[i++] = display.getTree().getClassGen(interf);
+				interfaces[i++] = display.getDexGen().getClassGen(interf);
 		}
 		i = 0;
 		if(!annList.isEmpty())

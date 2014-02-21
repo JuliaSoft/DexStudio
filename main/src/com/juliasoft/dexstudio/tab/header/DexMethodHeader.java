@@ -44,19 +44,19 @@ public class DexMethodHeader extends JTextPane
 		this.display = display;
 		this.meth = meth;
 		this.setBackground(Color.WHITE);
-		this.returnType = display.getTree().getClassGen(meth.getReturnType());
+		this.returnType = display.getDexGen().getClassGen(meth.getReturnType());
 		TypeList parList = meth.getPrototype().getParameters();
 		if(parList != null)
 		{
 			params = new ClassGen[parList.size()];
 			int i = 0;
 			for(Type param : parList)
-				params[i++] = display.getTree().getClassGen(param);
+				params[i++] = display.getDexGen().getClassGen(param);
 		}
 		String longName = meth.getOwnerClass().getName().replace('/', '.');
 		String pakName = longName.contains(".") ? longName.substring(1, longName.lastIndexOf('.')) : "[default pakage]";
 		String shortName = Library.shortName(longName);
-		this.ownerClass = display.getTree().getClassGen(meth.getOwnerClass());
+		this.ownerClass = display.getDexGen().getClassGen(meth.getOwnerClass());
 		Collection<Annotation> anns = meth.getAnnotations();
 		String annots;
 		if(anns.isEmpty())

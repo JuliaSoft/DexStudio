@@ -24,7 +24,7 @@ import com.juliasoft.amalia.dex.file.DexFile;
 import com.juliasoft.amalia.dex.file.DexReader;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.utils.DexProgress;
-import com.juliasoft.dexstudio.view.tree.DexCmp;
+import com.juliasoft.dexstudio.view.cmp.DexCmp;
 
 /**
  * Waiting dialog for the opening function

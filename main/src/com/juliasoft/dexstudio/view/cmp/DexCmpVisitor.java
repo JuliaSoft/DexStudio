@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.view.tree;
+package com.juliasoft.dexstudio.view.cmp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,14 +16,14 @@ import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.ParamGen;
 import com.juliasoft.dexstudio.utils.StringSet;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeField;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeFolder;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.tree.node.DexTreePackage;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeRoot;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
+import com.juliasoft.dexstudio.view.node.DexTreeClass;
+import com.juliasoft.dexstudio.view.node.DexTreeField;
+import com.juliasoft.dexstudio.view.node.DexTreeFolder;
+import com.juliasoft.dexstudio.view.node.DexTreeMethod;
+import com.juliasoft.dexstudio.view.node.DexTreePackage;
+import com.juliasoft.dexstudio.view.node.DexTreeRoot;
+import com.juliasoft.dexstudio.view.node.DexTreeStrings;
 
 public class DexCmpVisitor implements DexGenVisitor
 {
