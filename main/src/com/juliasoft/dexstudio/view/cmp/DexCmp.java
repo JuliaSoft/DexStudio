@@ -7,8 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -23,46 +23,48 @@ import javax.swing.tree.TreePath;
 
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
-import com.juliasoft.amalia.dex.codegen.DexGen;
+import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
-import com.juliasoft.amalia.dex.codegen.Type;
+import com.juliasoft.amalia.dex.codegen.diff.AnnotationDiff;
 import com.juliasoft.amalia.dex.codegen.diff.DexDiff;
+import com.juliasoft.amalia.dex.codegen.diff.DiffNode;
+import com.juliasoft.amalia.dex.codegen.diff.DiffState;
+import com.juliasoft.amalia.dex.codegen.diff.FieldDiff;
+import com.juliasoft.amalia.dex.codegen.diff.MethodDiff;
+import com.juliasoft.amalia.dex.codegen.diff.SimpleClassDiff;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.exception.ViewNotFoundException;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
-import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.node.DexTreeFolder;
-import com.juliasoft.dexstudio.view.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.node.DexTreeNode;
-import com.juliasoft.dexstudio.view.node.DexTreePackage;
-import com.juliasoft.dexstudio.view.node.DexTreeRoot;
-import com.juliasoft.dexstudio.view.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.cmp.node.DexAnnotationCmp;
+import com.juliasoft.dexstudio.view.cmp.node.DexClassCmp;
+import com.juliasoft.dexstudio.view.cmp.node.DexFieldCmp;
+import com.juliasoft.dexstudio.view.cmp.node.DexMethodCmp;
+import com.juliasoft.dexstudio.view.cmp.node.DexPackageCmp;
 import com.juliasoft.dexstudio.view.tree.DexTreePopup;
+import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
+import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
+import com.juliasoft.dexstudio.view.tree.node.DexFolderNode;
+import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
+import com.juliasoft.dexstudio.view.tree.node.DexPackageNode;
+import com.juliasoft.dexstudio.view.tree.node.DexRootNode;
+import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeNode;
 
 @SuppressWarnings("serial")
 public class DexCmp extends DexView
 {
-	private String abs;
+	private String name;
 	private DexFrame frame;
+	private JTree tree = new JTree();
+	private Map<String, DexPackageCmp> pkgs = new TreeMap<String, DexPackageCmp>();
 	
-	private JTree tree;
-	
-	public DexCmp(DexFrame frame, DexDiff diff, String abs)
+	public DexCmp(DexFrame frame, String name)
 	{
-		this.abs = abs;
+		this.name = name;
 		this.frame = frame;
-		initLayout();
-	}
-	
-	private void initLayout()
-	{
 		this.setPreferredSize(new Dimension(300, 600));
-		DexTreeRoot rootNode = new DexTreeRoot("<No dex file loaded>");
-		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
-		tree = new JTree(treeModel);
 		tree.setCellRenderer(new DexCmpCellRenderer());
 		tree.setToggleClickCount(0);
 		tree.addMouseListener(new MouseAdapter()
@@ -90,10 +92,109 @@ public class DexCmp extends DexView
 		this.setViewportView(tree);
 	}
 	
+	public void update(DexDiff diff)
+	{
+		diff.update(true);
+		DexRootNode rootNode = new DexRootNode(this.getName());
+		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+		tree.setModel(treeModel);
+		DexFolderNode context = new DexFolderNode("Context");
+		DexFolderNode classes = new DexFolderNode("Classes");
+		rootNode.add(context);
+		//context.add(new DexStringsCmp(null)); TODO: strings comparison
+		rootNode.add(classes);
+		for(DiffNode<?> child : diff.getClassDiffs())
+		{
+			updateNode(child, classes);
+		}
+		treeModel.nodeStructureChanged(rootNode);
+	}
+	
+	private void updateNode(DiffNode<?> diff, DexTreeNode<?> node)
+	{
+		DexTreeNode<?> new_node = null;
+		if(diff.getDiffClass().equals(ClassGen.class))
+		{
+			ClassGen clazz = (diff.getState().equals(DiffState.RIGHT_ONLY)) ? (ClassGen) diff.getRight() : (ClassGen) diff.getLeft();
+			String pkg = clazz.toHuman();
+			if(pkg.contains("."))
+			{
+				pkg = pkg.substring(0, pkg.lastIndexOf('.'));
+			}
+			else
+			{
+				pkg = "[Default Package]";
+			}
+			// If not exists, add the new package node
+			if(!pkgs.containsKey(pkg))
+			{
+				DexPackageCmp pkg_node = new DexPackageCmp(pkg);
+				pkgs.put(pkg, pkg_node);
+				node.add(pkg_node);
+			}
+			DexPackageCmp pkg_node = pkgs.get(pkg);
+			pkg_node.setState(updateState(pkg_node.getState(), diff.getState()));
+			new_node = new DexClassCmp(new SimpleClassDiff((ClassGen)diff.getLeft(), (ClassGen)diff.getRight()));
+			pkg_node.add(new_node);
+		}
+		else if(diff.getDiffClass().equals(FieldGen.class))
+		{
+			new_node = new DexFieldCmp(new FieldDiff((FieldGen)diff.getLeft(), (FieldGen)diff.getRight()));
+			node.add(new_node);
+		}
+		else if(diff.getDiffClass().equals(MethodGen.class))
+		{
+			new_node = new DexMethodCmp(new MethodDiff((MethodGen)diff.getLeft(), (MethodGen)diff.getRight()));
+			node.add(new_node);
+		}
+		else if(diff.getDiffClass().equals(Annotation.class))
+		{
+			new_node = new DexAnnotationCmp(new AnnotationDiff((Annotation)diff.getLeft(), (Annotation)diff.getRight()));
+			node.add(new_node);
+		}
+		else
+		{
+			new_node = new DexFolderNode("<missing>");
+			node.add(new_node);
+		}
+		for(DiffNode<?> child : diff.getChildren())
+		{
+			updateNode(child, new_node);
+		}
+	}
+	
+	private DiffState updateState(DiffState actual, DiffState child)
+	{
+		if(child.equals(DiffState.UNKNOWN))
+		{
+			return DiffState.UNKNOWN;
+		}
+		switch(actual)
+		{
+			case SAME:
+				if(!child.equals(DiffState.SAME))
+					return child;
+				return DiffState.SAME;
+			case UNKNOWN:
+				return DiffState.UNKNOWN;
+			case DIFFERENT:
+				return DiffState.DIFFERENT;
+			case LEFT_ONLY:
+				if(child.equals(DiffState.RIGHT_ONLY) || child.equals(DiffState.SAME) || child.equals(DiffState.DIFFERENT))
+					return DiffState.DIFFERENT;
+				return DiffState.LEFT_ONLY;
+			case RIGHT_ONLY:
+				if(child.equals(DiffState.LEFT_ONLY) || child.equals(DiffState.SAME) || child.equals(DiffState.DIFFERENT))
+					return DiffState.DIFFERENT;
+				return DiffState.LEFT_ONLY;
+		}
+		return DiffState.UNKNOWN;
+	}
+	
 	@Override
 	public String getName()
 	{
-		return this.abs.substring(abs.lastIndexOf('/') + 1, abs.lastIndexOf('.'));
+		return this.name.substring(name.lastIndexOf('/') + 1);
 	}
 	
 	private void mouseRightPressed(MouseEvent e)
@@ -103,7 +204,7 @@ public class DexCmp extends DexView
 		tree.setSelectionPath(path);
 		Object node = path.getLastPathComponent();
 		// If I can really visualize a tab for the selected element
-		if(!(node instanceof DexTreeRoot))
+		if(!(node instanceof DexRootNode))
 		{
 			// Open the popup menu
 			new DexTreePopup(frame, tree, node).show(e.getComponent(), e.getX(), e.getY());
@@ -116,7 +217,7 @@ public class DexCmp extends DexView
 		TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
 		tree.setSelectionPath(path);
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-		if(node instanceof DexTreeFolder | node instanceof DexTreePackage)
+		if(node instanceof DexFolderNode | node instanceof DexPackageNode)
 		{
 			if(tree.isExpanded(path))
 			{
@@ -127,103 +228,22 @@ public class DexCmp extends DexView
 				tree.expandPath(path);
 			}
 		}
-		else if(node instanceof DexTreeClass)
+		else if(node instanceof DexClassNode)
 		{
 			frame.changeSelectedTab(new DexTab(frame, (ClassGen) node.getUserObject()));
 		}
-		else if(node instanceof DexTreeMethod)
+		else if(node instanceof DexMethodNode)
 		{
 			frame.changeSelectedTab(new DexTab(frame, (MethodGen) node.getUserObject()));
 		}
-		else if(node instanceof DexTreeAnnotation)
+		else if(node instanceof DexAnnotationNode)
 		{
 			frame.changeSelectedTab(new DexTab(frame, (Annotation) node.getUserObject()));
 		}
-		else if(node instanceof DexTreeStrings)
+		else if(node instanceof DexStringsNode)
 		{
 			frame.changeSelectedTab(new DexTab(frame, (StringSet) node.getUserObject()));
 		}
-	}
-	
-	public void updateLayout(DexGen dexGen, String rootLabel)
-	{
-		DexTreeRoot rootNode = new DexTreeRoot(rootLabel);
-		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
-		tree.setModel(treeModel);
-		DexCmpVisitor treeModelvisitor = new DexCmpVisitor(rootNode);
-		dexGen.accept(treeModelvisitor);
-		treeModel.nodeStructureChanged(rootNode);
-	}
-	
-	public void cleanTree()
-	{
-		DexTreeRoot rootNode = new DexTreeRoot("<No dex file loaded>");
-		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
-		tree.setModel(treeModel);
-		treeModel.nodeStructureChanged(rootNode);
-	}
-	
-	/**
-	 * Returns an array of all the classes, methods and annotations nodes in the
-	 * tree
-	 * 
-	 * @return
-	 */
-	public ArrayList<DexTreeNode<?>> getNodeArray()
-	{
-		ArrayList<DexTreeNode<?>> nodes = new ArrayList<DexTreeNode<?>>();
-		DexTreeNode<?> root = (DexTreeNode<?>) tree.getModel().getRoot();
-		getSubTreeNodeArray(root, nodes);
-		return nodes;
-	}
-	
-	/**
-	 * Returns an array of all the class,method and annotation nodes contained
-	 * under the giver node
-	 * 
-	 * @param node
-	 * @param nodes
-	 */
-	private void getSubTreeNodeArray(DexTreeNode<?> node, ArrayList<DexTreeNode<?>> nodes)
-	{
-		if(node.getChildCount() == 0)
-			return;
-		for(int i = 0; i < node.getChildCount(); i++)
-		{
-			DexTreeNode<?> child = (DexTreeNode<?>) node.getChildAt(i);
-			Object obj = child.getUserObject();
-			if(obj instanceof ClassGen || obj instanceof Set<?>)
-			{
-				nodes.add(child);
-			}
-			getSubTreeNodeArray(child, nodes);
-		}
-	}
-	
-	public ClassGen getClassGen(Type type)
-	{
-		DexTreeRoot root = (DexTreeRoot) tree.getModel().getRoot();
-		DexTreeFolder classes = (DexTreeFolder) root.getChildAt(1);
-		// For every package
-		for(int i = 0; i < classes.getChildCount(); i++)
-		{
-			// Get the package
-			DexTreePackage pack = (DexTreePackage) classes.getChildAt(i);
-			// For every class in the package
-			for(int j = 0; j < pack.getChildCount(); j++)
-			{
-				// Get the class
-				DexTreeClass clazz = (DexTreeClass) pack.getChildAt(j);
-				// Get the ClassGen
-				ClassGen classGen = (ClassGen) clazz.getUserObject();
-				// If the type is the same
-				if(classGen.getType().equals(type))
-				{
-					return classGen;
-				}
-			}
-		}
-		return null;
 	}
 	
 	@Override

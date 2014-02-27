@@ -58,9 +58,7 @@ public class DexLog extends JPanel
 	private final String errorStyle = ".error{backcolor:red;}";
 	private final String debugStyle = ".debug{background-color:#DDDDFF}";
 	private final String divStyle = "div{border-bottom: 1px solid black; padding: 3px 2px};";
-
-	
-	private final String htmlStart = "<html><head><style type='text/css'>"+ bodyStyle + warnStyle + errorStyle + debugStyle + divStyle +"</style></head><body>";
+	private final String htmlStart = "<html><head><style type='text/css'>" + bodyStyle + warnStyle + errorStyle + debugStyle + divStyle + "</style></head><body>";
 	private final String htmlClose = "</body></html>";
 	private HTMLDocument fullDoc;
 	private HTMLDocument warnDoc;
@@ -82,65 +80,69 @@ public class DexLog extends JPanel
 		@Override
 		public void append(LogEvent event)
 		{
-			
 			String str = getLayout().toSerializable(event).toString();
-			
-			if(str.contains("WARN")){
-				
+			if(str.contains("WARN"))
+			{
 				str = "<div class='warn'>" + str + "</div>";
-				
 				Element warnBody = warnDoc.getElement(warnDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
-				try {
+				try
+				{
 					warnDoc.insertBeforeEnd(warnBody, str);
-				} catch (BadLocationException e) {
+				}
+				catch(BadLocationException e)
+				{
 					e.printStackTrace();
-				} catch (IOException e) {
+				}
+				catch(IOException e)
+				{
 					e.printStackTrace();
 				}
 			}
-			
-			
-			else if(str.contains("ERROR")){
-				
+			else if(str.contains("ERROR"))
+			{
 				str = "<div class='error'>" + str + "</div>";
-				
 				Element errorBody = errorDoc.getElement(errorDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
-				
-				try {
+				try
+				{
 					errorDoc.insertBeforeEnd(errorBody, str);
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
+				}
+				catch(BadLocationException e)
+				{
 					e.printStackTrace();
 				}
-				
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
-			
-			else if(str.contains("DEBUG")){
-				
+			else if(str.contains("DEBUG"))
+			{
 				str = "<div class='debug'>" + str + "</div>";
-				
 				Element debugBody = debugDoc.getElement(debugDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
-				
-				try {
+				try
+				{
 					debugDoc.insertBeforeEnd(debugBody, str);
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
+				}
+				catch(BadLocationException e)
+				{
 					e.printStackTrace();
 				}
-				
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
-			
-			
-			try {
-				
+			try
+			{
 				Element fullBody = fullDoc.getElement(fullDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
 				fullDoc.insertBeforeEnd(fullBody, str);
-				
-			} catch (BadLocationException e) {
+			}
+			catch(BadLocationException e)
+			{
 				e.printStackTrace();
-			} catch (IOException e) {
+			}
+			catch(IOException e)
+			{
 				e.printStackTrace();
 			}
 			log.setCaretPosition(log.getDocument().getLength());
@@ -156,29 +158,26 @@ public class DexLog extends JPanel
 		log.setEditable(false);
 		log.setContentType("text/html");
 		log.setText(htmlStart + htmlClose);
-		log.setMargin(new Insets(0,0,0,0));
-		
-		fullDoc = (HTMLDocument)log.getDocument();
-		
+		log.setMargin(new Insets(0, 0, 0, 0));
+		fullDoc = (HTMLDocument) log.getDocument();
 		HTMLEditorKit kit = new HTMLEditorKit();
-		
-		warnDoc = (HTMLDocument)kit.createDefaultDocument();
-		errorDoc = (HTMLDocument)kit.createDefaultDocument();
-		debugDoc = (HTMLDocument)kit.createDefaultDocument();
-		
-		try {
+		warnDoc = (HTMLDocument) kit.createDefaultDocument();
+		errorDoc = (HTMLDocument) kit.createDefaultDocument();
+		debugDoc = (HTMLDocument) kit.createDefaultDocument();
+		try
+		{
 			warnDoc.setInnerHTML(warnDoc.getDefaultRootElement(), htmlStart + htmlClose);
 			errorDoc.setInnerHTML(errorDoc.getDefaultRootElement(), htmlStart + htmlClose);
 			debugDoc.setInnerHTML(debugDoc.getDefaultRootElement(), htmlStart + htmlClose);
-			
-		} catch (BadLocationException e) {
+		}
+		catch(BadLocationException e)
+		{
 			e.printStackTrace();
 		}
-		catch (IOException e) {
+		catch(IOException e)
+		{
 			e.printStackTrace();
 		}
-		
-		
 		GridBagConstraints gbc = new GridBagConstraints();
 		JPanel header = new JPanel(new BorderLayout());
 		JScrollPane scroll = new JScrollPane(log);
@@ -186,28 +185,30 @@ public class DexLog extends JPanel
 		selection.addItem("Errors");
 		selection.addItem("Warnings");
 		selection.addItem("Debug");
-		
-		selection.addActionListener(new ActionListener(){
-
+		selection.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				JComboBox cb = (JComboBox)e.getSource();
-				String selected = (String)cb.getSelectedItem();
-				
-				switch(selected){
-				
-				case "All": log.setDocument(fullDoc); break;
-				case "Errors": log.setDocument(errorDoc); break;
-				case "Warnings": log.setDocument(warnDoc); break;
-				case "Debug": log.setDocument(debugDoc); break;
-				
+			public void actionPerformed(ActionEvent e)
+			{
+				JComboBox cb = (JComboBox) e.getSource();
+				String selected = (String) cb.getSelectedItem();
+				switch(selected)
+				{
+					case "All":
+						log.setDocument(fullDoc);
+						break;
+					case "Errors":
+						log.setDocument(errorDoc);
+						break;
+					case "Warnings":
+						log.setDocument(warnDoc);
+						break;
+					case "Debug":
+						log.setDocument(debugDoc);
+						break;
 				}
-				
 				log.setCaretPosition(log.getDocument().getLength());
-				
 			}
-			
 		});
 		JPanel buttons = new JPanel(new GridBagLayout());
 		JButton clean = new JButton(new ImageIcon("imgs/tab/clean.png"));
@@ -220,16 +221,16 @@ public class DexLog extends JPanel
 		clean.setBorderPainted(false);
 		clean.addMouseListener(cleanButtonMouseListener);
 		clean.setRolloverEnabled(true);
-		clean.addActionListener(new ActionListener(){
-
+		clean.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0)
+			{
 				DexLog.this.clean();
 			}
-			
 		});
 		buttons.add(clean, gbc);
-		buttons.add(Box.createRigidArea(new Dimension(10,10)));
+		buttons.add(Box.createRigidArea(new Dimension(10, 10)));
 		buttons.add(selection, gbc);
 		header.add(new JLabel("Log"), BorderLayout.WEST);
 		header.add(buttons, BorderLayout.EAST);
@@ -249,11 +250,10 @@ public class DexLog extends JPanel
 		l.addAppender(new SwingAppender());
 	}
 	
-	public void clean(){
-		
-		
-		try {
-			
+	public void clean()
+	{
+		try
+		{
 			Element body = fullDoc.getElement(fullDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
 			fullDoc.setOuterHTML(body, "<body></body>");
 			body = warnDoc.getElement(warnDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
@@ -262,15 +262,15 @@ public class DexLog extends JPanel
 			errorDoc.setOuterHTML(body, "<body></body>");
 			body = debugDoc.getElement(debugDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
 			debugDoc.setOuterHTML(body, "<body></body>");
-			
-		} catch (BadLocationException e1) {
+		}
+		catch(BadLocationException e1)
+		{
 			e1.printStackTrace();
 		}
-		catch (IOException e2) {
-			
+		catch(IOException e2)
+		{
 			e2.printStackTrace();
 		}
-		
 	}
 	
 	private final static MouseListener cleanButtonMouseListener = new MouseAdapter()
@@ -295,5 +295,4 @@ public class DexLog extends JPanel
 			}
 		}
 	};
-	
 }

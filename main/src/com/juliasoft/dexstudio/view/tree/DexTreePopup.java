@@ -14,10 +14,10 @@ import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
-import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
+import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
+import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
+import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
 
 /**
  * Popup menu of the tree
@@ -116,7 +116,7 @@ public class DexTreePopup extends JPopupMenu
 				}
 			});
 		}
-		if(node instanceof DexTreeClass || node instanceof DexTreeMethod || node instanceof DexTreeAnnotation || node instanceof DexTreeStrings)
+		if(node instanceof DexClassNode || node instanceof DexMethodNode || node instanceof DexAnnotationNode || node instanceof DexStringsNode)
 		{
 			this.add(changeTab);
 			this.add(newTab);

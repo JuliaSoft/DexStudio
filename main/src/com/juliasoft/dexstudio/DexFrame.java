@@ -1,7 +1,6 @@
 package com.juliasoft.dexstudio;
 
 import java.awt.BorderLayout;
-import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -28,7 +27,6 @@ public class DexFrame extends JFrame implements DexDisplay
 	private DexTabManager tabManager = new DexTabManager();
 	private DexLog log = new DexLog();
 	private DexMenu menu = new DexMenu(this);
-	
 	private DexGen dexGen;
 	
 	/**
@@ -37,7 +35,7 @@ public class DexFrame extends JFrame implements DexDisplay
 	public DexFrame()
 	{
 		// Setting the layout
-		this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setResizable(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("DexStudio");
@@ -57,8 +55,10 @@ public class DexFrame extends JFrame implements DexDisplay
 	
 	public void cleanLayout()
 	{
+		viewManager.clean();
 		tree.cleanTree();
 		tabManager.cleanTabs();
+		log.clean();
 	}
 	
 	/**
@@ -72,7 +72,6 @@ public class DexFrame extends JFrame implements DexDisplay
 	public void updateLayout(DexGen dexGen, String rootName)
 	{
 		this.dexGen = dexGen;
-		this.cleanLayout();
 		this.tree.updateLayout(dexGen, rootName);
 	}
 	

@@ -102,7 +102,7 @@ public final class Library
 		else if(longName.contains("."))
 			separator = '.';
 		else
-			return longName;
+			return longName.substring(1);
 		return longName.substring(longName.lastIndexOf(separator) + 1, longName.indexOf(';'));
 	}
 }

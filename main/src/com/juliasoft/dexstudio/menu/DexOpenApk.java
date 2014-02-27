@@ -36,7 +36,6 @@ public class DexOpenApk extends JDialog
 {
 	public static final int MOD_OPEN_APK = 0;
 	public static final int MOD_CMP_APK = 1;
-	
 	private File apk;
 	private DexFrame frame;
 	private JLabel step;
@@ -44,7 +43,6 @@ public class DexOpenApk extends JDialog
 	private DexOpenApkSwingWorker worker;
 	private int mod;
 	private DexGen base;
-	
 	
 	public DexOpenApk(DexFrame frame, File apk)
 	{
@@ -160,7 +158,9 @@ public class DexOpenApk extends JDialog
 							frame.updateLayout(get(), apk.getName());
 							break;
 						case MOD_CMP_APK:
-							frame.getViewManager().addView(new DexCmp(frame, new SimpleDexDiff(base, get()), apk.getAbsolutePath()));
+							DexCmp cmp = new DexCmp(frame, apk.getName());
+							cmp.update(new SimpleDexDiff(base, get()));
+							frame.getViewManager().addView(cmp);
 							break;
 					}
 				}

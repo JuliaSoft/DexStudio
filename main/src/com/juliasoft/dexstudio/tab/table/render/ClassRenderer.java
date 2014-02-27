@@ -34,8 +34,7 @@ public class ClassRenderer extends AbstractDexEditorRenderer
 			public void hyperlinkUpdate(HyperlinkEvent e)
 			{
 				if(e.getEventType().equals(EventType.ACTIVATED))
-				
-					display.changeSelectedTab(new DexTab(display, display.getDexGen().getClassGen((Type)value)));
+					display.changeSelectedTab(new DexTab(display, display.getDexGen().getClassGen((Type) value)));
 			}
 		};
 		cell.addHyperlinkListener(hll);

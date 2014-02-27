@@ -45,10 +45,7 @@ public class DexMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				closeApk();
-				DexMenu.this.frame.getLog().clean();
 				openApk();
-				updateItems();
 			}
 		});
 		menuFileSave = new DexMenuItem("Save apk");
@@ -71,7 +68,6 @@ public class DexMenu extends JMenuBar
 			{
 				closeApk();
 				open(false);
-				updateItems();
 			}
 		});
 		menuFileExit = new DexMenuItem("Exit");
@@ -94,7 +90,6 @@ public class DexMenu extends JMenuBar
 			public void actionPerformed(ActionEvent e)
 			{
 				compareApk();
-				updateItems();
 			}
 		});
 		menuNavigateSearch = new DexMenuItem("Search");
@@ -182,6 +177,7 @@ public class DexMenu extends JMenuBar
 			JOptionPane.showMessageDialog(null, "Invalid file extension");
 			return;
 		}
+		closeApk();
 		new DexOpenApk(frame, f);
 		open(true);
 		updateItems();
@@ -209,5 +205,6 @@ public class DexMenu extends JMenuBar
 	public void closeApk()
 	{
 		frame.cleanLayout();
+		updateItems();
 	}
 }

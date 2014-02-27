@@ -20,7 +20,7 @@ import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.DexProgress;
 import com.juliasoft.dexstudio.utils.StringSet;
-import com.juliasoft.dexstudio.view.node.DexTreeNode;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeNode;
 
 /**
  * TextField for the search dialog

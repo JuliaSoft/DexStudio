@@ -24,14 +24,14 @@ import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
-import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.node.DexTreeFolder;
-import com.juliasoft.dexstudio.view.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.node.DexTreeNode;
-import com.juliasoft.dexstudio.view.node.DexTreePackage;
-import com.juliasoft.dexstudio.view.node.DexTreeRoot;
-import com.juliasoft.dexstudio.view.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
+import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
+import com.juliasoft.dexstudio.view.tree.node.DexFolderNode;
+import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeNode;
+import com.juliasoft.dexstudio.view.tree.node.DexPackageNode;
+import com.juliasoft.dexstudio.view.tree.node.DexRootNode;
+import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
 
 @SuppressWarnings("serial")
 public class DexTree extends DexView
@@ -48,7 +48,7 @@ public class DexTree extends DexView
 	private void initLayout()
 	{
 		this.setPreferredSize(new Dimension(300, 600));
-		DexTreeRoot rootNode = new DexTreeRoot("<No dex file loaded>");
+		DexRootNode rootNode = new DexRootNode("<No dex file loaded>");
 		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		tree = new JTree(treeModel);
 		tree.setCellRenderer(new DexTreeCellRenderer());
@@ -85,7 +85,7 @@ public class DexTree extends DexView
 		tree.setSelectionPath(path);
 		Object node = path.getLastPathComponent();
 		// If I can really visualize a tab for the selected element
-		if(!(node instanceof DexTreeRoot))
+		if(!(node instanceof DexRootNode))
 		{
 			// Open the popup menu
 			new DexTreePopup(frame, tree, node).show(e.getComponent(), e.getX(), e.getY());
@@ -98,7 +98,7 @@ public class DexTree extends DexView
 		TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
 		tree.setSelectionPath(path);
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-		if(node instanceof DexTreeFolder | node instanceof DexTreePackage)
+		if(node instanceof DexFolderNode | node instanceof DexPackageNode)
 		{
 			if(tree.isExpanded(path))
 			{
@@ -109,19 +109,19 @@ public class DexTree extends DexView
 				tree.expandPath(path);
 			}
 		}
-		else if(node instanceof DexTreeClass)
+		else if(node instanceof DexClassNode)
 		{
 			frame.changeSelectedTab(new DexTab(frame, (ClassGen) node.getUserObject()));
 		}
-		else if(node instanceof DexTreeMethod)
+		else if(node instanceof DexMethodNode)
 		{
 			frame.changeSelectedTab(new DexTab(frame, (MethodGen) node.getUserObject()));
 		}
-		else if(node instanceof DexTreeAnnotation)
+		else if(node instanceof DexAnnotationNode)
 		{
 			frame.changeSelectedTab(new DexTab(frame, (Annotation) node.getUserObject()));
 		}
-		else if(node instanceof DexTreeStrings)
+		else if(node instanceof DexStringsNode)
 		{
 			frame.changeSelectedTab(new DexTab(frame, (StringSet) node.getUserObject()));
 		}
@@ -129,7 +129,7 @@ public class DexTree extends DexView
 	
 	public void updateLayout(DexGen dexGen, String rootLabel)
 	{
-		DexTreeRoot rootNode = new DexTreeRoot(rootLabel);
+		DexRootNode rootNode = new DexRootNode(rootLabel);
 		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		tree.setModel(treeModel);
 		DexTreeVisitor treeModelvisitor = new DexTreeVisitor(rootNode);
@@ -139,7 +139,7 @@ public class DexTree extends DexView
 	
 	public void cleanTree()
 	{
-		DexTreeRoot rootNode = new DexTreeRoot("<No dex file loaded>");
+		DexRootNode rootNode = new DexRootNode("<No dex file loaded>");
 		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		tree.setModel(treeModel);
 		treeModel.nodeStructureChanged(rootNode);

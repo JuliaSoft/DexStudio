@@ -8,14 +8,14 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
-import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.node.DexTreeField;
-import com.juliasoft.dexstudio.view.node.DexTreeFolder;
-import com.juliasoft.dexstudio.view.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.node.DexTreePackage;
-import com.juliasoft.dexstudio.view.node.DexTreeRoot;
-import com.juliasoft.dexstudio.view.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
+import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
+import com.juliasoft.dexstudio.view.tree.node.DexFieldNode;
+import com.juliasoft.dexstudio.view.tree.node.DexFolderNode;
+import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
+import com.juliasoft.dexstudio.view.tree.node.DexPackageNode;
+import com.juliasoft.dexstudio.view.tree.node.DexRootNode;
+import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
 
 /**
  * Cell Renderer for the tree
@@ -42,13 +42,13 @@ public class DexTreeCellRenderer extends DefaultTreeCellRenderer
 		root_ico = new ImageIcon("imgs/tree/root.png");
 		folder_close_ico = new ImageIcon("imgs/tree/folder_close.png");
 		folder_open_ico = new ImageIcon("imgs/tree/folder_open.png");
-		strings_ico = new ImageIcon("imgs/tree/strings.png");
-		package_ico = new ImageIcon("imgs/tree/package.png");
-		class_ico = new ImageIcon("imgs/tree/class.png");
-		interface_ico = new ImageIcon("imgs/tree/interface.png");
-		field_ico = new ImageIcon("imgs/tree/field.png");
-		method_ico = new ImageIcon("imgs/tree/method.png");
-		annotation_ico = new ImageIcon("imgs/tree/annotation.png");
+		strings_ico = new ImageIcon("imgs/tree/same/strings.png");
+		package_ico = new ImageIcon("imgs/tree/same/package.png");
+		class_ico = new ImageIcon("imgs/tree/same/class.png");
+		interface_ico = new ImageIcon("imgs/tree/same/interface.png");
+		field_ico = new ImageIcon("imgs/tree/same/field.png");
+		method_ico = new ImageIcon("imgs/tree/same/method.png");
+		annotation_ico = new ImageIcon("imgs/tree/same/annotation.png");
 	}
 	
 	@Override
@@ -57,22 +57,22 @@ public class DexTreeCellRenderer extends DefaultTreeCellRenderer
 		// Default render
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 		// Customizing
-		if(value instanceof DexTreeRoot)
+		if(value instanceof DexRootNode)
 			setIcon(root_ico);
-		else if(value instanceof DexTreeFolder)
+		else if(value instanceof DexFolderNode)
 		{
 			if(expanded)
 				setIcon(folder_open_ico);
 			else
 				setIcon(folder_close_ico);
 		}
-		else if(value instanceof DexTreePackage)
+		else if(value instanceof DexPackageNode)
 			setIcon(package_ico);
-		else if(value instanceof DexTreeStrings)
+		else if(value instanceof DexStringsNode)
 			setIcon(strings_ico);
-		else if(value instanceof DexTreeClass)
+		else if(value instanceof DexClassNode)
 		{
-			ClassGen clazz = (ClassGen) ((DexTreeClass) value).getUserObject();
+			ClassGen clazz = (ClassGen) ((DexClassNode) value).getUserObject();
 			if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags())) // Se la classe
 																	// ?? un
 																	// interfaccia
@@ -80,11 +80,11 @@ public class DexTreeCellRenderer extends DefaultTreeCellRenderer
 			else
 				setIcon(class_ico);
 		}
-		else if(value instanceof DexTreeMethod)
+		else if(value instanceof DexMethodNode)
 			setIcon(method_ico);
-		else if(value instanceof DexTreeField)
+		else if(value instanceof DexFieldNode)
 			setIcon(field_ico);
-		else if(value instanceof DexTreeAnnotation)
+		else if(value instanceof DexAnnotationNode)
 			setIcon(annotation_ico);
 		return this;
 	}

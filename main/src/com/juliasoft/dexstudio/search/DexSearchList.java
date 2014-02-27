@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
-import com.juliasoft.dexstudio.view.node.DexTreeNode;
+import com.juliasoft.dexstudio.view.tree.node.DexTreeNode;
 
 /**
  * JTable with additional functions for managed the results of a search
@@ -62,7 +62,7 @@ public class DexSearchList extends JTable
 		// Insert new rows
 		for(DexTreeNode<?> node : nodes)
 		{
-			Object obj = node.getUserObject();
+			Object obj = node.getObj();
 			if(obj instanceof ClassGen)
 			{
 				if(AccessFlag.ACC_INTERFACE.isSet(((ClassGen) obj).getFlags()))

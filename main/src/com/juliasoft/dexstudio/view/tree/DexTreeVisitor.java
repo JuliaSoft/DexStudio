@@ -16,14 +16,14 @@ import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.ParamGen;
 import com.juliasoft.dexstudio.utils.StringSet;
-import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.node.DexTreeField;
-import com.juliasoft.dexstudio.view.node.DexTreeFolder;
-import com.juliasoft.dexstudio.view.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.node.DexTreePackage;
-import com.juliasoft.dexstudio.view.node.DexTreeRoot;
-import com.juliasoft.dexstudio.view.node.DexTreeStrings;
+import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
+import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
+import com.juliasoft.dexstudio.view.tree.node.DexFieldNode;
+import com.juliasoft.dexstudio.view.tree.node.DexFolderNode;
+import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
+import com.juliasoft.dexstudio.view.tree.node.DexPackageNode;
+import com.juliasoft.dexstudio.view.tree.node.DexRootNode;
+import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
 
 /**
  * Visitor of the DexGen file for the built of the tree
@@ -33,9 +33,9 @@ import com.juliasoft.dexstudio.view.node.DexTreeStrings;
 public class DexTreeVisitor implements DexGenVisitor
 {
 	private final Stack<DefaultMutableTreeNode> nodeStack = new Stack<>();
-	private final Map<String, DexTreePackage> packages = new HashMap<String, DexTreePackage>();
+	private final Map<String, DexPackageNode> packages = new HashMap<String, DexPackageNode>();
 	
-	public DexTreeVisitor(DexTreeRoot rootNode)
+	public DexTreeVisitor(DexRootNode rootNode)
 	{
 		nodeStack.push(rootNode);
 	}
@@ -47,9 +47,9 @@ public class DexTreeVisitor implements DexGenVisitor
 	@Override
 	public void visitEnter(ContextGen ctxGen)
 	{
-		DexTreeFolder ctxNode = new DexTreeFolder("Context");
+		DexFolderNode ctxNode = new DexFolderNode("Context");
 		nodeStack.peek().add(ctxNode);
-		ctxNode.add(new DexTreeStrings(new StringSet(ctxGen.getStrings())));
+		ctxNode.add(new DexStringsNode(new StringSet(ctxGen.getStrings())));
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class DexTreeVisitor implements DexGenVisitor
 	@Override
 	public void visitEnterClasses()
 	{
-		DexTreeFolder codegenNode = new DexTreeFolder("Classes");
+		DexFolderNode codegenNode = new DexFolderNode("Classes");
 		nodeStack.peek().add(codegenNode);
 		nodeStack.push(codegenNode);
 	}
@@ -71,11 +71,11 @@ public class DexTreeVisitor implements DexGenVisitor
 		String actual = getPackage(clazz.getType().getName());
 		if(!packages.containsKey(actual))
 		{
-			DexTreePackage packageNode = new DexTreePackage((actual != "") ? actual : "[Default Package]");
+			DexPackageNode packageNode = new DexPackageNode((actual != "") ? actual : "[Default Package]");
 			packages.put(actual, packageNode);
 			nodeStack.peek().add(packageNode);
 		}
-		DexTreeClass classNode = new DexTreeClass(clazz);
+		DexClassNode classNode = new DexClassNode(clazz);
 		packages.get(actual).add(classNode);
 		nodeStack.push(classNode);
 	}
@@ -83,7 +83,7 @@ public class DexTreeVisitor implements DexGenVisitor
 	@Override
 	public void visitEnter(MethodGen meth)
 	{
-		DexTreeMethod methNode = new DexTreeMethod(meth);
+		DexMethodNode methNode = new DexMethodNode(meth);
 		nodeStack.peek().add(methNode);
 		nodeStack.push(methNode);
 	}
@@ -91,7 +91,7 @@ public class DexTreeVisitor implements DexGenVisitor
 	@Override
 	public void visitEnter(FieldGen field)
 	{
-		DexTreeField fieldNode = new DexTreeField(field);
+		DexFieldNode fieldNode = new DexFieldNode(field);
 		nodeStack.peek().add(fieldNode);
 		nodeStack.push(fieldNode);
 	}
@@ -99,7 +99,7 @@ public class DexTreeVisitor implements DexGenVisitor
 	@Override
 	public void visitEnter(Annotation ann)
 	{
-		DexTreeAnnotation annNode = new DexTreeAnnotation(ann);
+		DexAnnotationNode annNode = new DexAnnotationNode(ann);
 		nodeStack.peek().add(annNode);
 		nodeStack.push(annNode);
 	}

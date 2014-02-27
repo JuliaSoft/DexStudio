@@ -8,79 +8,130 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
-import com.juliasoft.dexstudio.view.node.DexTreeAnnotation;
-import com.juliasoft.dexstudio.view.node.DexTreeClass;
-import com.juliasoft.dexstudio.view.node.DexTreeField;
-import com.juliasoft.dexstudio.view.node.DexTreeFolder;
-import com.juliasoft.dexstudio.view.node.DexTreeMethod;
-import com.juliasoft.dexstudio.view.node.DexTreePackage;
-import com.juliasoft.dexstudio.view.node.DexTreeRoot;
-import com.juliasoft.dexstudio.view.node.DexTreeStrings;
+import com.juliasoft.amalia.dex.codegen.diff.DiffNode;
+import com.juliasoft.amalia.dex.codegen.diff.DiffState;
+import com.juliasoft.dexstudio.view.cmp.node.DexAnnotationCmp;
+import com.juliasoft.dexstudio.view.cmp.node.DexClassCmp;
+import com.juliasoft.dexstudio.view.cmp.node.DexFieldCmp;
+import com.juliasoft.dexstudio.view.cmp.node.DexMethodCmp;
+import com.juliasoft.dexstudio.view.cmp.node.DexPackageCmp;
+import com.juliasoft.dexstudio.view.cmp.node.DexStringsCmp;
+import com.juliasoft.dexstudio.view.tree.node.DexFolderNode;
+import com.juliasoft.dexstudio.view.tree.node.DexRootNode;
 
 @SuppressWarnings("serial")
 public class DexCmpCellRenderer extends DefaultTreeCellRenderer
 {
-	private ImageIcon root_ico;
-	private ImageIcon folder_close_ico;
-	private ImageIcon folder_open_ico;
-	private ImageIcon strings_ico;
-	private ImageIcon package_ico;
-	private ImageIcon class_ico;
-	private ImageIcon interface_ico;
-	private ImageIcon field_ico;
-	private ImageIcon method_ico;
-	private ImageIcon annotation_ico;
-	
 	public DexCmpCellRenderer()
-	{
-		// Initializing images
-		root_ico = new ImageIcon("imgs/tree/root.png");
-		folder_close_ico = new ImageIcon("imgs/tree/folder_close.png");
-		folder_open_ico = new ImageIcon("imgs/tree/folder_open.png");
-		strings_ico = new ImageIcon("imgs/tree/strings.png");
-		package_ico = new ImageIcon("imgs/tree/package.png");
-		class_ico = new ImageIcon("imgs/tree/class.png");
-		interface_ico = new ImageIcon("imgs/tree/interface.png");
-		field_ico = new ImageIcon("imgs/tree/field.png");
-		method_ico = new ImageIcon("imgs/tree/method.png");
-		annotation_ico = new ImageIcon("imgs/tree/annotation.png");
-	}
+	{}
 	
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus)
 	{
-		// Default render
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-		// Customizing
-		if(value instanceof DexTreeRoot)
-			setIcon(root_ico);
-		else if(value instanceof DexTreeFolder)
+		
+		if(value instanceof DexRootNode)
+		{
+			setIcon(new ImageIcon("imgs/tree/root.png"));
+		}
+		else if(value instanceof DexFolderNode)
 		{
 			if(expanded)
-				setIcon(folder_open_ico);
+				setIcon(new ImageIcon("imgs/tree/folder_open.png"));
 			else
-				setIcon(folder_close_ico);
+				setIcon(new ImageIcon("imgs/tree/folder_close.png"));
 		}
-		else if(value instanceof DexTreePackage)
-			setIcon(package_ico);
-		else if(value instanceof DexTreeStrings)
-			setIcon(strings_ico);
-		else if(value instanceof DexTreeClass)
+		else if(value instanceof DexPackageCmp)
 		{
-			ClassGen clazz = (ClassGen) ((DexTreeClass) value).getUserObject();
-			if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags())) // Se la classe
-																	// ?? un
-																	// interfaccia
-				setIcon(interface_ico);
-			else
-				setIcon(class_ico);
+			setIcon(getIcon("package", ((DexPackageCmp) value).getState()));
+			setLabel(((DexPackageCmp) value).getState());
 		}
-		else if(value instanceof DexTreeMethod)
-			setIcon(method_ico);
-		else if(value instanceof DexTreeField)
-			setIcon(field_ico);
-		else if(value instanceof DexTreeAnnotation)
-			setIcon(annotation_ico);
+		else if(value instanceof DexStringsCmp)
+		{
+			setIcon(getIcon("strings", ((DexStringsCmp) value).getObj().getState()));
+		}
+		else if(value instanceof DexClassCmp)
+		{
+			DiffNode<ClassGen> diff = ((DexClassCmp) value).getObj();
+			ClassGen clazz = (ClassGen) ((diff.getState().equals(DiffState.RIGHT_ONLY)) ? diff.getRight() : diff.getLeft());
+			// Se la classe non è un interfaccia
+			if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags()))
+			{
+				setIcon(getIcon("class", diff.getState()));
+			}
+			else
+			{
+				setIcon(getIcon("interface", diff.getState()));
+			}
+			setLabel(diff.getState());
+		}
+		else if(value instanceof DexMethodCmp)
+		{
+			DexMethodCmp node = (DexMethodCmp) value;
+			setIcon(getIcon("method", node.getObj().getState()));
+			setLabel(node.getObj().getState());
+		}
+		else if(value instanceof DexFieldCmp)
+		{
+			DexFieldCmp node = (DexFieldCmp) value;
+			setIcon(getIcon("field", node.getObj().getState()));
+			setLabel(node.getObj().getState());
+		}
+		else if(value instanceof DexAnnotationCmp)
+		{
+			DexAnnotationCmp node = (DexAnnotationCmp) value;
+			setIcon(getIcon("annotation", node.getObj().getState()));
+			setLabel(node.getObj().getState());
+		}
+		
 		return this;
+	}
+	
+	private ImageIcon getIcon(String type, DiffState diffState)
+	{
+		String state = new String();
+		switch(diffState)
+		{
+			case UNKNOWN:
+				state = "unknown";
+				break;
+			case SAME:
+				state = "same";
+				break;
+			case LEFT_ONLY:
+				state = "left";
+				break;
+			case RIGHT_ONLY:
+				state = "right";
+				break;
+			case DIFFERENT:
+				state = "different";
+				break;
+		}
+		return new ImageIcon("imgs/tree/" + state + "/" + type + ".png");
+	}
+	
+	private void setLabel(DiffState state)
+	{
+		String diff = new String();
+		switch(state)
+		{
+			case UNKNOWN:
+				diff = "(UNKNOWN)";
+				break;
+			case SAME:
+				diff = "(SAME)";
+				break;
+			case LEFT_ONLY:
+				diff = "(LEFT)";
+				break;
+			case RIGHT_ONLY:
+				diff = "(RIGHT)";
+				break;
+			case DIFFERENT:
+				diff = "(DIFFERENT)";
+				break;
+		}
+		this.setText(this.getText() + " " + diff);
 	}
 }
