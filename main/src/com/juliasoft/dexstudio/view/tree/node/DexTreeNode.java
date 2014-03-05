@@ -50,8 +50,6 @@ public abstract class DexTreeNode<T> extends DefaultMutableTreeNode implements C
 		this.obj = obj;
 	}
 	
-	// TODO (Maybe): Update every call of this method in the project with a call
-	// of getLeft();
 	@Override
 	public Object getUserObject()
 	{

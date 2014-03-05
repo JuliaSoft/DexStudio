@@ -190,7 +190,7 @@ public class DexLog extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				JComboBox cb = (JComboBox) e.getSource();
+				JComboBox<String> cb = (JComboBox) e.getSource();
 				String selected = (String) cb.getSelectedItem();
 				switch(selected)
 				{

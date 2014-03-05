@@ -24,7 +24,7 @@ import com.juliasoft.amalia.dex.file.DexFile;
 import com.juliasoft.amalia.dex.file.DexReader;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.utils.DexProgress;
-import com.juliasoft.dexstudio.view.cmp.DexCmp;
+import com.juliasoft.dexstudio.view.compare.DexCompare;
 
 /**
  * Waiting dialog for the opening function
@@ -158,7 +158,7 @@ public class DexOpenApk extends JDialog
 							frame.updateLayout(get(), apk.getName());
 							break;
 						case MOD_CMP_APK:
-							DexCmp cmp = new DexCmp(frame, apk.getName());
+							DexCompare cmp = new DexCompare(frame, apk.getName());
 							cmp.update(new SimpleDexDiff(base, get()));
 							frame.getViewManager().addView(cmp);
 							break;

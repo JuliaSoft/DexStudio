@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.view.cmp;
+package com.juliasoft.dexstudio.view.compare;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -21,27 +21,20 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
-import com.juliasoft.amalia.dex.codegen.diff.AnnotationDiff;
 import com.juliasoft.amalia.dex.codegen.diff.DexDiff;
 import com.juliasoft.amalia.dex.codegen.diff.DiffNode;
 import com.juliasoft.amalia.dex.codegen.diff.DiffState;
-import com.juliasoft.amalia.dex.codegen.diff.FieldDiff;
-import com.juliasoft.amalia.dex.codegen.diff.MethodDiff;
-import com.juliasoft.amalia.dex.codegen.diff.SimpleClassDiff;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.exception.ViewNotFoundException;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
-import com.juliasoft.dexstudio.view.cmp.node.DexAnnotationCmp;
-import com.juliasoft.dexstudio.view.cmp.node.DexClassCmp;
-import com.juliasoft.dexstudio.view.cmp.node.DexFieldCmp;
-import com.juliasoft.dexstudio.view.cmp.node.DexMethodCmp;
-import com.juliasoft.dexstudio.view.cmp.node.DexPackageCmp;
+import com.juliasoft.dexstudio.view.NodeType;
 import com.juliasoft.dexstudio.view.tree.DexTreePopup;
 import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
 import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
@@ -50,22 +43,21 @@ import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
 import com.juliasoft.dexstudio.view.tree.node.DexPackageNode;
 import com.juliasoft.dexstudio.view.tree.node.DexRootNode;
 import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeNode;
 
 @SuppressWarnings("serial")
-public class DexCmp extends DexView
+public class DexCompare extends DexView
 {
 	private String name;
 	private DexFrame frame;
 	private JTree tree = new JTree();
-	private Map<String, DexPackageCmp> pkgs = new TreeMap<String, DexPackageCmp>();
+	private Map<String, CompareNode> pkgs = new TreeMap<String, CompareNode>();
 	
-	public DexCmp(DexFrame frame, String name)
+	public DexCompare(DexFrame frame, String name)
 	{
 		this.name = name;
 		this.frame = frame;
 		this.setPreferredSize(new Dimension(300, 600));
-		tree.setCellRenderer(new DexCmpCellRenderer());
+		tree.setCellRenderer(new CompareCellRenderer());
 		tree.setToggleClickCount(0);
 		tree.addMouseListener(new MouseAdapter()
 		{
@@ -95,24 +87,24 @@ public class DexCmp extends DexView
 	public void update(DexDiff diff)
 	{
 		diff.update(true);
-		DexRootNode rootNode = new DexRootNode(this.getName());
-		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+		CompareNode root = new CompareNode(NodeType.ROOT, this.getName());
+		DefaultTreeModel treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
-		DexFolderNode context = new DexFolderNode("Context");
-		DexFolderNode classes = new DexFolderNode("Classes");
-		rootNode.add(context);
+		CompareNode context = new CompareNode(NodeType.FOLDER, "Context");
+		CompareNode classes = new CompareNode(NodeType.FOLDER, "Classes");
+		root.add(context);
 		//context.add(new DexStringsCmp(null)); TODO: strings comparison
-		rootNode.add(classes);
+		root.add(classes);
 		for(DiffNode<?> child : diff.getClassDiffs())
 		{
 			updateNode(child, classes);
 		}
-		treeModel.nodeStructureChanged(rootNode);
+		treeModel.nodeStructureChanged(root);
 	}
 	
-	private void updateNode(DiffNode<?> diff, DexTreeNode<?> node)
+	private void updateNode(DiffNode<?> diff, CompareNode node) throws IllegalArgumentException
 	{
-		DexTreeNode<?> new_node = null;
+		CompareNode new_node = null;
 		if(diff.getDiffClass().equals(ClassGen.class))
 		{
 			ClassGen clazz = (diff.getState().equals(DiffState.RIGHT_ONLY)) ? (ClassGen) diff.getRight() : (ClassGen) diff.getLeft();
@@ -128,67 +120,47 @@ public class DexCmp extends DexView
 			// If not exists, add the new package node
 			if(!pkgs.containsKey(pkg))
 			{
-				DexPackageCmp pkg_node = new DexPackageCmp(pkg);
+				CompareNode pkg_node = new CompareNode(NodeType.PACKAGE, pkg);
 				pkgs.put(pkg, pkg_node);
 				node.add(pkg_node);
 			}
-			DexPackageCmp pkg_node = pkgs.get(pkg);
-			pkg_node.setState(updateState(pkg_node.getState(), diff.getState()));
-			new_node = new DexClassCmp(new SimpleClassDiff((ClassGen)diff.getLeft(), (ClassGen)diff.getRight()));
+			CompareNode pkg_node = pkgs.get(pkg);
+			pkg_node.updateState(diff.getState());
+			// Se la classe e' un interfaccia
+			if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags()))
+			{
+				new_node = new CompareNode(NodeType.INTERFACE, diff);
+			}
+			else
+			{
+				new_node = new CompareNode(NodeType.CLASS, diff);
+			}
+			new_node = new CompareNode(NodeType.CLASS, diff);
 			pkg_node.add(new_node);
 		}
 		else if(diff.getDiffClass().equals(FieldGen.class))
 		{
-			new_node = new DexFieldCmp(new FieldDiff((FieldGen)diff.getLeft(), (FieldGen)diff.getRight()));
+			new_node = new CompareNode(NodeType.FIELD, diff);
 			node.add(new_node);
 		}
 		else if(diff.getDiffClass().equals(MethodGen.class))
 		{
-			new_node = new DexMethodCmp(new MethodDiff((MethodGen)diff.getLeft(), (MethodGen)diff.getRight()));
+			new_node = new CompareNode(NodeType.METHOD, diff);
 			node.add(new_node);
 		}
 		else if(diff.getDiffClass().equals(Annotation.class))
 		{
-			new_node = new DexAnnotationCmp(new AnnotationDiff((Annotation)diff.getLeft(), (Annotation)diff.getRight()));
+			new_node = new CompareNode(NodeType.ANNOTATION, diff);
 			node.add(new_node);
 		}
 		else
 		{
-			new_node = new DexFolderNode("<missing>");
-			node.add(new_node);
+			throw new IllegalArgumentException();
 		}
 		for(DiffNode<?> child : diff.getChildren())
 		{
 			updateNode(child, new_node);
 		}
-	}
-	
-	private DiffState updateState(DiffState actual, DiffState child)
-	{
-		if(child.equals(DiffState.UNKNOWN))
-		{
-			return DiffState.UNKNOWN;
-		}
-		switch(actual)
-		{
-			case SAME:
-				if(!child.equals(DiffState.SAME))
-					return child;
-				return DiffState.SAME;
-			case UNKNOWN:
-				return DiffState.UNKNOWN;
-			case DIFFERENT:
-				return DiffState.DIFFERENT;
-			case LEFT_ONLY:
-				if(child.equals(DiffState.RIGHT_ONLY) || child.equals(DiffState.SAME) || child.equals(DiffState.DIFFERENT))
-					return DiffState.DIFFERENT;
-				return DiffState.LEFT_ONLY;
-			case RIGHT_ONLY:
-				if(child.equals(DiffState.LEFT_ONLY) || child.equals(DiffState.SAME) || child.equals(DiffState.DIFFERENT))
-					return DiffState.DIFFERENT;
-				return DiffState.LEFT_ONLY;
-		}
-		return DiffState.UNKNOWN;
 	}
 	
 	@Override
@@ -271,7 +243,7 @@ public class DexCmp extends DexView
 			{
 				try
 				{
-					frame.getViewManager().removeView(DexCmp.this.getName());
+					frame.getViewManager().removeView(DexCompare.this.getName());
 				}
 				catch(ViewNotFoundException e1)
 				{
