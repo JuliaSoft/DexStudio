@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.plaf.basic.BasicButtonUI;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
@@ -35,14 +34,8 @@ import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
 import com.juliasoft.dexstudio.view.NodeType;
-import com.juliasoft.dexstudio.view.tree.DexTreePopup;
-import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
-import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
-import com.juliasoft.dexstudio.view.tree.node.DexFolderNode;
-import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
-import com.juliasoft.dexstudio.view.tree.node.DexPackageNode;
-import com.juliasoft.dexstudio.view.tree.node.DexRootNode;
-import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
+import com.juliasoft.dexstudio.view.tree.TreeNode;
+import com.juliasoft.dexstudio.view.tree.TreePopup;
 
 @SuppressWarnings("serial")
 public class DexCompare extends DexView
@@ -125,7 +118,7 @@ public class DexCompare extends DexView
 				node.add(pkg_node);
 			}
 			CompareNode pkg_node = pkgs.get(pkg);
-			pkg_node.updateState(diff.getState());
+			pkg_node.setState(pkg_node.updateState(diff.getState()));
 			// Se la classe e' un interfaccia
 			if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags()))
 			{
@@ -176,10 +169,10 @@ public class DexCompare extends DexView
 		tree.setSelectionPath(path);
 		Object node = path.getLastPathComponent();
 		// If I can really visualize a tab for the selected element
-		if(!(node instanceof DexRootNode))
+		if(node instanceof TreeNode && !((TreeNode)node).getType().equals(NodeType.ROOT))
 		{
 			// Open the popup menu
-			new DexTreePopup(frame, tree, node).show(e.getComponent(), e.getX(), e.getY());
+			new TreePopup(frame, tree, node).show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 	
@@ -188,8 +181,8 @@ public class DexCompare extends DexView
 		// Get the selected element of the tree
 		TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
 		tree.setSelectionPath(path);
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-		if(node instanceof DexFolderNode | node instanceof DexPackageNode)
+		CompareNode node = (CompareNode) path.getLastPathComponent();
+		if(node.getType().equals(NodeType.FOLDER) || node.getType().equals(NodeType.PACKAGE))
 		{
 			if(tree.isExpanded(path))
 			{
@@ -200,19 +193,19 @@ public class DexCompare extends DexView
 				tree.expandPath(path);
 			}
 		}
-		else if(node instanceof DexClassNode)
+		else if(node.getType().equals(NodeType.CLASS) || node.getType().equals(NodeType.INTERFACE))
 		{
 			frame.changeSelectedTab(new DexTab(frame, (ClassGen) node.getUserObject()));
 		}
-		else if(node instanceof DexMethodNode)
+		else if(node.getType().equals(NodeType.METHOD))
 		{
 			frame.changeSelectedTab(new DexTab(frame, (MethodGen) node.getUserObject()));
 		}
-		else if(node instanceof DexAnnotationNode)
+		else if(node.getType().equals(NodeType.ANNOTATION))
 		{
 			frame.changeSelectedTab(new DexTab(frame, (Annotation) node.getUserObject()));
 		}
-		else if(node instanceof DexStringsNode)
+		else if(node.getType().equals(NodeType.STRINGS))
 		{
 			frame.changeSelectedTab(new DexTab(frame, (StringSet) node.getUserObject()));
 		}

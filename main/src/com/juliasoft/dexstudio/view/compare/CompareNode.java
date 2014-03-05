@@ -19,7 +19,7 @@ public class CompareNode extends DefaultMutableTreeNode implements Comparable<Co
 	private String label;
 	private NodeType type;
 	private DiffNode<?> diff;
-	private DiffState state = DiffState.SAME;
+	private DiffState state;
 	
 	public CompareNode(NodeType type, String name) throws IllegalArgumentException
 	{
@@ -27,6 +27,8 @@ public class CompareNode extends DefaultMutableTreeNode implements Comparable<Co
 			throw new IllegalArgumentException();
 		this.type = type;
 		this.label = name;
+		if(type.equals(NodeType.PACKAGE))
+			this.state = DiffState.SAME;
 	}
 	
 	public CompareNode(NodeType type, DiffNode<?> diff) throws IllegalArgumentException
@@ -34,7 +36,10 @@ public class CompareNode extends DefaultMutableTreeNode implements Comparable<Co
 		if((type.equals(NodeType.CLASS) || type.equals(NodeType.INTERFACE)) && !diff.getDiffClass().equals(ClassGen.class) ||
 				type.equals(NodeType.FIELD) && !diff.getDiffClass().equals(FieldGen.class) ||
 				type.equals(NodeType.METHOD) && !diff.getDiffClass().equals(MethodGen.class) ||
-				type.equals(NodeType.ANNOTATION) && !diff.getDiffClass().equals(Annotation.class))
+				type.equals(NodeType.ANNOTATION) && !diff.getDiffClass().equals(Annotation.class) ||
+				type.equals(NodeType.ROOT) ||
+				type.equals(NodeType.FOLDER) ||
+				type.equals(NodeType.PACKAGE))
 			throw new IllegalArgumentException();
 		this.type = type;
 		this.diff = diff;
@@ -90,8 +95,6 @@ public class CompareNode extends DefaultMutableTreeNode implements Comparable<Co
 				if(!child.equals(DiffState.SAME))
 					return child;
 				return DiffState.SAME;
-			case UNKNOWN:
-				return DiffState.UNKNOWN;
 			case DIFFERENT:
 				return DiffState.DIFFERENT;
 			case LEFT_ONLY:
@@ -101,9 +104,10 @@ public class CompareNode extends DefaultMutableTreeNode implements Comparable<Co
 			case RIGHT_ONLY:
 				if(child.equals(DiffState.LEFT_ONLY) || child.equals(DiffState.SAME) || child.equals(DiffState.DIFFERENT))
 					return DiffState.DIFFERENT;
-				return DiffState.LEFT_ONLY;
+				return DiffState.RIGHT_ONLY;
+			default:
+				return DiffState.UNKNOWN;	
 		}
-		return DiffState.UNKNOWN;
 	}
 	
 	@Override

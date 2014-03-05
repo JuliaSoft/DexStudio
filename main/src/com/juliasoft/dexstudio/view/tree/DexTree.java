@@ -12,7 +12,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
@@ -24,14 +23,7 @@ import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
-import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
-import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
-import com.juliasoft.dexstudio.view.tree.node.DexFolderNode;
-import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeNode;
-import com.juliasoft.dexstudio.view.tree.node.DexPackageNode;
-import com.juliasoft.dexstudio.view.tree.node.DexRootNode;
-import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
+import com.juliasoft.dexstudio.view.NodeType;
 
 @SuppressWarnings("serial")
 public class DexTree extends DexView
@@ -48,10 +40,10 @@ public class DexTree extends DexView
 	private void initLayout()
 	{
 		this.setPreferredSize(new Dimension(300, 600));
-		DexRootNode rootNode = new DexRootNode("<No dex file loaded>");
+		TreeNode rootNode = new TreeNode(NodeType.ROOT, "<No dex file loaded>");
 		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		tree = new JTree(treeModel);
-		tree.setCellRenderer(new DexTreeCellRenderer());
+		tree.setCellRenderer(new TreeCellRenderer());
 		tree.setToggleClickCount(0);
 		tree.addMouseListener(new MouseAdapter()
 		{
@@ -85,10 +77,10 @@ public class DexTree extends DexView
 		tree.setSelectionPath(path);
 		Object node = path.getLastPathComponent();
 		// If I can really visualize a tab for the selected element
-		if(!(node instanceof DexRootNode))
+		if(node instanceof TreeNode && !((TreeNode)node).getType().equals(NodeType.ROOT))
 		{
 			// Open the popup menu
-			new DexTreePopup(frame, tree, node).show(e.getComponent(), e.getX(), e.getY());
+			new TreePopup(frame, tree, node).show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 	
@@ -97,8 +89,8 @@ public class DexTree extends DexView
 		// Get the selected element of the tree
 		TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
 		tree.setSelectionPath(path);
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-		if(node instanceof DexFolderNode | node instanceof DexPackageNode)
+		TreeNode node = (TreeNode) path.getLastPathComponent();
+		if(node.getType().equals(NodeType.FOLDER) || node.getType().equals(NodeType.PACKAGE))
 		{
 			if(tree.isExpanded(path))
 			{
@@ -109,19 +101,19 @@ public class DexTree extends DexView
 				tree.expandPath(path);
 			}
 		}
-		else if(node instanceof DexClassNode)
+		else if(node.getType().equals(NodeType.CLASS) || node.getType().equals(NodeType.INTERFACE))
 		{
 			frame.changeSelectedTab(new DexTab(frame, (ClassGen) node.getUserObject()));
 		}
-		else if(node instanceof DexMethodNode)
+		else if(node.getType().equals(NodeType.METHOD))
 		{
 			frame.changeSelectedTab(new DexTab(frame, (MethodGen) node.getUserObject()));
 		}
-		else if(node instanceof DexAnnotationNode)
+		else if(node.getType().equals(NodeType.ANNOTATION))
 		{
 			frame.changeSelectedTab(new DexTab(frame, (Annotation) node.getUserObject()));
 		}
-		else if(node instanceof DexStringsNode)
+		else if(node.getType().equals(NodeType.STRINGS))
 		{
 			frame.changeSelectedTab(new DexTab(frame, (StringSet) node.getUserObject()));
 		}
@@ -129,17 +121,17 @@ public class DexTree extends DexView
 	
 	public void updateLayout(DexGen dexGen, String rootLabel)
 	{
-		DexRootNode rootNode = new DexRootNode(rootLabel);
+		TreeNode rootNode = new TreeNode(NodeType.ROOT, rootLabel);
 		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		tree.setModel(treeModel);
-		DexTreeVisitor treeModelvisitor = new DexTreeVisitor(rootNode);
+		TreeVisitor treeModelvisitor = new TreeVisitor(rootNode);
 		dexGen.accept(treeModelvisitor);
 		treeModel.nodeStructureChanged(rootNode);
 	}
 	
 	public void cleanTree()
 	{
-		DexRootNode rootNode = new DexRootNode("<No dex file loaded>");
+		TreeNode rootNode = new TreeNode(NodeType.ROOT, "<No dex file loaded>");
 		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		tree.setModel(treeModel);
 		treeModel.nodeStructureChanged(rootNode);
@@ -151,10 +143,10 @@ public class DexTree extends DexView
 	 * 
 	 * @return
 	 */
-	public ArrayList<DexTreeNode<?>> getNodeArray()
+	public ArrayList<TreeNode> getNodeArray()
 	{
-		ArrayList<DexTreeNode<?>> nodes = new ArrayList<DexTreeNode<?>>();
-		DexTreeNode<?> root = (DexTreeNode<?>) tree.getModel().getRoot();
+		ArrayList<TreeNode> nodes = new ArrayList<TreeNode>();
+		TreeNode root = (TreeNode) tree.getModel().getRoot();
 		getSubTreeNodeArray(root, nodes);
 		return nodes;
 	}
@@ -166,13 +158,13 @@ public class DexTree extends DexView
 	 * @param node
 	 * @param nodes
 	 */
-	private void getSubTreeNodeArray(DexTreeNode<?> node, ArrayList<DexTreeNode<?>> nodes)
+	private void getSubTreeNodeArray(TreeNode node, ArrayList<TreeNode> nodes)
 	{
 		if(node.getChildCount() == 0)
 			return;
 		for(int i = 0; i < node.getChildCount(); i++)
 		{
-			DexTreeNode<?> child = (DexTreeNode<?>) node.getChildAt(i);
+			TreeNode child = (TreeNode) node.getChildAt(i);
 			Object obj = child.getUserObject();
 			if(obj instanceof ClassGen || obj instanceof Set<?>)
 			{

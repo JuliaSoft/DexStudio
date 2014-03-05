@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeNode;
+import com.juliasoft.dexstudio.view.tree.TreeNode;
 
 /**
  * JTable with additional functions for managed the results of a search
@@ -52,7 +52,7 @@ public class DexSearchList extends JTable
 	 *            User input string for additional informations into the
 	 *            visualization
 	 */
-	public synchronized void updateRows(TreeSet<DexTreeNode<?>> nodes, String search)
+	public synchronized void updateRows(TreeSet<TreeNode> nodes, String search)
 	{
 		this.search = search;
 		DefaultTableModel model = (DefaultTableModel) this.getModel();
@@ -60,9 +60,9 @@ public class DexSearchList extends JTable
 		this.update(getGraphics());
 		this.repaint();
 		// Insert new rows
-		for(DexTreeNode<?> node : nodes)
+		for(TreeNode node : nodes)
 		{
-			Object obj = node.getObj();
+			Object obj = node.getUserObject();
 			if(obj instanceof ClassGen)
 			{
 				if(AccessFlag.ACC_INTERFACE.isSet(((ClassGen) obj).getFlags()))
@@ -125,7 +125,7 @@ public class DexSearchList extends JTable
 	{
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focus, int row, int col)
 		{
-			DexTreeNode<?> node = (DexTreeNode<?>) value;
+			TreeNode node = (TreeNode) value;
 			String str = node.toString();
 			JLabel label = new JLabel();
 			label.setBackground(selected ? Color.LIGHT_GRAY : Color.white);

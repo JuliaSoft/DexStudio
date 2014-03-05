@@ -7,6 +7,7 @@ import java.util.Stack;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.juliasoft.amalia.dex.DexGenVisitor;
+import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.ContextGen;
@@ -16,26 +17,19 @@ import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.ParamGen;
 import com.juliasoft.dexstudio.utils.StringSet;
-import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
-import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
-import com.juliasoft.dexstudio.view.tree.node.DexFieldNode;
-import com.juliasoft.dexstudio.view.tree.node.DexFolderNode;
-import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
-import com.juliasoft.dexstudio.view.tree.node.DexPackageNode;
-import com.juliasoft.dexstudio.view.tree.node.DexRootNode;
-import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
+import com.juliasoft.dexstudio.view.NodeType;
 
 /**
  * Visitor of the DexGen file for the built of the tree
  * 
  * @author Zanoncello Matteo
  */
-public class DexTreeVisitor implements DexGenVisitor
+public class TreeVisitor implements DexGenVisitor
 {
 	private final Stack<DefaultMutableTreeNode> nodeStack = new Stack<>();
-	private final Map<String, DexPackageNode> packages = new HashMap<String, DexPackageNode>();
+	private final Map<String, TreeNode> packages = new HashMap<String, TreeNode>();
 	
-	public DexTreeVisitor(DexRootNode rootNode)
+	public TreeVisitor(TreeNode rootNode)
 	{
 		nodeStack.push(rootNode);
 	}
@@ -47,9 +41,9 @@ public class DexTreeVisitor implements DexGenVisitor
 	@Override
 	public void visitEnter(ContextGen ctxGen)
 	{
-		DexFolderNode ctxNode = new DexFolderNode("Context");
+		TreeNode ctxNode = new TreeNode(NodeType.FOLDER, "Context");
 		nodeStack.peek().add(ctxNode);
-		ctxNode.add(new DexStringsNode(new StringSet(ctxGen.getStrings())));
+		ctxNode.add(new TreeNode(NodeType.STRINGS, new StringSet(ctxGen.getStrings())));
 	}
 	
 	@Override
@@ -59,7 +53,7 @@ public class DexTreeVisitor implements DexGenVisitor
 	@Override
 	public void visitEnterClasses()
 	{
-		DexFolderNode codegenNode = new DexFolderNode("Classes");
+		TreeNode codegenNode = new TreeNode(NodeType.FOLDER, "Classes");
 		nodeStack.peek().add(codegenNode);
 		nodeStack.push(codegenNode);
 	}
@@ -71,19 +65,28 @@ public class DexTreeVisitor implements DexGenVisitor
 		String actual = getPackage(clazz.getType().getName());
 		if(!packages.containsKey(actual))
 		{
-			DexPackageNode packageNode = new DexPackageNode((actual != "") ? actual : "[Default Package]");
+			TreeNode packageNode = new TreeNode(NodeType.PACKAGE, (actual != "") ? actual : "[Default Package]");
 			packages.put(actual, packageNode);
 			nodeStack.peek().add(packageNode);
 		}
-		DexClassNode classNode = new DexClassNode(clazz);
-		packages.get(actual).add(classNode);
-		nodeStack.push(classNode);
+		if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags()))
+		{
+			TreeNode classNode = new TreeNode(NodeType.INTERFACE, clazz);
+			packages.get(actual).add(classNode);
+			nodeStack.push(classNode);
+		}
+		else
+		{
+			TreeNode classNode = new TreeNode(NodeType.CLASS, clazz);
+			packages.get(actual).add(classNode);
+			nodeStack.push(classNode);
+		}
 	}
 	
 	@Override
 	public void visitEnter(MethodGen meth)
 	{
-		DexMethodNode methNode = new DexMethodNode(meth);
+		TreeNode methNode = new TreeNode(NodeType.METHOD, meth);
 		nodeStack.peek().add(methNode);
 		nodeStack.push(methNode);
 	}
@@ -91,7 +94,7 @@ public class DexTreeVisitor implements DexGenVisitor
 	@Override
 	public void visitEnter(FieldGen field)
 	{
-		DexFieldNode fieldNode = new DexFieldNode(field);
+		TreeNode fieldNode = new TreeNode(NodeType.FIELD, field);
 		nodeStack.peek().add(fieldNode);
 		nodeStack.push(fieldNode);
 	}
@@ -99,7 +102,7 @@ public class DexTreeVisitor implements DexGenVisitor
 	@Override
 	public void visitEnter(Annotation ann)
 	{
-		DexAnnotationNode annNode = new DexAnnotationNode(ann);
+		TreeNode annNode = new TreeNode(NodeType.ANNOTATION, ann);
 		nodeStack.peek().add(annNode);
 		nodeStack.push(annNode);
 	}

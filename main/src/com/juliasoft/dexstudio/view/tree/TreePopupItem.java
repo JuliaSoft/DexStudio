@@ -11,7 +11,7 @@ import javax.swing.JMenuItem;
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class DexTreePopupItem extends JMenuItem
+public class TreePopupItem extends JMenuItem
 {
 	/**
 	 * String constructor
@@ -19,7 +19,7 @@ public class DexTreePopupItem extends JMenuItem
 	 * @param name
 	 *            The name of the menu item
 	 */
-	public DexTreePopupItem(String name)
+	public TreePopupItem(String name)
 	{
 		super(name);
 		this.setMinimumSize(new Dimension(this.getPreferredSize().width, 30));

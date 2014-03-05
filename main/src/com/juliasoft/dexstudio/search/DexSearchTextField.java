@@ -20,7 +20,7 @@ import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.DexProgress;
 import com.juliasoft.dexstudio.utils.StringSet;
-import com.juliasoft.dexstudio.view.tree.node.DexTreeNode;
+import com.juliasoft.dexstudio.view.tree.TreeNode;
 
 /**
  * TextField for the search dialog
@@ -80,7 +80,7 @@ public class DexSearchTextField extends JTextField implements KeyListener
 			case KeyEvent.VK_ENTER:
 				if(sel != -1)
 				{
-					DexTreeNode<?> node = (DexTreeNode<?>) list.getModel().getValueAt(sel, 1);
+					TreeNode node = (TreeNode) list.getModel().getValueAt(sel, 1);
 					Object obj = node.getUserObject();
 					if(obj instanceof ClassGen)
 					{
@@ -115,7 +115,7 @@ public class DexSearchTextField extends JTextField implements KeyListener
 	 */
 	public class DexSearchDocumentListener implements DocumentListener
 	{
-		private ArrayList<DexTreeNode<?>> nodes;
+		private ArrayList<TreeNode> nodes;
 		private DexSearchSwingWorker worker;
 		
 		public DexSearchDocumentListener()
@@ -155,7 +155,7 @@ public class DexSearchTextField extends JTextField implements KeyListener
 		 * 
 		 * @author Zanoncello Matteo
 		 */
-		public class DexSearchSwingWorker extends SwingWorker<TreeSet<DexTreeNode<?>>, DexProgress>
+		public class DexSearchSwingWorker extends SwingWorker<TreeSet<TreeNode>, DexProgress>
 		{
 			private String str;
 			
@@ -165,15 +165,15 @@ public class DexSearchTextField extends JTextField implements KeyListener
 			}
 			
 			@Override
-			protected TreeSet<DexTreeNode<?>> doInBackground() throws Exception
+			protected TreeSet<TreeNode> doInBackground() throws Exception
 			{
 				if(str.equals(""))
 				{
-					list.updateRows(new TreeSet<DexTreeNode<?>>(), "");
+					list.updateRows(new TreeSet<TreeNode>(), "");
 					return null;
 				}
-				TreeSet<DexTreeNode<?>> results = new TreeSet<DexTreeNode<?>>();
-				for(DexTreeNode<?> node : nodes)
+				TreeSet<TreeNode> results = new TreeSet<TreeNode>();
+				for(TreeNode node : nodes)
 				{
 					if(Thread.currentThread().isInterrupted())
 						return null;
@@ -190,7 +190,7 @@ public class DexSearchTextField extends JTextField implements KeyListener
 			{
 				try
 				{
-					TreeSet<DexTreeNode<?>> results = get();
+					TreeSet<TreeNode> results = get();
 					if(results == null)
 					{
 						return;

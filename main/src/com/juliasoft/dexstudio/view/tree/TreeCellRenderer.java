@@ -6,24 +6,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import com.juliasoft.amalia.dex.codegen.AccessFlag;
-import com.juliasoft.amalia.dex.codegen.ClassGen;
-import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
-import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
-import com.juliasoft.dexstudio.view.tree.node.DexFieldNode;
-import com.juliasoft.dexstudio.view.tree.node.DexFolderNode;
-import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
-import com.juliasoft.dexstudio.view.tree.node.DexPackageNode;
-import com.juliasoft.dexstudio.view.tree.node.DexRootNode;
-import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
-
 /**
  * Cell Renderer for the tree
  * 
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class DexTreeCellRenderer extends DefaultTreeCellRenderer
+public class TreeCellRenderer extends DefaultTreeCellRenderer
 {
 	private ImageIcon root_ico;
 	private ImageIcon folder_close_ico;
@@ -36,7 +25,7 @@ public class DexTreeCellRenderer extends DefaultTreeCellRenderer
 	private ImageIcon method_ico;
 	private ImageIcon annotation_ico;
 	
-	public DexTreeCellRenderer()
+	public TreeCellRenderer()
 	{
 		// Initializing images
 		root_ico = new ImageIcon("imgs/tree/root.png");
@@ -56,36 +45,42 @@ public class DexTreeCellRenderer extends DefaultTreeCellRenderer
 	{
 		// Default render
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-		// Customizing
-		if(value instanceof DexRootNode)
-			setIcon(root_ico);
-		else if(value instanceof DexFolderNode)
+		if(!(value instanceof TreeNode))
+			throw new IllegalArgumentException();
+		TreeNode node = (TreeNode) value;
+		switch(node.getType())
 		{
-			if(expanded)
-				setIcon(folder_open_ico);
-			else
-				setIcon(folder_close_ico);
-		}
-		else if(value instanceof DexPackageNode)
-			setIcon(package_ico);
-		else if(value instanceof DexStringsNode)
-			setIcon(strings_ico);
-		else if(value instanceof DexClassNode)
-		{
-			ClassGen clazz = (ClassGen) ((DexClassNode) value).getUserObject();
-			if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags())) // Se la classe
-																	// ?? un
-																	// interfaccia
-				setIcon(interface_ico);
-			else
+			case ROOT:
+				setIcon(root_ico);
+				break;
+			case FOLDER:
+				if(expanded)
+					setIcon(folder_open_ico);
+				else
+					setIcon(folder_close_ico);
+				break;
+			case STRINGS:
+				setIcon(strings_ico);
+				break;
+			case PACKAGE:
+				setIcon(package_ico);
+				break;
+			case CLASS:
 				setIcon(class_ico);
+				break;
+			case INTERFACE:
+				setIcon(interface_ico);
+				break;
+			case FIELD:
+				setIcon(field_ico);
+				break;
+			case METHOD:
+				setIcon(method_ico);
+				break;
+			case ANNOTATION:
+				setIcon(annotation_ico);
+				break;
 		}
-		else if(value instanceof DexMethodNode)
-			setIcon(method_ico);
-		else if(value instanceof DexFieldNode)
-			setIcon(field_ico);
-		else if(value instanceof DexAnnotationNode)
-			setIcon(annotation_ico);
 		return this;
 	}
 }

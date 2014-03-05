@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import com.juliasoft.amalia.dex.codegen.Annotation;
@@ -14,10 +13,7 @@ import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.tab.DexTab;
 import com.juliasoft.dexstudio.utils.StringSet;
-import com.juliasoft.dexstudio.view.tree.node.DexAnnotationNode;
-import com.juliasoft.dexstudio.view.tree.node.DexClassNode;
-import com.juliasoft.dexstudio.view.tree.node.DexMethodNode;
-import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
+import com.juliasoft.dexstudio.view.NodeType;
 
 /**
  * Popup menu of the tree
@@ -25,24 +21,24 @@ import com.juliasoft.dexstudio.view.tree.node.DexStringsNode;
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class DexTreePopup extends JPopupMenu
+public class TreePopup extends JPopupMenu
 {
-	private DefaultMutableTreeNode node;
+	private TreeNode node;
 	private JTree tree;
-	private DexTreePopupItem changeTab, newTab, expand;
+	private TreePopupItem changeTab, newTab, expand;
 	private DexDisplay display;
 	
-	public DexTreePopup(DexDisplay display, JTree tree, Object node)
+	public TreePopup(DexDisplay display, JTree tree, Object node)
 	{
 		this.display = display;
 		this.tree = tree;
-		this.node = (DefaultMutableTreeNode) node;
+		this.node = (TreeNode) node;
 		initLayout();
 	}
 	
 	private void initLayout()
 	{
-		changeTab = new DexTreePopupItem("Open");
+		changeTab = new TreePopupItem("Open");
 		changeTab.addActionListener(new ActionListener()
 		{
 			@Override
@@ -67,7 +63,7 @@ public class DexTreePopup extends JPopupMenu
 				}
 			}
 		});
-		newTab = new DexTreePopupItem("Open in a new tab");
+		newTab = new TreePopupItem("Open in a new tab");
 		newTab.addActionListener(new ActionListener()
 		{
 			@Override
@@ -94,7 +90,7 @@ public class DexTreePopup extends JPopupMenu
 		});
 		if(tree.isExpanded(new TreePath(node.getPath())))
 		{
-			expand = new DexTreePopupItem("Collapse");
+			expand = new TreePopupItem("Collapse");
 			expand.addActionListener(new ActionListener()
 			{
 				@Override
@@ -106,7 +102,7 @@ public class DexTreePopup extends JPopupMenu
 		}
 		else
 		{
-			expand = new DexTreePopupItem("Expand");
+			expand = new TreePopupItem("Expand");
 			expand.addActionListener(new ActionListener()
 			{
 				@Override
@@ -116,7 +112,7 @@ public class DexTreePopup extends JPopupMenu
 				}
 			});
 		}
-		if(node instanceof DexClassNode || node instanceof DexMethodNode || node instanceof DexAnnotationNode || node instanceof DexStringsNode)
+		if(node.getType().equals(NodeType.CLASS) || node.getType().equals(NodeType.METHOD) || node.getType().equals(NodeType.ANNOTATION) || node.getType().equals(NodeType.STRINGS))
 		{
 			this.add(changeTab);
 			this.add(newTab);
