@@ -8,7 +8,7 @@ import javax.swing.event.HyperlinkEvent.EventType;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.cell.DexClassCell;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 
 @SuppressWarnings("serial")
 public class ClassRenderer extends AbstractDexEditorRenderer
@@ -34,7 +34,7 @@ public class ClassRenderer extends AbstractDexEditorRenderer
 			public void hyperlinkUpdate(HyperlinkEvent e)
 			{
 				if(e.getEventType().equals(EventType.ACTIVATED))
-					display.changeSelectedTab(new DexTab(display, display.getDexGen().getClassGen((Type) value)));
+					display.changeSelectedTab(new DexTreeTab(display, display.getDexGen().getClassGen((Type) value)));
 			}
 		};
 		cell.addHyperlinkListener(hll);

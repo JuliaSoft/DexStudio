@@ -30,11 +30,11 @@ import com.juliasoft.amalia.dex.codegen.diff.DiffNode;
 import com.juliasoft.amalia.dex.codegen.diff.DiffState;
 import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.exception.ViewNotFoundException;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexCompareTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
 import com.juliasoft.dexstudio.view.NodeType;
-import com.juliasoft.dexstudio.view.tree.TreeNode;
 import com.juliasoft.dexstudio.view.tree.TreePopup;
 
 @SuppressWarnings("serial")
@@ -42,7 +42,7 @@ public class DexCompare extends DexView
 {
 	private String name;
 	private DexFrame frame;
-	private JTree tree = new JTree();
+	private JTree tree;
 	private Map<String, CompareNode> pkgs = new TreeMap<String, CompareNode>();
 	
 	public DexCompare(DexFrame frame, String name)
@@ -50,6 +50,9 @@ public class DexCompare extends DexView
 		this.name = name;
 		this.frame = frame;
 		this.setPreferredSize(new Dimension(300, 600));
+		CompareNode defaultRoot = new CompareNode(NodeType.ROOT, "<No dex file loaded>");
+		DefaultTreeModel treeModel = new DefaultTreeModel(defaultRoot);
+		tree = new JTree(treeModel);
 		tree.setCellRenderer(new CompareCellRenderer());
 		tree.setToggleClickCount(0);
 		tree.addMouseListener(new MouseAdapter()
@@ -123,13 +126,13 @@ public class DexCompare extends DexView
 			if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags()))
 			{
 				new_node = new CompareNode(NodeType.INTERFACE, diff);
+				pkg_node.add(new_node);
 			}
 			else
 			{
 				new_node = new CompareNode(NodeType.CLASS, diff);
+				pkg_node.add(new_node);
 			}
-			new_node = new CompareNode(NodeType.CLASS, diff);
-			pkg_node.add(new_node);
 		}
 		else if(diff.getDiffClass().equals(FieldGen.class))
 		{
@@ -169,7 +172,7 @@ public class DexCompare extends DexView
 		tree.setSelectionPath(path);
 		Object node = path.getLastPathComponent();
 		// If I can really visualize a tab for the selected element
-		if(node instanceof TreeNode && !((TreeNode)node).getType().equals(NodeType.ROOT))
+		if(node instanceof CompareNode && !((CompareNode)node).getType().equals(NodeType.ROOT))
 		{
 			// Open the popup menu
 			new TreePopup(frame, tree, node).show(e.getComponent(), e.getX(), e.getY());
@@ -195,19 +198,19 @@ public class DexCompare extends DexView
 		}
 		else if(node.getType().equals(NodeType.CLASS) || node.getType().equals(NodeType.INTERFACE))
 		{
-			frame.changeSelectedTab(new DexTab(frame, (ClassGen) node.getUserObject()));
+			frame.changeSelectedTab(new DexCompareTab(frame, (ClassGen) node.getDiff().getLeft(), (ClassGen) node.getDiff().getRight()));
 		}
 		else if(node.getType().equals(NodeType.METHOD))
 		{
-			frame.changeSelectedTab(new DexTab(frame, (MethodGen) node.getUserObject()));
+			frame.changeSelectedTab(new DexTreeTab(frame, (MethodGen) node.getUserObject()));
 		}
 		else if(node.getType().equals(NodeType.ANNOTATION))
 		{
-			frame.changeSelectedTab(new DexTab(frame, (Annotation) node.getUserObject()));
+			frame.changeSelectedTab(new DexTreeTab(frame, (Annotation) node.getUserObject()));
 		}
 		else if(node.getType().equals(NodeType.STRINGS))
 		{
-			frame.changeSelectedTab(new DexTab(frame, (StringSet) node.getUserObject()));
+			frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getUserObject()));
 		}
 	}
 	

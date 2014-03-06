@@ -8,7 +8,7 @@ import javax.swing.event.HyperlinkListener;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.cell.DexAnnotationCell;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.AnnotationSet;
 
 @SuppressWarnings("serial")
@@ -42,7 +42,7 @@ public class AnnotationRenderer extends AbstractDexEditorRenderer
 					if(code.matches("ann[0-9]+"))
 					{
 						int index = Integer.parseInt(code.substring(3));
-						display.changeSelectedTab(new DexTab(display, (Annotation) ((AnnotationSet) value).toArray()[index]));
+						display.changeSelectedTab(new DexTreeTab(display, (Annotation) ((AnnotationSet) value).toArray()[index]));
 					}
 					else
 						throw new IllegalArgumentException("Wrong Event");

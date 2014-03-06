@@ -20,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import com.juliasoft.dexstudio.DexFrame;
+
 /**
  * Tab manager of the project
  * 
@@ -53,7 +55,7 @@ public class DexTabManager extends JTabbedPane
 	 */
 	public void addTab(DexTab tab)
 	{
-		super.addTab(tab.getTitle(), tab);
+		super.addTab(tab.getTitle(), tab.getTab());
 		this.setSelectedIndex(this.getTabCount() - 1);
 		this.setTabComponentAt(this.getSelectedIndex(), makeTabTitle(tab));
 	}
@@ -68,7 +70,7 @@ public class DexTabManager extends JTabbedPane
 	{
 		int pos = this.getSelectedIndex();
 		this.removeTabAt(pos);
-		this.insertTab(tab.getTitle(), null, tab, null, pos);
+		this.insertTab(tab.getTitle(), null, tab.getTab(), null, pos);
 		this.setTabComponentAt(pos, makeTabTitle(tab));
 		this.setSelectedIndex(pos);
 	}

@@ -17,7 +17,7 @@ import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexFrame;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 
 /**
@@ -63,19 +63,19 @@ public class DexSearch extends JDialog implements WindowListener
 				{
 					if(content instanceof ClassGen)
 					{
-						frame.changeSelectedTab(new DexTab(frame, (ClassGen) content));
+						frame.changeSelectedTab(new DexTreeTab(frame, (ClassGen) content));
 					}
 					else if(content instanceof MethodGen)
 					{
-						frame.changeSelectedTab(new DexTab(frame, (MethodGen) content));
+						frame.changeSelectedTab(new DexTreeTab(frame, (MethodGen) content));
 					}
 					else if(content instanceof Annotation)
 					{
-						frame.changeSelectedTab(new DexTab(frame, (Annotation) content));
+						frame.changeSelectedTab(new DexTreeTab(frame, (Annotation) content));
 					}
 					else if(content instanceof StringSet)
 					{
-						frame.changeSelectedTab(new DexTab(frame, (StringSet) content));
+						frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) content));
 					}
 					DexSearch.this.setVisible(false);
 					DexSearch.this.dispatchEvent(new WindowEvent(DexSearch.this, WindowEvent.WINDOW_CLOSING));

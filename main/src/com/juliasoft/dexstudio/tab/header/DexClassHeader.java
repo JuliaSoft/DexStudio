@@ -16,7 +16,7 @@ import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.dexstudio.DexDisplay;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.Library;
 
 @SuppressWarnings("serial")
@@ -116,16 +116,16 @@ public class DexClassHeader extends JTextPane
 				{
 					String code = e.getDescription();
 					if(code.equals("superclass"))
-						DexClassHeader.this.display.changeSelectedTab(new DexTab(DexClassHeader.this.display, superClass));
+						DexClassHeader.this.display.changeSelectedTab(new DexTreeTab(DexClassHeader.this.display, superClass));
 					else if(code.matches("int[0-9]+"))
 					{
 						int index = Integer.parseInt(code.substring(3));
-						DexClassHeader.this.display.changeSelectedTab(new DexTab(DexClassHeader.this.display, interfaces[index]));
+						DexClassHeader.this.display.changeSelectedTab(new DexTreeTab(DexClassHeader.this.display, interfaces[index]));
 					}
 					else if(code.matches("ann[0-9]+"))
 					{
 						int index = Integer.parseInt(code.substring(3));
-						DexClassHeader.this.display.changeSelectedTab(new DexTab(DexClassHeader.this.display, annotations[index]));
+						DexClassHeader.this.display.changeSelectedTab(new DexTreeTab(DexClassHeader.this.display, annotations[index]));
 					}
 				}
 			}

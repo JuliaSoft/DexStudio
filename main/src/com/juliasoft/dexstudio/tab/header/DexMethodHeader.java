@@ -18,7 +18,7 @@ import com.juliasoft.amalia.dex.codegen.ParamGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.TypeList;
 import com.juliasoft.dexstudio.DexDisplay;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.Library;
 
 @SuppressWarnings("serial")
@@ -97,18 +97,18 @@ public class DexMethodHeader extends JTextPane
 				{
 					String code = e.getDescription();
 					if(code.equals("ownerclass"))
-						DexMethodHeader.this.display.changeSelectedTab(new DexTab(DexMethodHeader.this.display, ownerClass));
+						DexMethodHeader.this.display.changeSelectedTab(new DexTreeTab(DexMethodHeader.this.display, ownerClass));
 					else if(code.equals("returntype"))
-						DexMethodHeader.this.display.changeSelectedTab(new DexTab(DexMethodHeader.this.display, returnType));
+						DexMethodHeader.this.display.changeSelectedTab(new DexTreeTab(DexMethodHeader.this.display, returnType));
 					else if(code.matches("par[0-9]+"))
 					{
 						int index = Integer.parseInt(code.substring(3));
-						DexMethodHeader.this.display.changeSelectedTab(new DexTab(DexMethodHeader.this.display, params[index]));
+						DexMethodHeader.this.display.changeSelectedTab(new DexTreeTab(DexMethodHeader.this.display, params[index]));
 					}
 					else if(code.matches("ann[0-9]+"))
 					{
 						int index = Integer.parseInt(code.substring(3));
-						DexMethodHeader.this.display.changeSelectedTab(new DexTab(DexMethodHeader.this.display, annotations[index]));
+						DexMethodHeader.this.display.changeSelectedTab(new DexTreeTab(DexMethodHeader.this.display, annotations[index]));
 					}
 				}
 			}

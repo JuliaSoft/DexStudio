@@ -20,7 +20,7 @@ import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexDisplay;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
 import com.juliasoft.dexstudio.view.NodeType;
@@ -103,19 +103,19 @@ public class DexTree extends DexView
 		}
 		else if(node.getType().equals(NodeType.CLASS) || node.getType().equals(NodeType.INTERFACE))
 		{
-			frame.changeSelectedTab(new DexTab(frame, (ClassGen) node.getUserObject()));
+			frame.changeSelectedTab(new DexTreeTab(frame, (ClassGen) node.getUserObject()));
 		}
 		else if(node.getType().equals(NodeType.METHOD))
 		{
-			frame.changeSelectedTab(new DexTab(frame, (MethodGen) node.getUserObject()));
+			frame.changeSelectedTab(new DexTreeTab(frame, (MethodGen) node.getUserObject()));
 		}
 		else if(node.getType().equals(NodeType.ANNOTATION))
 		{
-			frame.changeSelectedTab(new DexTab(frame, (Annotation) node.getUserObject()));
+			frame.changeSelectedTab(new DexTreeTab(frame, (Annotation) node.getUserObject()));
 		}
 		else if(node.getType().equals(NodeType.STRINGS))
 		{
-			frame.changeSelectedTab(new DexTab(frame, (StringSet) node.getUserObject()));
+			frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getUserObject()));
 		}
 	}
 	

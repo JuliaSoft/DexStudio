@@ -9,7 +9,7 @@ import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexDisplay;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 
 @SuppressWarnings("serial")
@@ -36,19 +36,19 @@ public class DexTablePopup extends JPopupMenu
 			{
 				if(obj instanceof ClassGen)
 				{
-					display.changeSelectedTab(new DexTab(display, (ClassGen) obj));
+					display.changeSelectedTab(new DexTreeTab(display, (ClassGen) obj));
 				}
 				else if(obj instanceof MethodGen)
 				{
-					display.changeSelectedTab(new DexTab(display, (MethodGen) obj));
+					display.changeSelectedTab(new DexTreeTab(display, (MethodGen) obj));
 				}
 				else if(obj instanceof Annotation)
 				{
-					display.changeSelectedTab(new DexTab(display, (Annotation) obj));
+					display.changeSelectedTab(new DexTreeTab(display, (Annotation) obj));
 				}
 				else if(obj instanceof StringSet)
 				{
-					display.changeSelectedTab(new DexTab(display, (StringSet) obj));
+					display.changeSelectedTab(new DexTreeTab(display, (StringSet) obj));
 				}
 			}
 		});
@@ -60,19 +60,19 @@ public class DexTablePopup extends JPopupMenu
 			{
 				if(obj instanceof ClassGen)
 				{
-					display.openNewTab(new DexTab(display, (ClassGen) obj));
+					display.openNewTab(new DexTreeTab(display, (ClassGen) obj));
 				}
 				else if(obj instanceof MethodGen)
 				{
-					display.openNewTab(new DexTab(display, (MethodGen) obj));
+					display.openNewTab(new DexTreeTab(display, (MethodGen) obj));
 				}
 				else if(obj instanceof Annotation)
 				{
-					display.openNewTab(new DexTab(display, (Annotation) obj));
+					display.openNewTab(new DexTreeTab(display, (Annotation) obj));
 				}
 				else if(obj instanceof StringSet)
 				{
-					display.openNewTab(new DexTab(display, (StringSet) obj));
+					display.openNewTab(new DexTreeTab(display, (StringSet) obj));
 				}
 			}
 		});

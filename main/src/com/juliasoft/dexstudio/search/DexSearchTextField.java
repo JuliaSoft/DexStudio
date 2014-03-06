@@ -17,7 +17,7 @@ import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexFrame;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.DexProgress;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.tree.TreeNode;
@@ -84,19 +84,19 @@ public class DexSearchTextField extends JTextField implements KeyListener
 					Object obj = node.getUserObject();
 					if(obj instanceof ClassGen)
 					{
-						frame.changeSelectedTab(new DexTab(frame, (ClassGen) node.getUserObject()));
+						frame.changeSelectedTab(new DexTreeTab(frame, (ClassGen) node.getUserObject()));
 					}
 					else if(obj instanceof MethodGen)
 					{
-						frame.changeSelectedTab(new DexTab(frame, (MethodGen) node.getUserObject()));
+						frame.changeSelectedTab(new DexTreeTab(frame, (MethodGen) node.getUserObject()));
 					}
 					else if(obj instanceof Annotation)
 					{
-						frame.changeSelectedTab(new DexTab(frame, (Annotation) node.getUserObject()));
+						frame.changeSelectedTab(new DexTreeTab(frame, (Annotation) node.getUserObject()));
 					}
 					else if(obj instanceof StringSet)
 					{
-						frame.changeSelectedTab(new DexTab(frame, (StringSet) node.getUserObject()));
+						frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getUserObject()));
 					}
 					dialog.setVisible(false);
 					dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));

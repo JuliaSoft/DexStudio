@@ -8,7 +8,7 @@ import javax.swing.event.HyperlinkListener;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.cell.DexMethodCell;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 
 @SuppressWarnings("serial")
 public class MethodRenderer extends AbstractDexEditorRenderer
@@ -35,7 +35,7 @@ public class MethodRenderer extends AbstractDexEditorRenderer
 			{
 				if(e.getEventType().equals(EventType.ACTIVATED))
 				{
-					display.changeSelectedTab(new DexTab(display, (MethodGen) value));
+					display.changeSelectedTab(new DexTreeTab(display, (MethodGen) value));
 				}
 			}
 		};

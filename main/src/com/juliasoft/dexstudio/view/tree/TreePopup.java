@@ -11,7 +11,7 @@ import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexDisplay;
-import com.juliasoft.dexstudio.tab.DexTab;
+import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.NodeType;
 
@@ -47,19 +47,19 @@ public class TreePopup extends JPopupMenu
 				Object obj = node.getUserObject();
 				if(obj instanceof ClassGen)
 				{
-					display.changeSelectedTab(new DexTab(display, (ClassGen) node.getUserObject()));
+					display.changeSelectedTab(new DexTreeTab(display, (ClassGen) node.getUserObject()));
 				}
 				else if(obj instanceof MethodGen)
 				{
-					display.changeSelectedTab(new DexTab(display, (MethodGen) node.getUserObject()));
+					display.changeSelectedTab(new DexTreeTab(display, (MethodGen) node.getUserObject()));
 				}
 				else if(obj instanceof Annotation)
 				{
-					display.changeSelectedTab(new DexTab(display, (Annotation) node.getUserObject()));
+					display.changeSelectedTab(new DexTreeTab(display, (Annotation) node.getUserObject()));
 				}
 				else if(obj instanceof StringSet)
 				{
-					display.changeSelectedTab(new DexTab(display, (StringSet) node.getUserObject()));
+					display.changeSelectedTab(new DexTreeTab(display, (StringSet) node.getUserObject()));
 				}
 			}
 		});
@@ -72,19 +72,19 @@ public class TreePopup extends JPopupMenu
 				Object obj = node.getUserObject();
 				if(obj instanceof ClassGen)
 				{
-					display.openNewTab(new DexTab(display, (ClassGen) node.getUserObject()));
+					display.openNewTab(new DexTreeTab(display, (ClassGen) node.getUserObject()));
 				}
 				else if(obj instanceof MethodGen)
 				{
-					display.openNewTab(new DexTab(display, (MethodGen) node.getUserObject()));
+					display.openNewTab(new DexTreeTab(display, (MethodGen) node.getUserObject()));
 				}
 				else if(obj instanceof Annotation)
 				{
-					display.openNewTab(new DexTab(display, (Annotation) node.getUserObject()));
+					display.openNewTab(new DexTreeTab(display, (Annotation) node.getUserObject()));
 				}
 				else if(obj instanceof StringSet)
 				{
-					display.openNewTab(new DexTab(display, (StringSet) node.getUserObject()));
+					display.openNewTab(new DexTreeTab(display, (StringSet) node.getUserObject()));
 				}
 			}
 		});
