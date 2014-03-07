@@ -20,8 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import com.juliasoft.dexstudio.DexFrame;
-
 /**
  * Tab manager of the project
  * 

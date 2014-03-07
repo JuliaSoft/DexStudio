@@ -190,7 +190,8 @@ public class DexLog extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				JComboBox<String> cb = (JComboBox) e.getSource();
+				@SuppressWarnings("unchecked")
+				JComboBox<String> cb = (JComboBox<String>) e.getSource();
 				String selected = (String) cb.getSelectedItem();
 				switch(selected)
 				{

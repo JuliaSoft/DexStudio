@@ -202,15 +202,15 @@ public class DexCompare extends DexView
 		}
 		else if(node.getType().equals(NodeType.METHOD))
 		{
-			frame.changeSelectedTab(new DexTreeTab(frame, (MethodGen) node.getUserObject()));
+			frame.changeSelectedTab(new DexCompareTab(frame, (MethodGen) node.getDiff().getLeft(), (MethodGen) node.getDiff().getRight()));
 		}
 		else if(node.getType().equals(NodeType.ANNOTATION))
 		{
-			frame.changeSelectedTab(new DexTreeTab(frame, (Annotation) node.getUserObject()));
+			frame.changeSelectedTab(new DexCompareTab(frame, (Annotation) node.getDiff().getLeft(), (Annotation) node.getDiff().getRight()));
 		}
 		else if(node.getType().equals(NodeType.STRINGS))
 		{
-			frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getUserObject()));
+			frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getUserObject()));//TODO: string comparison missing
 		}
 	}
 	
