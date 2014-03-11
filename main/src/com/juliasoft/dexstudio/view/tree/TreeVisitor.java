@@ -65,7 +65,7 @@ public class TreeVisitor implements DexGenVisitor
 		String actual = getPackage(clazz.getType().getName());
 		if(!packages.containsKey(actual))
 		{
-			TreeNode packageNode = new TreeNode(NodeType.PACKAGE, (actual != "") ? actual : "[Default Package]");
+			TreeNode packageNode = new TreeNode(NodeType.PACKAGE, (actual != "") ? actual.replace('/', '.') : "[Default Package]");
 			packages.put(actual, packageNode);
 			nodeStack.peek().add(packageNode);
 		}

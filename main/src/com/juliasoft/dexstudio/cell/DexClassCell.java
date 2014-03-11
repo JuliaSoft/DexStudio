@@ -26,8 +26,4 @@ public class DexClassCell extends JTextPane
 		this.setText(htmlFormat + text + closeFormat);
 	}
 	
-	public ClassGen getClazz()
-	{
-		return clazz;
-	}
 }

@@ -50,9 +50,9 @@ public class TreeNode extends DefaultMutableTreeNode implements Comparable<TreeN
 		if(obj instanceof MethodGen)
 		{
 			MethodGen meth = (MethodGen) obj;
-			String result = (meth.isConstructor() ? Library.printType(meth.getOwnerClass()) : meth.getName()) + "(";
+			String result = ((meth.isConstructor()) ? Library.printType(meth.getOwnerClass()) : meth.getName()) + "(";
 			TypeList params = meth.getPrototype().getParameters();
-			if(params != null)
+			if(params != null && !params.isEmpty())
 			{
 				for(Type typ : params)
 				{

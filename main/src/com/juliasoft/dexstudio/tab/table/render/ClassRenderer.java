@@ -27,17 +27,20 @@ public class ClassRenderer extends AbstractDexEditorRenderer
 		{
 			throw new IllegalArgumentException("value");
 		}
-		DexClassCell cell = new DexClassCell((Type) value, display);
-		HyperlinkListener hll = new HyperlinkListener()
-		{
-			@Override
-			public void hyperlinkUpdate(HyperlinkEvent e)
+		
+			DexClassCell cell = new DexClassCell((Type) value, display);
+			
+			HyperlinkListener hll = new HyperlinkListener()
 			{
-				if(e.getEventType().equals(EventType.ACTIVATED))
-					display.changeSelectedTab(new DexTreeTab(display, display.getDexGen().getClassGen((Type) value)));
-			}
-		};
-		cell.addHyperlinkListener(hll);
+				@Override
+				public void hyperlinkUpdate(HyperlinkEvent e)
+				{
+					if(e.getEventType().equals(EventType.ACTIVATED))
+						display.changeSelectedTab(new DexTreeTab(display, display.getDexGen().getClassGen((Type) value)));
+				}
+			};
+			cell.addHyperlinkListener(hll);
+		
 		return cell;
 	}
 	

@@ -10,14 +10,12 @@ import com.juliasoft.dexstudio.utils.Library;
 @SuppressWarnings("serial")
 public class DexMethodCell extends JTextPane
 {
-	private MethodGen meth;
 	private ClassGen returnType;
 	private ClassGen[] params;
 	
 	public DexMethodCell(MethodGen meth)
 	{
 		super();
-		this.meth = meth;
 		returnType = meth.getDexGen().getClassGen(meth.getReturnType());
 		params = new ClassGen[meth.getParams().size()];
 		int i = 0;
@@ -54,46 +52,5 @@ public class DexMethodCell extends JTextPane
 		this.setText(text);
 	}
 	
-	public ClassGen getReturnTypeClass()
-	{
-		return returnType;
-	}
 	
-	public MethodGen getMethod()
-	{
-		return meth;
-	}
-	
-	public ClassGen[] getParams()
-	{
-		return params;
-	}
-	
-	public Object getLinkedObject(int pos)
-	{
-		String text = this.getText().replaceAll("<[^>]*>|\n| {2,}", ""); // clean
-																			// form
-																			// html
-																			// tags
-		if(!meth.isConstructor() && pos < text.indexOf(' '))
-			return returnType;
-		else if(pos < text.indexOf('('))
-			return meth;
-		else if(pos < text.indexOf(')') && params.length > 0 && text.charAt(pos) != ',' && text.charAt(pos) != ' ')
-		{
-			String beforeClick = text.substring(text.indexOf('('), pos);
-			int commaCount = 0;
-			int spaceCount = 0;
-			for(int i = 0; i < beforeClick.length(); i++)
-			{
-				if(beforeClick.charAt(i) == ',')
-					commaCount++;
-				else if(beforeClick.charAt(i) == ' ')
-					spaceCount++;
-			}
-			if(spaceCount == commaCount * 2)
-				return params[commaCount];
-		}
-		return null;
-	}
 }
