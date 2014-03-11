@@ -14,7 +14,7 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.juliasoft.dexstudio.DexFrame;
-import com.juliasoft.dexstudio.search.DexSearch;
+import com.juliasoft.dexstudio.navigate.DexSearch;
 
 /**
  * The menu bar of the frame

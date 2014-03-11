@@ -60,7 +60,7 @@ public class DexViewManager extends JTabbedPane
 	{
 		if(pos >= this.getTabCount())
 			throw new ViewNotFoundException();
-		return (DexView) this.getTabComponentAt(pos);
+		return (DexView) this.getComponentAt(pos);
 	}
 	
 	public int indexOf(String viewName)

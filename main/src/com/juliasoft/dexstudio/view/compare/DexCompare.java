@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -196,21 +197,46 @@ public class DexCompare extends DexView
 				tree.expandPath(path);
 			}
 		}
-		else if(node.getType().equals(NodeType.CLASS) || node.getType().equals(NodeType.INTERFACE))
+		else
 		{
-			frame.changeSelectedTab(new DexCompareTab(frame, (ClassGen) node.getDiff().getLeft(), (ClassGen) node.getDiff().getRight()));
-		}
-		else if(node.getType().equals(NodeType.METHOD))
-		{
-			frame.changeSelectedTab(new DexTreeTab(frame, (MethodGen) node.getUserObject()));
-		}
-		else if(node.getType().equals(NodeType.ANNOTATION))
-		{
-			frame.changeSelectedTab(new DexTreeTab(frame, (Annotation) node.getUserObject()));
-		}
-		else if(node.getType().equals(NodeType.STRINGS))
-		{
-			frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getUserObject()));
+			if(node.getDiff().getState().equals(DiffState.SAME))
+			{
+				if(node.getType().equals(NodeType.CLASS) || node.getType().equals(NodeType.INTERFACE))
+				{
+					frame.openNewTab(new DexTreeTab(frame, (ClassGen) node.getDiff().getLeft()));
+				}
+				else if(node.getType().equals(NodeType.METHOD))
+				{
+					frame.changeSelectedTab(new DexTreeTab(frame, (MethodGen) node.getDiff().getLeft()));
+				}
+				else if(node.getType().equals(NodeType.ANNOTATION))
+				{
+					frame.changeSelectedTab(new DexTreeTab(frame, (Annotation) node.getDiff().getLeft()));
+				}
+				else if(node.getType().equals(NodeType.STRINGS))
+				{
+					frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getDiff().getLeft()));
+				}
+			}
+			else
+			{
+				if(node.getType().equals(NodeType.CLASS) || node.getType().equals(NodeType.INTERFACE))
+				{
+					frame.changeSelectedTab(new DexCompareTab(frame, (ClassGen) node.getDiff().getLeft(), (ClassGen) node.getDiff().getRight()));
+				}
+				else if(node.getType().equals(NodeType.METHOD))
+				{
+					frame.changeSelectedTab(new DexCompareTab(frame, (MethodGen) node.getDiff().getLeft(), (MethodGen) node.getDiff().getRight()));
+				}
+				else if(node.getType().equals(NodeType.ANNOTATION))
+				{
+					frame.changeSelectedTab(new DexCompareTab(frame, (Annotation) node.getDiff().getLeft(), (Annotation) node.getDiff().getRight()));
+				}
+				else if(node.getType().equals(NodeType.STRINGS))
+				{
+					frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getUserObject()));//TODO: string comparison missing
+				}
+			}
 		}
 	}
 	
@@ -252,5 +278,21 @@ public class DexCompare extends DexView
 		res.add(title, gbc);
 		res.add(close, gbc);
 		return res;
+	}
+	
+	public ArrayList<Object> getClassNodes()
+	{
+		ArrayList<Object> nodes = new ArrayList<Object>();
+		CompareNode root = (CompareNode) tree.getModel().getRoot();
+		root = (CompareNode) root.getChildAt(1);
+		for(int i=0; i<root.getChildCount(); i++)
+		{
+			CompareNode pkg = (CompareNode) root.getChildAt(i);
+			for(int j=0; j<pkg.getChildCount(); j++)
+			{
+				nodes.add((CompareNode) pkg.getChildAt(j));
+			}
+		}
+		return nodes;
 	}
 }

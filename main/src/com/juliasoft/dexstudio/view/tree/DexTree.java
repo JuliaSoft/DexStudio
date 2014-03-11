@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -20,6 +19,7 @@ import com.juliasoft.amalia.dex.codegen.ClassGen;
 import com.juliasoft.amalia.dex.codegen.DexGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.dexstudio.DexDisplay;
+import com.juliasoft.dexstudio.DexFrame;
 import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
@@ -127,6 +127,7 @@ public class DexTree extends DexView
 		TreeVisitor treeModelvisitor = new TreeVisitor(rootNode);
 		dexGen.accept(treeModelvisitor);
 		treeModel.nodeStructureChanged(rootNode);
+		((DexFrame) frame).getViewManager().setTabComponentAt(0, this.getTabTitle());
 	}
 	
 	public void cleanTree()
@@ -138,46 +139,30 @@ public class DexTree extends DexView
 	}
 	
 	/**
-	 * Returns an array of all the classes, methods and annotations nodes in the
-	 * tree
+	 * Returns an array of all the class nodes in the tree
 	 * 
 	 * @return
 	 */
-	public ArrayList<TreeNode> getNodeArray()
+	public ArrayList<Object> getClassNodes()
 	{
-		ArrayList<TreeNode> nodes = new ArrayList<TreeNode>();
+		ArrayList<Object> nodes = new ArrayList<Object>();
 		TreeNode root = (TreeNode) tree.getModel().getRoot();
-		getSubTreeNodeArray(root, nodes);
-		return nodes;
-	}
-	
-	/**
-	 * Returns an array of all the class,method and annotation nodes contained
-	 * under the giver node
-	 * 
-	 * @param node
-	 * @param nodes
-	 */
-	private void getSubTreeNodeArray(TreeNode node, ArrayList<TreeNode> nodes)
-	{
-		if(node.getChildCount() == 0)
-			return;
-		for(int i = 0; i < node.getChildCount(); i++)
+		root = (TreeNode) root.getChildAt(1);
+		for(int i=0; i<root.getChildCount(); i++)
 		{
-			TreeNode child = (TreeNode) node.getChildAt(i);
-			Object obj = child.getUserObject();
-			if(obj instanceof ClassGen || obj instanceof Set<?>)
+			TreeNode pkg = (TreeNode) root.getChildAt(i);
+			for(int j=0; j<pkg.getChildCount(); j++)
 			{
-				nodes.add(child);
+				nodes.add(pkg.getChildAt(j));
 			}
-			getSubTreeNodeArray(child, nodes);
 		}
+		return nodes;
 	}
 	
 	@Override
 	public String getName()
 	{
-		return "Packages";
+		return ((TreeNode)tree.getModel().getRoot()).getLabel();
 	}
 	
 	@Override
