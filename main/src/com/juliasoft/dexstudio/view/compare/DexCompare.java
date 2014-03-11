@@ -237,6 +237,7 @@ public class DexCompare extends DexView
 					frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getUserObject()));//TODO: string comparison missing
 				}
 			}
+			frame.changeSelectedTab(new DexCompareTab(frame, (ClassGen) node.getDiff().getLeft(), (ClassGen) node.getDiff().getRight()));
 		}
 	}
 	
