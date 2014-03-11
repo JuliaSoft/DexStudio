@@ -42,7 +42,7 @@ public class DexClassHeader extends JTextPane
 		List<Type> interfList = clazz.getInterfaces();
 		Collection<Annotation> annList = clazz.getAnnotations();
 		int i = 0;
-		if(interfList != null)
+		if(interfList != null && !interfList.isEmpty())
 		{
 			this.interfaces = new ClassGen[interfList.size()];
 			for(Type interf : interfList)
@@ -69,7 +69,7 @@ public class DexClassHeader extends JTextPane
 		String annots = "<b>annotations:</b> ";
 		i = 0;
 		boolean separator = false;
-		if(interfList == null)
+		if(interfList == null || interfList.isEmpty())
 			implementz = "";
 		else
 		{

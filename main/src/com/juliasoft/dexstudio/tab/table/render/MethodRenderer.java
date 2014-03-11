@@ -27,6 +27,7 @@ public class MethodRenderer extends AbstractDexEditorRenderer
 		{
 			throw new IllegalArgumentException("value");
 		}
+		
 		DexMethodCell cell = new DexMethodCell((MethodGen) value);
 		HyperlinkListener hll = new HyperlinkListener()
 		{
@@ -40,6 +41,7 @@ public class MethodRenderer extends AbstractDexEditorRenderer
 			}
 		};
 		cell.addHyperlinkListener(hll);
+		
 		return cell;
 	}
 	

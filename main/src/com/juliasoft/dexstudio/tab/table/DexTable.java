@@ -150,7 +150,7 @@ public class DexTable extends JPanel
 		@Override
 		public void mouseExited(MouseEvent e)
 		{
-			activeCell(e);
+			//activeCell(e);
 		}
 		
 		@Override
