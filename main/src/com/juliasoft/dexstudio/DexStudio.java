@@ -11,6 +11,5 @@ public class DexStudio
 	{
 		DexFrame df = new DexFrame();
 		df.setVisible(true);
-		df.getMenu().openApk();
 	}
 }

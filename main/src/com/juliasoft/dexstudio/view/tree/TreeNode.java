@@ -9,6 +9,7 @@ import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.TypeList;
 import com.juliasoft.dexstudio.utils.Library;
+import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.NodeType;
 
 /**
@@ -70,6 +71,10 @@ public class TreeNode extends DefaultMutableTreeNode implements Comparable<TreeN
 		if(obj instanceof Annotation)
 		{
 			this.label = "@" + Library.printType(((Annotation)obj).getType());
+		}
+		if(obj instanceof StringSet)
+		{
+			this.label = "Strings";
 		}
 	}
 	

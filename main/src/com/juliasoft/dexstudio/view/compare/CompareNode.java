@@ -4,6 +4,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
+import com.juliasoft.amalia.dex.codegen.ContextGen;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.Type;
@@ -37,6 +38,7 @@ public class CompareNode extends DefaultMutableTreeNode implements Comparable<Co
 				type.equals(NodeType.FIELD) && !diff.getDiffClass().equals(FieldGen.class) ||
 				type.equals(NodeType.METHOD) && !diff.getDiffClass().equals(MethodGen.class) ||
 				type.equals(NodeType.ANNOTATION) && !diff.getDiffClass().equals(Annotation.class) ||
+				type.equals(NodeType.STRINGS) && !diff.getDiffClass().equals(ContextGen.class) ||
 				type.equals(NodeType.ROOT) ||
 				type.equals(NodeType.FOLDER) ||
 				type.equals(NodeType.PACKAGE))
@@ -52,11 +54,11 @@ public class CompareNode extends DefaultMutableTreeNode implements Comparable<Co
 			String className = ((ClassGen)obj).getType().getName().replace("/", ".");
 			this.label = Library.shortName(className);
 		}
-		if(obj instanceof FieldGen)
+		else if(obj instanceof FieldGen)
 		{
 			this.label = ((FieldGen)obj).getName();
 		}
-		if(obj instanceof MethodGen)
+		else if(obj instanceof MethodGen)
 		{
 			MethodGen meth = (MethodGen) obj;
 			String result = (meth.isConstructor() ? Library.printType(meth.getOwnerClass()) : meth.getName()) + "(";
@@ -76,9 +78,13 @@ public class CompareNode extends DefaultMutableTreeNode implements Comparable<Co
 			}
 			this.label = result;
 		}
-		if(obj instanceof Annotation)
+		else if(obj instanceof Annotation)
 		{
 			this.label = "@" + Library.printType(((Annotation)obj).getType());
+		}
+		else if(obj instanceof ContextGen)
+		{
+			this.label = "Strings";
 		}
 	}
 	

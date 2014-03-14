@@ -49,10 +49,30 @@ public class SearchList extends JTable
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focus, int row, int col)
 			{
+				String str = (String) value;
+				String color = str.substring(0, str.indexOf(" "));
+				String ico = str.substring(str.indexOf(" ") + 1);
 				JLabel label = new JLabel();
 				label.setHorizontalAlignment(JLabel.CENTER);
-				label.setIcon(new ImageIcon((String) value));
-				label.setBackground(selected ? Color.LIGHT_GRAY : Color.white);
+				label.setIcon(new ImageIcon(ico));
+				switch(color)
+				{
+					case "YELLOW":
+						label.setBackground(Color.YELLOW);
+						break;
+					case "GREEN":
+						label.setBackground(Color.GREEN);
+						break;
+					case "RED":
+						label.setBackground(Color.RED);
+						break;
+					case "BLUE":
+						label.setBackground(Color.BLUE);
+						break;
+					case "WHITE":
+						label.setBackground(Color.WHITE);
+						break;
+				}
 				label.setOpaque(true);
 				return label;
 			}
@@ -136,6 +156,7 @@ public class SearchList extends JTable
 		for(Object obj : results)
 		{
 			ClassGen clazz = null;
+			String color = "WHITE";
 			if(obj instanceof TreeNode)
 			{
 				clazz = (ClassGen) ((TreeNode) obj).getUserObject();
@@ -143,15 +164,32 @@ public class SearchList extends JTable
 			else if(obj instanceof CompareNode)
 			{
 				SimpleClassDiff diff = (SimpleClassDiff) ((CompareNode) obj).getDiff();
+				switch(diff.getState())
+				{
+					case DIFFERENT:
+						color = "YELLOW";
+						break;
+					case RIGHT_ONLY:
+						color = "GREEN";
+						break;
+					case LEFT_ONLY:
+						color = "RED";
+						break;
+					case UNKNOWN:
+						color = "BLUE";
+						break;
+					case SAME:
+						break;
+				}
 				clazz = (diff.getState().equals(DiffState.RIGHT_ONLY) ? diff.getRight() : diff.getLeft());
 			}
 			if(clazz == null)
 				continue;
 			//Controllo se la classe e' un interfaccia
 			if(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags()))
-				model.addRow(new Object[] { "imgs/tree/same/interface.png", obj });
+				model.addRow(new Object[] { color + " imgs/tree/same/interface.png", obj });
 			else
-				model.addRow(new Object[] { "imgs/tree/same/class.png", obj });
+				model.addRow(new Object[] { color + " imgs/tree/same/class.png", obj });
 		}
 		// Update selection and graphics
 		if(SearchList.this.getRowCount() > 0)

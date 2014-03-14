@@ -90,7 +90,7 @@ public class DexCompare extends DexView
 		CompareNode context = new CompareNode(NodeType.FOLDER, "Context");
 		CompareNode classes = new CompareNode(NodeType.FOLDER, "Classes");
 		root.add(context);
-		//context.add(new DexStringsCmp(null)); TODO: strings comparison
+		context.add(new CompareNode(NodeType.STRINGS, diff.getContextDiff()));
 		root.add(classes);
 		for(DiffNode<?> child : diff.getClassDiffs())
 		{
@@ -203,7 +203,7 @@ public class DexCompare extends DexView
 			{
 				if(node.getType().equals(NodeType.CLASS) || node.getType().equals(NodeType.INTERFACE))
 				{
-					frame.openNewTab(new DexTreeTab(frame, (ClassGen) node.getDiff().getLeft()));
+					frame.changeSelectedTab(new DexTreeTab(frame, (ClassGen) node.getDiff().getLeft()));
 				}
 				else if(node.getType().equals(NodeType.METHOD))
 				{
@@ -234,10 +234,9 @@ public class DexCompare extends DexView
 				}
 				else if(node.getType().equals(NodeType.STRINGS))
 				{
-					frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getUserObject()));//TODO: string comparison missing
+					frame.changeSelectedTab(new DexTreeTab(frame, node.getDiff()));
 				}
 			}
-			frame.changeSelectedTab(new DexCompareTab(frame, (ClassGen) node.getDiff().getLeft(), (ClassGen) node.getDiff().getRight()));
 		}
 	}
 	

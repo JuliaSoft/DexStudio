@@ -12,16 +12,20 @@ import javax.swing.JScrollPane;
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
+import com.juliasoft.amalia.dex.codegen.ContextGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
+import com.juliasoft.amalia.dex.codegen.diff.DiffNode;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.tab.header.DexAnnotationHeader;
 import com.juliasoft.dexstudio.tab.header.DexClassHeader;
 import com.juliasoft.dexstudio.tab.header.DexMethodHeader;
+import com.juliasoft.dexstudio.tab.header.DexStringCompareHeader;
 import com.juliasoft.dexstudio.tab.header.DexStringHeader;
 import com.juliasoft.dexstudio.tab.table.DexCodeTableModel;
 import com.juliasoft.dexstudio.tab.table.DexConstructorTableModel;
 import com.juliasoft.dexstudio.tab.table.DexFieldTableModel;
 import com.juliasoft.dexstudio.tab.table.DexMethodTableModel;
+import com.juliasoft.dexstudio.tab.table.DexStringCompareTableModel;
 import com.juliasoft.dexstudio.tab.table.DexStringTableModel;
 import com.juliasoft.dexstudio.tab.table.DexTable;
 import com.juliasoft.dexstudio.tab.table.DexValueTableModel;
@@ -107,6 +111,17 @@ public class DexTreeTab extends JScrollPane implements DexTab
 		title = "Strings";
 		content.add(new DexStringHeader(strs));
 		content.add(new DexTable(frame, new DexStringTableModel(strs)));
+		ico = new ImageIcon("imgs/tab/strings.png");
+	}
+	
+	public DexTreeTab(DexDisplay frame, DiffNode<?> ctx)
+	{
+		if(!ctx.getDiffClass().equals(ContextGen.class))
+			throw new IllegalArgumentException("DiffNode<ContextGen> expected");
+		initLayout();
+		title = "Strings comparisons";
+		content.add(new DexStringCompareHeader(ctx));
+		content.add(new DexTable(frame, new DexStringCompareTableModel(ctx)));
 		ico = new ImageIcon("imgs/tab/strings.png");
 	}
 	
