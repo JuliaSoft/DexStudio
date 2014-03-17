@@ -1,4 +1,4 @@
-package com.juliasoft.dexstudio.view.tree;
+package com.juliasoft.dexstudio.view;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -11,7 +11,7 @@ import javax.swing.JMenuItem;
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class TreePopupItem extends JMenuItem
+public class PopupItem extends JMenuItem
 {
 	/**
 	 * String constructor
@@ -19,7 +19,7 @@ public class TreePopupItem extends JMenuItem
 	 * @param name
 	 *            The name of the menu item
 	 */
-	public TreePopupItem(String name)
+	public PopupItem(String name)
 	{
 		super(name);
 		this.setMinimumSize(new Dimension(this.getPreferredSize().width, 30));

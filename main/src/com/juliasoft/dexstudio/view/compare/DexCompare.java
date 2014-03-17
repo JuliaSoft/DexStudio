@@ -36,7 +36,6 @@ import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.DexView;
 import com.juliasoft.dexstudio.view.NodeType;
-import com.juliasoft.dexstudio.view.tree.TreePopup;
 
 @SuppressWarnings("serial")
 public class DexCompare extends DexView
@@ -176,7 +175,7 @@ public class DexCompare extends DexView
 		if(node instanceof CompareNode && !((CompareNode)node).getType().equals(NodeType.ROOT))
 		{
 			// Open the popup menu
-			new TreePopup(frame, tree, node).show(e.getComponent(), e.getX(), e.getY());
+			new ComparePopup(frame, tree, node).show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 	

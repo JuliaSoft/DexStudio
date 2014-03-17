@@ -14,6 +14,7 @@ import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 import com.juliasoft.dexstudio.view.NodeType;
+import com.juliasoft.dexstudio.view.PopupItem;
 
 /**
  * Popup menu of the tree
@@ -25,7 +26,7 @@ public class TreePopup extends JPopupMenu
 {
 	private TreeNode node;
 	private JTree tree;
-	private TreePopupItem changeTab, newTab, expand;
+	private PopupItem changeTab, newTab, expand;
 	private DexDisplay display;
 	
 	public TreePopup(DexDisplay display, JTree tree, Object node)
@@ -38,7 +39,7 @@ public class TreePopup extends JPopupMenu
 	
 	private void initLayout()
 	{
-		changeTab = new TreePopupItem("Open");
+		changeTab = new PopupItem("Open");
 		changeTab.addActionListener(new ActionListener()
 		{
 			@Override
@@ -63,7 +64,7 @@ public class TreePopup extends JPopupMenu
 				}
 			}
 		});
-		newTab = new TreePopupItem("Open in a new tab");
+		newTab = new PopupItem("Open in a new tab");
 		newTab.addActionListener(new ActionListener()
 		{
 			@Override
@@ -90,7 +91,7 @@ public class TreePopup extends JPopupMenu
 		});
 		if(tree.isExpanded(new TreePath(node.getPath())))
 		{
-			expand = new TreePopupItem("Collapse");
+			expand = new PopupItem("Collapse");
 			expand.addActionListener(new ActionListener()
 			{
 				@Override
@@ -102,7 +103,7 @@ public class TreePopup extends JPopupMenu
 		}
 		else
 		{
-			expand = new TreePopupItem("Expand");
+			expand = new PopupItem("Expand");
 			expand.addActionListener(new ActionListener()
 			{
 				@Override
