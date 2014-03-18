@@ -115,6 +115,7 @@ public class DexLog extends JPanel
 					e.printStackTrace();
 				}
 			}
+			
 			else if(str.contains("DEBUG"))
 			{
 				str = "<div class='debug'>" + str + "</div>";
@@ -132,6 +133,9 @@ public class DexLog extends JPanel
 					e.printStackTrace();
 				}
 			}
+			
+			else str = "<div>" + str + "</div>";
+			
 			try
 			{
 				Element fullBody = fullDoc.getElement(fullDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);

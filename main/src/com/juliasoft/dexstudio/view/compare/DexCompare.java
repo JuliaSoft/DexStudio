@@ -24,6 +24,7 @@ import javax.swing.tree.TreePath;
 import com.juliasoft.amalia.dex.codegen.AccessFlag;
 import com.juliasoft.amalia.dex.codegen.Annotation;
 import com.juliasoft.amalia.dex.codegen.ClassGen;
+import com.juliasoft.amalia.dex.codegen.ContextGen;
 import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.diff.DexDiff;
@@ -214,7 +215,7 @@ public class DexCompare extends DexView
 				}
 				else if(node.getType().equals(NodeType.STRINGS))
 				{
-					frame.changeSelectedTab(new DexTreeTab(frame, (StringSet) node.getDiff().getLeft()));
+					frame.changeSelectedTab(new DexTreeTab(frame, new StringSet(((ContextGen)node.getDiff().getLeft()).getStrings())));
 				}
 			}
 			else

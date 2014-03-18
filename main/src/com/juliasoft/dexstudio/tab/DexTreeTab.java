@@ -119,7 +119,7 @@ public class DexTreeTab extends JScrollPane implements DexTab
 		if(!ctx.getDiffClass().equals(ContextGen.class))
 			throw new IllegalArgumentException("DiffNode<ContextGen> expected");
 		initLayout();
-		title = "Strings comparisons";
+		title = "String comparison";
 		content.add(new DexStringCompareHeader(ctx));
 		content.add(new DexTable(frame, new DexStringCompareTableModel(ctx)));
 		ico = new ImageIcon("imgs/tab/strings.png");

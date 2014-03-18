@@ -18,11 +18,13 @@ import com.juliasoft.amalia.dex.codegen.FieldGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.cst.Constant;
+import com.juliasoft.amalia.dex.codegen.diff.DiffNode;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.tab.table.render.AnnotationRenderer;
 import com.juliasoft.dexstudio.tab.table.render.ClassRenderer;
 import com.juliasoft.dexstudio.tab.table.render.DefaultDexRenderer;
 import com.juliasoft.dexstudio.tab.table.render.MethodRenderer;
+import com.juliasoft.dexstudio.tab.table.render.StringCompareRenderer;
 import com.juliasoft.dexstudio.utils.AnnotationSet;
 
 /**
@@ -75,17 +77,20 @@ public class DexTable extends JPanel
 		MethodRenderer mRend = new MethodRenderer(display);
 		AnnotationRenderer aRend = new AnnotationRenderer(display);
 		ClassRenderer cRend = new ClassRenderer(display);
+		StringCompareRenderer sRend = new StringCompareRenderer();
 		table.setDefaultRenderer(Type.class, cRend);
 		table.setDefaultRenderer(String.class, editRend);
 		table.setDefaultRenderer(MethodGen.class, mRend);
 		table.setDefaultRenderer(FieldGen.class, editRend);
 		table.setDefaultRenderer(AnnotationSet.class, aRend);
 		table.setDefaultRenderer(Constant.class, editRend);
+		table.setDefaultRenderer(DiffNode.class, sRend);
 		table.setDefaultEditor(String.class, editRend);
 		table.setDefaultEditor(Type.class, cRend);
 		table.setDefaultEditor(MethodGen.class, mRend);
 		table.setDefaultEditor(FieldGen.class, editRend);
 		table.setDefaultEditor(AnnotationSet.class, aRend);
+		table.setDefaultEditor(DiffNode.class, sRend);
 		table.setRowHeight(20);
 		table.setShowGrid(false);
 		table.setIntercellSpacing(new Dimension(0, 0));
@@ -130,6 +135,11 @@ public class DexTable extends JPanel
 		{
 			title.setText("String Summary");
 		}
+		else if(model instanceof DexStringCompareTableModel){
+			
+			title.setText("String Comparison");
+		}
+		
 		content.add(table.getTableHeader());
 		content.add(table);
 		this.add(title);

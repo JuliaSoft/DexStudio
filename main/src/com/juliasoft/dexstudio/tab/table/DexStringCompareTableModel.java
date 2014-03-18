@@ -8,29 +8,47 @@ import com.juliasoft.amalia.dex.codegen.diff.DiffNode;
 @SuppressWarnings("serial")
 public class DexStringCompareTableModel extends AbstractTableModel implements TableModel
 {
+	private DiffNode<?>[] data;
+	protected String[] columnNames = { "String Value" };
+	
 	public DexStringCompareTableModel(DiffNode<?> ctx)
 	{
+		data = ctx.getChildren().toArray(new DiffNode<?>[ctx.getChildren().size()]);
 		
 	}
 
 	@Override
-	public int getRowCount()
+	public Class<?> getColumnClass(int arg0)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if(arg0 == 0)
+		{
+			return DiffNode.class;
+		}
+		return super.getColumnClass(arg0);
 	}
-
+	
 	@Override
 	public int getColumnCount()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return columnNames.length;
 	}
-
+	
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex)
+	public String getColumnName(int idx)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return columnNames[idx];
 	}
+	
+	@Override
+	public int getRowCount()
+	{
+		return data.length;
+	}
+	
+	@Override
+	public Object getValueAt(int row, int column)
+	{
+		return data[row];
+	}
+	
 }
