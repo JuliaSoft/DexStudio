@@ -42,122 +42,108 @@ import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 /**
- * Logger console
+ * The logger console using log4j logging systems
  * 
- * @author Zanoncello Matteo
+ * @author Eugenio Ancona
  */
 @SuppressWarnings("serial")
-public class DexLog extends JPanel
-{
+public class DexLog extends JPanel {
 	private JTextPane log = new JTextPane();
 	private JComboBox<String> selection = new JComboBox<String>();
 	private final String fontSize = 12 + "pt";
 	private final String fontName = getFont().getName();
-	private final String bodyStyle = "body{font-family:" + fontName + ";font-size:" + fontSize + ";font-weight:normal;}";
+	private final String bodyStyle = "body{font-family:" + fontName
+			+ ";font-size:" + fontSize + ";font-weight:normal;}";
 	private final String warnStyle = ".warn{background-color:#EEEE66;}";
 	private final String errorStyle = ".error{backcolor:red;}";
 	private final String debugStyle = ".debug{background-color:#DDDDFF}";
 	private final String divStyle = "div{border-bottom: 1px solid black; padding: 3px 2px};";
-	private final String htmlStart = "<html><head><style type='text/css'>" + bodyStyle + warnStyle + errorStyle + debugStyle + divStyle + "</style></head><body>";
+	private final String htmlStart = "<html><head><style type='text/css'>"
+			+ bodyStyle + warnStyle + errorStyle + debugStyle + divStyle
+			+ "</style></head><body>";
 	private final String htmlClose = "</body></html>";
 	private HTMLDocument fullDoc;
 	private HTMLDocument warnDoc;
 	private HTMLDocument errorDoc;
 	private HTMLDocument debugDoc;
-	
-	private final class SwingAppender extends AbstractAppender implements Appender
-	{
-		public SwingAppender()
-		{
-			this("SwingAppender", null, PatternLayout.createLayout("%d{HH:mm:ss.SSS} [%t] %-5level %c - %msg%n", null, null, "UTF8", null));
+
+	private final class SwingAppender extends AbstractAppender implements
+			Appender {
+		public SwingAppender() {
+			this("SwingAppender", null, PatternLayout.createLayout(
+					"%d{HH:mm:ss.SSS} [%t] %-5level %c - %msg%n", null, null,
+					"UTF8", null));
 		}
-		
-		protected SwingAppender(String name, Filter filter, Layout<? extends Serializable> layout)
-		{
+
+		protected SwingAppender(String name, Filter filter,
+				Layout<? extends Serializable> layout) {
 			super(name, filter, layout);
 		}
-		
+
 		@Override
-		public void append(LogEvent event)
-		{
+		public void append(LogEvent event) {
 			String str = getLayout().toSerializable(event).toString();
-			if(str.contains("WARN"))
-			{
+			if (str.contains("WARN")) {
 				str = "<div class='warn'>" + str + "</div>";
-				Element warnBody = warnDoc.getElement(warnDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
-				try
-				{
+				Element warnBody = warnDoc.getElement(
+						warnDoc.getDefaultRootElement(),
+						StyleConstants.NameAttribute, HTML.Tag.BODY);
+				try {
 					warnDoc.insertBeforeEnd(warnBody, str);
-				}
-				catch(BadLocationException e)
-				{
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				catch(IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-			else if(str.contains("ERROR"))
-			{
+			} else if (str.contains("ERROR")) {
 				str = "<div class='error'>" + str + "</div>";
-				Element errorBody = errorDoc.getElement(errorDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
-				try
-				{
+				Element errorBody = errorDoc.getElement(
+						errorDoc.getDefaultRootElement(),
+						StyleConstants.NameAttribute, HTML.Tag.BODY);
+				try {
 					errorDoc.insertBeforeEnd(errorBody, str);
-				}
-				catch(BadLocationException e)
-				{
+				} catch (BadLocationException e) {
 					e.printStackTrace();
-				}
-				catch(IOException e)
-				{
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			
-			else if(str.contains("DEBUG"))
-			{
+
+			else if (str.contains("DEBUG")) {
 				str = "<div class='debug'>" + str + "</div>";
-				Element debugBody = debugDoc.getElement(debugDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
-				try
-				{
+				Element debugBody = debugDoc.getElement(
+						debugDoc.getDefaultRootElement(),
+						StyleConstants.NameAttribute, HTML.Tag.BODY);
+				try {
 					debugDoc.insertBeforeEnd(debugBody, str);
-				}
-				catch(BadLocationException e)
-				{
+				} catch (BadLocationException e) {
 					e.printStackTrace();
-				}
-				catch(IOException e)
-				{
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			
-			else str = "<div>" + str + "</div>";
-			
-			try
-			{
-				Element fullBody = fullDoc.getElement(fullDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
+
+			else
+				str = "<div>" + str + "</div>";
+
+			try {
+				Element fullBody = fullDoc.getElement(
+						fullDoc.getDefaultRootElement(),
+						StyleConstants.NameAttribute, HTML.Tag.BODY);
 				fullDoc.insertBeforeEnd(fullBody, str);
-			}
-			catch(BadLocationException e)
-			{
+			} catch (BadLocationException e) {
 				e.printStackTrace();
-			}
-			catch(IOException e)
-			{
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			log.setCaretPosition(log.getDocument().getLength());
 		}
 	}
-	
+
 	/**
 	 * Constructor
 	 */
-	public DexLog()
-	{
+	public DexLog() {
 		super(new BorderLayout());
 		log.setEditable(false);
 		log.setContentType("text/html");
@@ -168,18 +154,16 @@ public class DexLog extends JPanel
 		warnDoc = (HTMLDocument) kit.createDefaultDocument();
 		errorDoc = (HTMLDocument) kit.createDefaultDocument();
 		debugDoc = (HTMLDocument) kit.createDefaultDocument();
-		try
-		{
-			warnDoc.setInnerHTML(warnDoc.getDefaultRootElement(), htmlStart + htmlClose);
-			errorDoc.setInnerHTML(errorDoc.getDefaultRootElement(), htmlStart + htmlClose);
-			debugDoc.setInnerHTML(debugDoc.getDefaultRootElement(), htmlStart + htmlClose);
-		}
-		catch(BadLocationException e)
-		{
+		try {
+			warnDoc.setInnerHTML(warnDoc.getDefaultRootElement(), htmlStart
+					+ htmlClose);
+			errorDoc.setInnerHTML(errorDoc.getDefaultRootElement(), htmlStart
+					+ htmlClose);
+			debugDoc.setInnerHTML(debugDoc.getDefaultRootElement(), htmlStart
+					+ htmlClose);
+		} catch (BadLocationException e) {
 			e.printStackTrace();
-		}
-		catch(IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -189,28 +173,25 @@ public class DexLog extends JPanel
 		selection.addItem("Errors");
 		selection.addItem("Warnings");
 		selection.addItem("Debug");
-		selection.addActionListener(new ActionListener()
-		{
+		selection.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				@SuppressWarnings("unchecked")
 				JComboBox<String> cb = (JComboBox<String>) e.getSource();
 				String selected = (String) cb.getSelectedItem();
-				switch(selected)
-				{
-					case "All":
-						log.setDocument(fullDoc);
-						break;
-					case "Errors":
-						log.setDocument(errorDoc);
-						break;
-					case "Warnings":
-						log.setDocument(warnDoc);
-						break;
-					case "Debug":
-						log.setDocument(debugDoc);
-						break;
+				switch (selected) {
+				case "All":
+					log.setDocument(fullDoc);
+					break;
+				case "Errors":
+					log.setDocument(errorDoc);
+					break;
+				case "Warnings":
+					log.setDocument(warnDoc);
+					break;
+				case "Debug":
+					log.setDocument(debugDoc);
+					break;
 				}
 				log.setCaretPosition(log.getDocument().getLength());
 			}
@@ -226,11 +207,9 @@ public class DexLog extends JPanel
 		clean.setBorderPainted(false);
 		clean.addMouseListener(cleanButtonMouseListener);
 		clean.setRolloverEnabled(true);
-		clean.addActionListener(new ActionListener()
-		{
+		clean.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
 				DexLog.this.clean();
 			}
 		});
@@ -243,58 +222,49 @@ public class DexLog extends JPanel
 		this.add(scroll, BorderLayout.CENTER);
 		addVisualLogAppender();
 	}
-	
-	private void addVisualLogAppender()
-	{
+
+	private void addVisualLogAppender() {
 		Logger l = (Logger) LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
-		if(l.getAppenders().containsKey("SwingAppender"))
-		{
+		if (l.getAppenders().containsKey("SwingAppender")) {
 			// XXX: log??
 			return;
 		}
 		l.addAppender(new SwingAppender());
 	}
-	
-	public void clean()
-	{
-		try
-		{
-			Element body = fullDoc.getElement(fullDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
+
+	public void clean() {
+		try {
+			Element body = fullDoc.getElement(fullDoc.getDefaultRootElement(),
+					StyleConstants.NameAttribute, HTML.Tag.BODY);
 			fullDoc.setOuterHTML(body, "<body></body>");
-			body = warnDoc.getElement(warnDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
+			body = warnDoc.getElement(warnDoc.getDefaultRootElement(),
+					StyleConstants.NameAttribute, HTML.Tag.BODY);
 			warnDoc.setOuterHTML(body, "<body></body>");
-			body = errorDoc.getElement(errorDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
+			body = errorDoc.getElement(errorDoc.getDefaultRootElement(),
+					StyleConstants.NameAttribute, HTML.Tag.BODY);
 			errorDoc.setOuterHTML(body, "<body></body>");
-			body = debugDoc.getElement(debugDoc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.BODY);
+			body = debugDoc.getElement(debugDoc.getDefaultRootElement(),
+					StyleConstants.NameAttribute, HTML.Tag.BODY);
 			debugDoc.setOuterHTML(body, "<body></body>");
-		}
-		catch(BadLocationException e1)
-		{
+		} catch (BadLocationException e1) {
 			e1.printStackTrace();
-		}
-		catch(IOException e2)
-		{
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
 	}
-	
-	private final static MouseListener cleanButtonMouseListener = new MouseAdapter()
-	{
-		public void mouseEntered(MouseEvent e)
-		{
+
+	private final static MouseListener cleanButtonMouseListener = new MouseAdapter() {
+		public void mouseEntered(MouseEvent e) {
 			Component component = e.getComponent();
-			if(component instanceof AbstractButton)
-			{
+			if (component instanceof AbstractButton) {
 				AbstractButton button = (AbstractButton) component;
 				button.setBorderPainted(true);
 			}
 		}
-		
-		public void mouseExited(MouseEvent e)
-		{
+
+		public void mouseExited(MouseEvent e) {
 			Component component = e.getComponent();
-			if(component instanceof AbstractButton)
-			{
+			if (component instanceof AbstractButton) {
 				AbstractButton button = (AbstractButton) component;
 				button.setBorderPainted(false);
 			}

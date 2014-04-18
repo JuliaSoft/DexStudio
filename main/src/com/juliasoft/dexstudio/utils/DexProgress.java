@@ -1,12 +1,17 @@
 package com.juliasoft.dexstudio.utils;
 
-public class DexProgress
-{
+/**
+ * Analisys progress popup
+ * 
+ * 
+ * @author Matteo Zanoncello
+ * 
+ */
+public class DexProgress {
 	public String phrase;
 	public int percentage;
-	
-	public DexProgress(String phrase, int percentage)
-	{
+
+	public DexProgress(String phrase, int percentage) {
 		this.phrase = phrase;
 		this.percentage = percentage;
 	}

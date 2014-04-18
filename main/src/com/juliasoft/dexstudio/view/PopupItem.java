@@ -11,16 +11,14 @@ import javax.swing.JMenuItem;
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class PopupItem extends JMenuItem
-{
+public class PopupItem extends JMenuItem {
 	/**
 	 * String constructor
 	 * 
 	 * @param name
 	 *            The name of the menu item
 	 */
-	public PopupItem(String name)
-	{
+	public PopupItem(String name) {
 		super(name);
 		this.setMinimumSize(new Dimension(this.getPreferredSize().width, 30));
 		this.setPreferredSize(new Dimension(this.getPreferredSize().width, 30));

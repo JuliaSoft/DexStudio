@@ -23,15 +23,20 @@ import com.juliasoft.dexstudio.view.DexViewManager;
 import com.juliasoft.dexstudio.view.compare.CompareNode;
 import com.juliasoft.dexstudio.view.tree.TreeNode;
 
+/**
+ * Main class for the search function
+ * 
+ * 
+ * @author Matteo Zanoncello
+ * 
+ */
 @SuppressWarnings("serial")
-public class DexSearch extends JDialog
-{
+public class DexSearch extends JDialog {
 	private SearchBar search;
 	private SearchList list;
 	private JComboBox<String> viewSelect;
-	
-	public DexSearch(final DexFrame frame)
-	{	
+
+	public DexSearch(final DexFrame frame) {
 		this.setIconImage(new ImageIcon("imgs/logo.png").getImage());
 		int width = frame.getSize().width;
 		int height = frame.getSize().height;
@@ -44,23 +49,17 @@ public class DexSearch extends JDialog
 		this.setTitle("Search");
 		viewSelect = new JComboBox<String>();
 		DexViewManager viewManager = frame.getViewManager();
-		try
-		{
-			for(int i=0; i<viewManager.getTabCount(); i++)
-			{
+		try {
+			for (int i = 0; i < viewManager.getTabCount(); i++) {
 				viewSelect.addItem(viewManager.getView(i).getName());
 			}
-		}
-		catch(ViewNotFoundException e)
-		{
+		} catch (ViewNotFoundException e) {
 			e.printStackTrace();
 		}
 		viewSelect.setSelectedIndex(0);
-		viewSelect.addActionListener(new ActionListener()
-		{
+		viewSelect.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				list.updateView(viewSelect.getSelectedIndex());
 				search.clean();
 			}
@@ -70,34 +69,30 @@ public class DexSearch extends JDialog
 		search = new SearchBar(frame, this, list);
 		search.requestFocus();
 		JButton ok = new JButton("Ok");
-		ok.addActionListener(new ActionListener()
-		{
+		ok.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				// Open the selected file
 				Object item = list.getSelectedItem();
-				if(item instanceof TreeNode)
-				{
-					ClassGen clazz = (ClassGen) ((TreeNode) item).getUserObject();
+				if (item instanceof TreeNode) {
+					ClassGen clazz = (ClassGen) ((TreeNode) item)
+							.getUserObject();
 					frame.openNewTab(new DexTreeTab(frame, clazz));
-				}
-				else if(item instanceof CompareNode)
-				{
-					SimpleClassDiff diff = (SimpleClassDiff) ((CompareNode) item).getDiff();
-					if(diff.getState().equals(DiffState.SAME))
+				} else if (item instanceof CompareNode) {
+					SimpleClassDiff diff = (SimpleClassDiff) ((CompareNode) item)
+							.getDiff();
+					if (diff.getState().equals(DiffState.SAME))
 						frame.openNewTab(new DexTreeTab(frame, diff.getLeft()));
 					else
-						frame.openNewTab(new DexCompareTab(frame, diff.getLeft(), diff.getRight()));
+						frame.openNewTab(new DexCompareTab(frame, diff
+								.getLeft(), diff.getRight()));
 				}
 			}
 		});
 		JButton cancel = new JButton("Cancel");
-		cancel.addActionListener(new ActionListener()
-		{
+		cancel.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				DexSearch.this.dispose();
 			}
 		});

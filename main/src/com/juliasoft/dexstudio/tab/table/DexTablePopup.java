@@ -13,71 +13,53 @@ import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.StringSet;
 
 @SuppressWarnings("serial")
-public class DexTablePopup extends JPopupMenu
-{
+public class DexTablePopup extends JPopupMenu {
 	private Object obj;
 	private DexDisplay display;
 	DexTablePopupItem changeTab, newTab, expand;
-	
-	public DexTablePopup(DexDisplay display, Object obj)
-	{
+
+	public DexTablePopup(DexDisplay display, Object obj) {
 		this.display = display;
 		this.obj = obj;
 		initLayout();
 	}
-	
-	private void initLayout()
-	{
+
+	private void initLayout() {
 		changeTab = new DexTablePopupItem("Open");
-		changeTab.addActionListener(new ActionListener()
-		{
+		changeTab.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				if(obj instanceof ClassGen)
-				{
-					display.changeSelectedTab(new DexTreeTab(display, (ClassGen) obj));
-				}
-				else if(obj instanceof MethodGen)
-				{
-					display.changeSelectedTab(new DexTreeTab(display, (MethodGen) obj));
-				}
-				else if(obj instanceof Annotation)
-				{
-					display.changeSelectedTab(new DexTreeTab(display, (Annotation) obj));
-				}
-				else if(obj instanceof StringSet)
-				{
-					display.changeSelectedTab(new DexTreeTab(display, (StringSet) obj));
+			public void actionPerformed(ActionEvent e) {
+				if (obj instanceof ClassGen) {
+					display.changeSelectedTab(new DexTreeTab(display,
+							(ClassGen) obj));
+				} else if (obj instanceof MethodGen) {
+					display.changeSelectedTab(new DexTreeTab(display,
+							(MethodGen) obj));
+				} else if (obj instanceof Annotation) {
+					display.changeSelectedTab(new DexTreeTab(display,
+							(Annotation) obj));
+				} else if (obj instanceof StringSet) {
+					display.changeSelectedTab(new DexTreeTab(display,
+							(StringSet) obj));
 				}
 			}
 		});
 		newTab = new DexTablePopupItem("Open in a new tab");
-		newTab.addActionListener(new ActionListener()
-		{
+		newTab.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				if(obj instanceof ClassGen)
-				{
+			public void actionPerformed(ActionEvent e) {
+				if (obj instanceof ClassGen) {
 					display.openNewTab(new DexTreeTab(display, (ClassGen) obj));
-				}
-				else if(obj instanceof MethodGen)
-				{
+				} else if (obj instanceof MethodGen) {
 					display.openNewTab(new DexTreeTab(display, (MethodGen) obj));
-				}
-				else if(obj instanceof Annotation)
-				{
+				} else if (obj instanceof Annotation) {
 					display.openNewTab(new DexTreeTab(display, (Annotation) obj));
-				}
-				else if(obj instanceof StringSet)
-				{
+				} else if (obj instanceof StringSet) {
 					display.openNewTab(new DexTreeTab(display, (StringSet) obj));
 				}
 			}
 		});
-		if(obj instanceof ClassGen || obj instanceof MethodGen)
-		{
+		if (obj instanceof ClassGen || obj instanceof MethodGen) {
 			this.add(changeTab);
 			this.add(newTab);
 		}

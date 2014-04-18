@@ -12,8 +12,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class TreeCellRenderer extends DefaultTreeCellRenderer
-{
+public class TreeCellRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon root_ico;
 	private ImageIcon folder_close_ico;
 	private ImageIcon folder_open_ico;
@@ -24,9 +23,8 @@ public class TreeCellRenderer extends DefaultTreeCellRenderer
 	private ImageIcon field_ico;
 	private ImageIcon method_ico;
 	private ImageIcon annotation_ico;
-	
-	public TreeCellRenderer()
-	{
+
+	public TreeCellRenderer() {
 		// Initializing images
 		root_ico = new ImageIcon("imgs/tree/root.png");
 		folder_close_ico = new ImageIcon("imgs/tree/folder_close.png");
@@ -39,47 +37,48 @@ public class TreeCellRenderer extends DefaultTreeCellRenderer
 		method_ico = new ImageIcon("imgs/tree/same/method.png");
 		annotation_ico = new ImageIcon("imgs/tree/same/annotation.png");
 	}
-	
+
 	@Override
-	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus)
-	{
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
+			boolean sel, boolean expanded, boolean leaf, int row,
+			boolean hasFocus) {
 		// Default render
-		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-		if(!(value instanceof TreeNode))
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
+				row, hasFocus);
+		if (!(value instanceof TreeNode))
 			throw new IllegalArgumentException();
 		TreeNode node = (TreeNode) value;
-		switch(node.getType())
-		{
-			case ROOT:
-				setIcon(root_ico);
-				break;
-			case FOLDER:
-				if(expanded)
-					setIcon(folder_open_ico);
-				else
-					setIcon(folder_close_ico);
-				break;
-			case STRINGS:
-				setIcon(strings_ico);
-				break;
-			case PACKAGE:
-				setIcon(package_ico);
-				break;
-			case CLASS:
-				setIcon(class_ico);
-				break;
-			case INTERFACE:
-				setIcon(interface_ico);
-				break;
-			case FIELD:
-				setIcon(field_ico);
-				break;
-			case METHOD:
-				setIcon(method_ico);
-				break;
-			case ANNOTATION:
-				setIcon(annotation_ico);
-				break;
+		switch (node.getType()) {
+		case ROOT:
+			setIcon(root_ico);
+			break;
+		case FOLDER:
+			if (expanded)
+				setIcon(folder_open_ico);
+			else
+				setIcon(folder_close_ico);
+			break;
+		case STRINGS:
+			setIcon(strings_ico);
+			break;
+		case PACKAGE:
+			setIcon(package_ico);
+			break;
+		case CLASS:
+			setIcon(class_ico);
+			break;
+		case INTERFACE:
+			setIcon(interface_ico);
+			break;
+		case FIELD:
+			setIcon(field_ico);
+			break;
+		case METHOD:
+			setIcon(method_ico);
+			break;
+		case ANNOTATION:
+			setIcon(annotation_ico);
+			break;
 		}
 		return this;
 	}

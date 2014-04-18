@@ -4,10 +4,8 @@ import java.util.HashSet;
 import java.util.SortedSet;
 
 @SuppressWarnings("serial")
-public class StringSet extends HashSet<String>
-{
-	public StringSet(SortedSet<String> strings)
-	{
+public class StringSet extends HashSet<String> {
+	public StringSet(SortedSet<String> strings) {
 		super(strings);
 	}
 }

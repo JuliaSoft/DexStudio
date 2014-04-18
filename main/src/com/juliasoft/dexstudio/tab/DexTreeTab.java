@@ -38,12 +38,11 @@ import com.juliasoft.dexstudio.utils.StringSet;
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class DexTreeTab extends JScrollPane implements DexTab
-{
+public class DexTreeTab extends JScrollPane implements DexTab {
 	private JPanel content;
 	private String title;
 	private ImageIcon ico;
-	
+
 	/**
 	 * Constructor of ClassGen tab
 	 * 
@@ -52,17 +51,18 @@ public class DexTreeTab extends JScrollPane implements DexTab
 	 * @param clazz
 	 *            The ClassGen instance
 	 */
-	public DexTreeTab(DexDisplay frame, ClassGen clazz)
-	{
+	public DexTreeTab(DexDisplay frame, ClassGen clazz) {
 		initLayout();
 		title = Library.shortName(clazz.getType().getName());
 		content.add(new DexClassHeader(frame, clazz));
 		content.add(new DexTable(frame, new DexFieldTableModel(clazz)));
 		content.add(new DexTable(frame, new DexConstructorTableModel(clazz)));
 		content.add(new DexTable(frame, new DexMethodTableModel(clazz)));
-		ico = new ImageIcon((AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags())) ? "imgs/tab/interface.png" : "imgs/tab/class.png");
+		ico = new ImageIcon(
+				(AccessFlag.ACC_INTERFACE.isSet(clazz.getFlags())) ? "imgs/tab/interface.png"
+						: "imgs/tab/class.png");
 	}
-	
+
 	/**
 	 * Constructor of MethodGen tab
 	 * 
@@ -71,15 +71,15 @@ public class DexTreeTab extends JScrollPane implements DexTab
 	 * @param clazz
 	 *            The MethodGen instance
 	 */
-	public DexTreeTab(DexDisplay frame, MethodGen meth)
-	{
+	public DexTreeTab(DexDisplay frame, MethodGen meth) {
 		initLayout();
-		title = (meth.isConstructor()) ? Library.printType(meth.getOwnerClass()) + "()" : meth.getName() + "()";
+		title = (meth.isConstructor()) ? Library
+				.printType(meth.getOwnerClass()) + "()" : meth.getName() + "()";
 		content.add(new DexMethodHeader(frame, meth));
 		content.add(new DexTable(frame, new DexCodeTableModel(meth)));
 		ico = new ImageIcon("imgs/tab/method.png");
 	}
-	
+
 	/**
 	 * Constructor of Annotation tab
 	 * 
@@ -88,15 +88,14 @@ public class DexTreeTab extends JScrollPane implements DexTab
 	 * @param clazz
 	 *            The Annotation instance
 	 */
-	public DexTreeTab(DexDisplay frame, Annotation ann)
-	{
+	public DexTreeTab(DexDisplay frame, Annotation ann) {
 		initLayout();
 		title = Library.printType(ann.getType());
 		content.add(new DexAnnotationHeader(ann));
 		content.add(new DexTable(frame, new DexValueTableModel(ann)));
 		ico = new ImageIcon("imgs/tab/annotation.png");
 	}
-	
+
 	/**
 	 * Constructor of Strings tab
 	 * 
@@ -105,18 +104,16 @@ public class DexTreeTab extends JScrollPane implements DexTab
 	 * @param clazz
 	 *            The Set of the strings
 	 */
-	public DexTreeTab(DexDisplay frame, StringSet strs)
-	{
+	public DexTreeTab(DexDisplay frame, StringSet strs) {
 		initLayout();
 		title = "Strings";
 		content.add(new DexStringHeader(strs));
 		content.add(new DexTable(frame, new DexStringTableModel(strs)));
 		ico = new ImageIcon("imgs/tab/strings.png");
 	}
-	
-	public DexTreeTab(DexDisplay frame, DiffNode<?> ctx)
-	{
-		if(!ctx.getDiffClass().equals(ContextGen.class))
+
+	public DexTreeTab(DexDisplay frame, DiffNode<?> ctx) {
+		if (!ctx.getDiffClass().equals(ContextGen.class))
 			throw new IllegalArgumentException("DiffNode<ContextGen> expected");
 		initLayout();
 		title = "String comparison";
@@ -124,39 +121,36 @@ public class DexTreeTab extends JScrollPane implements DexTab
 		content.add(new DexTable(frame, new DexStringCompareTableModel(ctx)));
 		ico = new ImageIcon("imgs/tab/strings.png");
 	}
-	
-	private void initLayout()
-	{
+
+	private void initLayout() {
 		this.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
 		this.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		this.getVerticalScrollBar().setUnitIncrement(15);
 		content = new JPanel();
 		content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 		content.setBackground(Color.white);
-		content.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white));
+		content.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10,
+				Color.white));
 		this.setViewportView(content);
 	}
-	
+
 	/**
 	 * Get the title of the tab
 	 * 
 	 * @return
 	 */
 	@Override
-	public String getTitle()
-	{
+	public String getTitle() {
 		return title;
 	}
-	
+
 	@Override
-	public ImageIcon getIco()
-	{
+	public ImageIcon getIco() {
 		return this.ico;
 	}
 
 	@Override
-	public Component getTab()
-	{
+	public Component getTab() {
 		return this;
 	}
 }

@@ -23,22 +23,20 @@ import com.juliasoft.dexstudio.view.tree.DexTree;
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class DexFrame extends JFrame implements DexDisplay
-{
+public class DexFrame extends JFrame implements DexDisplay {
 	private DexViewManager viewManager = new DexViewManager();
 	private DexTree tree = new DexTree(this);
 	private DexTabManager tabManager = new DexTabManager();
 	private DexLog log = new DexLog();
 	private DexMenu menu = new DexMenu(this);
 	private DexGen dexGen;
-	
+
 	/**
 	 * Constructor
 	 */
-	public DexFrame()
-	{
+	public DexFrame() {
 		// Setting the layout
-		//this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		// this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setSize(screen.getSize());
 		this.setResizable(true);
@@ -46,9 +44,11 @@ public class DexFrame extends JFrame implements DexDisplay
 		this.setTitle("DexStudio");
 		this.setIconImage(new ImageIcon("imgs/logo.png").getImage());
 		this.setJMenuBar(menu);
-		JSplitPane contentSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabManager, log);
+		JSplitPane contentSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+				tabManager, log);
 		contentSplitPane.setFocusable(false);
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, viewManager, contentSplitPane);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+				viewManager, contentSplitPane);
 		viewManager.addView(tree);
 		splitPane.setFocusable(false);
 		this.getContentPane().add(splitPane, BorderLayout.CENTER);
@@ -58,15 +58,14 @@ public class DexFrame extends JFrame implements DexDisplay
 		contentSplitPane.setDividerLocation(0.7);
 		splitPane.setDividerLocation(0.3);
 	}
-	
-	public void cleanLayout()
-	{
+
+	public void cleanLayout() {
 		viewManager.clean();
 		tree.cleanTree();
 		tabManager.cleanTabs();
 		log.clean();
 	}
-	
+
 	/**
 	 * Update the layout of the frame
 	 * 
@@ -75,56 +74,48 @@ public class DexFrame extends JFrame implements DexDisplay
 	 * @param rootName
 	 *            The name showed on the root of the navigation tree
 	 */
-	public void updateLayout(DexGen dexGen, String rootName)
-	{
+	public void updateLayout(DexGen dexGen, String rootName) {
 		this.dexGen = dexGen;
 		this.tree.updateLayout(dexGen, rootName);
 	}
-	
+
 	@Override
-	public void openNewTab(DexTab tab)
-	{
+	public void openNewTab(DexTab tab) {
 		tabManager.addTab(tab);
 	}
-	
+
 	@Override
-	public void changeSelectedTab(DexTab tab)
-	{
-		if(tabManager.getSelectedIndex() == -1)
+	public void changeSelectedTab(DexTab tab) {
+		if (tabManager.getSelectedIndex() == -1)
 			tabManager.addTab(tab);
 		else
 			tabManager.changeTab(tab);
 	}
-	
+
 	@Override
-	public DexGen getDexGen()
-	{
+	public DexGen getDexGen() {
 		return dexGen;
 	}
-	
+
 	/**
 	 * Returns the navigation tree of the frame
 	 * 
 	 * @return the navigation tree
 	 */
 	@Override
-	public DexTree getTree()
-	{
+	public DexTree getTree() {
 		return this.tree;
 	}
-	
-	public DexMenu getMenu()
-	{
+
+	public DexMenu getMenu() {
 		return this.menu;
 	}
-	
-	public DexViewManager getViewManager()
-	{
+
+	public DexViewManager getViewManager() {
 		return this.viewManager;
 	}
-	
-	public DexLog getLog()
-	{
+
+	public DexLog getLog() {
 		return this.log;
 	}
 }

@@ -11,40 +11,40 @@ import com.juliasoft.dexstudio.cell.DexAnnotationCell;
 import com.juliasoft.dexstudio.tab.DexTreeTab;
 import com.juliasoft.dexstudio.utils.AnnotationSet;
 
+/**
+ * Editor and renderer for DexAnnonationCell objects
+ * 
+ * 
+ * @author Eugenio Ancona
+ * 
+ */
 @SuppressWarnings("serial")
-public class AnnotationRenderer extends AbstractDexEditorRenderer
-{
+public class AnnotationRenderer extends AbstractDexEditorRenderer {
 	private final DexDisplay display;
-	
-	public AnnotationRenderer(DexDisplay display)
-	{
+
+	public AnnotationRenderer(DexDisplay display) {
 		this.display = display;
 	}
-	
+
 	@Override
-	protected JTextPane getJTextPane(final Object value)
-	{
-		if(!(value instanceof AnnotationSet))
-		{
+	protected JTextPane getJTextPane(final Object value) {
+		if (!(value instanceof AnnotationSet)) {
 			throw new IllegalArgumentException("value");
 		}
 		DexAnnotationCell cell = new DexAnnotationCell((AnnotationSet) value);// TODO:
 																				// creare
 																				// metodo??
-		HyperlinkListener hll = new HyperlinkListener()
-		{
+		HyperlinkListener hll = new HyperlinkListener() {
 			@Override
-			public void hyperlinkUpdate(HyperlinkEvent e)
-			{
-				if(e.getEventType().equals(EventType.ACTIVATED))
-				{
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+				if (e.getEventType().equals(EventType.ACTIVATED)) {
 					String code = e.getDescription();
-					if(code.matches("ann[0-9]+"))
-					{
+					if (code.matches("ann[0-9]+")) {
 						int index = Integer.parseInt(code.substring(3));
-						display.changeSelectedTab(new DexTreeTab(display, (Annotation) ((AnnotationSet) value).toArray()[index]));
-					}
-					else
+						display.changeSelectedTab(new DexTreeTab(
+								display,
+								(Annotation) ((AnnotationSet) value).toArray()[index]));
+					} else
 						throw new IllegalArgumentException("Wrong Event");
 				}
 			}
@@ -52,10 +52,9 @@ public class AnnotationRenderer extends AbstractDexEditorRenderer
 		cell.addHyperlinkListener(hll);
 		return cell;
 	}
-	
+
 	@Override
-	protected boolean supportsRendering(Object value)
-	{
+	protected boolean supportsRendering(Object value) {
 		return (value instanceof AnnotationSet);
 	}
 }

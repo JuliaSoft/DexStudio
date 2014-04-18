@@ -26,55 +26,49 @@ import javax.swing.plaf.basic.BasicButtonUI;
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class DexTabManager extends JTabbedPane
-{
+public class DexTabManager extends JTabbedPane {
 	/**
 	 * Constructor
 	 */
-	public DexTabManager()
-	{
+	public DexTabManager() {
 		this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		this.setBackground(Color.WHITE);
 	}
-	
+
 	/**
 	 * Remove all the visualized tabs
 	 */
-	public void cleanTabs()
-	{
+	public void cleanTabs() {
 		this.removeAll();
 	}
-	
+
 	/**
 	 * Add a new DexTab
 	 * 
 	 * @param tab
 	 *            The DexTab instance
 	 */
-	public void addTab(DexTab tab)
-	{
+	public void addTab(DexTab tab) {
 		super.addTab(tab.getTitle(), tab.getTab());
 		this.setSelectedIndex(this.getTabCount() - 1);
 		this.setTabComponentAt(this.getSelectedIndex(), makeTabTitle(tab));
 	}
-	
+
 	/**
 	 * Change the content of the current tab
 	 * 
 	 * @param tab
 	 *            The DexTab instance
 	 */
-	public void changeTab(DexTab tab)
-	{
+	public void changeTab(DexTab tab) {
 		int pos = this.getSelectedIndex();
 		this.removeTabAt(pos);
 		this.insertTab(tab.getTitle(), null, tab.getTab(), null, pos);
 		this.setTabComponentAt(pos, makeTabTitle(tab));
 		this.setSelectedIndex(pos);
 	}
-	
-	private JPanel makeTabTitle(final DexTab tab)
-	{
+
+	private JPanel makeTabTitle(final DexTab tab) {
 		JPanel result = new JPanel(new GridBagLayout());
 		result.setOpaque(false);
 		JLabel icon = new JLabel(tab.getIco());
@@ -90,12 +84,11 @@ public class DexTabManager extends JTabbedPane
 		close.setBorderPainted(false);
 		close.addMouseListener(closeButtonMouseListener);
 		close.setRolloverEnabled(true);
-		close.addActionListener(new ActionListener()
-		{
+		close.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				DexTabManager.this.removeTabAt(DexTabManager.this.indexOfTab(tab.getTitle()));
+			public void actionPerformed(ActionEvent e) {
+				DexTabManager.this.removeTabAt(DexTabManager.this
+						.indexOfTab(tab.getTitle()));
 			}
 		});
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -104,24 +97,19 @@ public class DexTabManager extends JTabbedPane
 		result.add(close, gbc);
 		return result;
 	}
-	
-	private final static MouseListener closeButtonMouseListener = new MouseAdapter()
-	{
-		public void mouseEntered(MouseEvent e)
-		{
+
+	private final static MouseListener closeButtonMouseListener = new MouseAdapter() {
+		public void mouseEntered(MouseEvent e) {
 			Component component = e.getComponent();
-			if(component instanceof AbstractButton)
-			{
+			if (component instanceof AbstractButton) {
 				AbstractButton button = (AbstractButton) component;
 				button.setBorderPainted(true);
 			}
 		}
-		
-		public void mouseExited(MouseEvent e)
-		{
+
+		public void mouseExited(MouseEvent e) {
 			Component component = e.getComponent();
-			if(component instanceof AbstractButton)
-			{
+			if (component instanceof AbstractButton) {
 				AbstractButton button = (AbstractButton) component;
 				button.setBorderPainted(false);
 			}

@@ -11,16 +11,14 @@ import javax.swing.JMenuItem;
  * @author Zanoncello Matteo
  */
 @SuppressWarnings("serial")
-public class DexMenuItem extends JMenuItem
-{
+public class DexMenuItem extends JMenuItem {
 	/**
 	 * Stirng constructor
 	 * 
 	 * @param name
 	 *            The name of the menu item
 	 */
-	public DexMenuItem(String name)
-	{
+	public DexMenuItem(String name) {
 		super(name);
 		this.setMinimumSize(new Dimension(this.getPreferredSize().width, 30));
 		this.setPreferredSize(new Dimension(200, 30));

@@ -1,0 +1,77 @@
+<project name="DexStudio" basedir="." default="dexstudio-boundle.zip">
+	
+	<!-- load the properties stored into the external file -->
+	<property file="build.properties" />
+
+	<target name="clean">
+		<delete dir="build" />
+		<delete dir="doc" />
+	</target>
+
+	<target name="compile-main" depends="clean">
+		<mkdir dir="build/main/classes" />
+		<javac srcdir="main/src" destdir="build/main/classes">
+			<include name="**/*.java" />
+			<classpath>
+				<pathelement location="./lib/*.jar" />
+				<fileset dir="lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="dexstudio.jar" depends="compile-main">
+		<mkdir dir="build/jar" />
+		<jar destfile="build/jar/dexstudio-${dexstudio.version}.jar">
+			<manifest>
+				<attribute name="Implementation-Title" value="DexStudio" />
+				<attribute name="Implementation-Version" value="${dexstudio.version}" />
+				<attribute name="Implementation-Vendor" value="Eugenio Ancona, Matteo Zanoncello" />
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="com.juliasoft.dexstudio.DexStudio"/>
+				<attribute name="Class-Path" value="lib/amalia-0.9.1.jar
+								    lib/log4j-api-2.0-beta9.jar 
+								    lib/log4j-core-2.0-beta9.jar
+								    lib/bcpkix-jdk15on-149.jar
+								    lib/bcprov-jdk15on-149.jar
+								    lib/commons-cli-1.2.jar
+								    lib/commons-codec-1.9.jar
+							            lib/commons-collections4-4.0.jar
+								    lib/commons-io-2.4.jar"/>
+			</manifest>
+			<fileset dir="build/main/classes" includes="**/*.class" />
+			<fileset dir="." includes="imgs/" />
+			<file name="NOTICE" />
+		</jar>
+	</target>
+
+	<target name="dexstudio-doc.jar">
+		<mkdir dir="doc" />
+		<javadoc destdir="doc" sourcepath="main/src">
+			<classpath>
+				<pathelement location="lib/*.jar" />
+				<fileset dir="lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javadoc>
+		<jar destfile="build/jar/dexstudio-${dexstudio.version}-javadoc.jar" basedir="doc">
+		</jar>
+	</target>
+
+	<target name="dexstudio-boundle.zip" depends="clean,dexstudio.jar,dexstudio-doc.jar">
+		<zip destfile="build/dexstudio-${dexstudio.version}-boundle.zip">
+
+			<fileset dir="build/jar" excludes="amalia-${amalia.version}-sources.jar">
+			</fileset>
+
+			<zipfileset dir="">
+				<include name="lib/*.jar"/>
+				<include name="imgs/**/*.png"/>
+				<include name="logo/*" />
+			</zipfileset>
+			
+		</zip>
+	</target>
+</project>

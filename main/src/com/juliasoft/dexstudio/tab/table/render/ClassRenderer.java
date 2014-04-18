@@ -10,43 +10,44 @@ import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.cell.DexClassCell;
 import com.juliasoft.dexstudio.tab.DexTreeTab;
 
+/**
+ * Editor and renderer for DexClassCell objects
+ * 
+ * 
+ * @author Eugenio Ancona
+ * 
+ */
 @SuppressWarnings("serial")
-public class ClassRenderer extends AbstractDexEditorRenderer
-{
+public class ClassRenderer extends AbstractDexEditorRenderer {
 	private final DexDisplay display;
-	
-	public ClassRenderer(DexDisplay display)
-	{
+
+	public ClassRenderer(DexDisplay display) {
 		this.display = display;
 	}
-	
+
 	@Override
-	protected JTextPane getJTextPane(final Object value)
-	{
-		if(!(value instanceof Type))
-		{
+	protected JTextPane getJTextPane(final Object value) {
+		if (!(value instanceof Type)) {
 			throw new IllegalArgumentException("value");
 		}
-		
-			DexClassCell cell = new DexClassCell((Type) value, display);
-			
-			HyperlinkListener hll = new HyperlinkListener()
-			{
-				@Override
-				public void hyperlinkUpdate(HyperlinkEvent e)
-				{
-					if(e.getEventType().equals(EventType.ACTIVATED))
-						display.changeSelectedTab(new DexTreeTab(display, display.getDexGen().getClassGen((Type) value)));
-				}
-			};
-			cell.addHyperlinkListener(hll);
-		
+
+		DexClassCell cell = new DexClassCell((Type) value, display);
+
+		HyperlinkListener hll = new HyperlinkListener() {
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+				if (e.getEventType().equals(EventType.ACTIVATED))
+					display.changeSelectedTab(new DexTreeTab(display, display
+							.getDexGen().getClassGen((Type) value)));
+			}
+		};
+		cell.addHyperlinkListener(hll);
+
 		return cell;
 	}
-	
+
 	@Override
-	protected boolean supportsRendering(Object value)
-	{
+	protected boolean supportsRendering(Object value) {
 		return (value instanceof Type);
 	}
 }
