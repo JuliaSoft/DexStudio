@@ -67,8 +67,6 @@ public abstract class AbstractDexEditorRenderer extends AbstractCellEditor
 	/**
 	 * Tells if this renderer is able to render the specified value.
 	 * 
-	 * @param value
-	 * @return
 	 */
 	protected abstract boolean supportsRendering(Object value);
 }

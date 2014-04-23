@@ -129,7 +129,7 @@ public class DexTree extends DexView {
 	/**
 	 * Returns an array of all the class nodes in the tree
 	 * 
-	 * @return
+	 * 
 	 */
 	public ArrayList<Object> getClassNodes() {
 		ArrayList<Object> nodes = new ArrayList<Object>();

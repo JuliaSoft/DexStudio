@@ -39,8 +39,8 @@ public class DexTable extends JPanel {
 	/**
 	 * Constructor
 	 * 
-	 * @param frame
-	 *            The DexFrame reference
+	 * @param display
+	 *            The frame reference
 	 * @param model
 	 *            The model of the table to visualize
 	 */

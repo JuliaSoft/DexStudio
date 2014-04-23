@@ -68,7 +68,7 @@ public class DexTreeTab extends JScrollPane implements DexTab {
 	 * 
 	 * @param frame
 	 *            The DexFrame reference
-	 * @param clazz
+	 * @param meth
 	 *            The MethodGen instance
 	 */
 	public DexTreeTab(DexDisplay frame, MethodGen meth) {
@@ -85,7 +85,7 @@ public class DexTreeTab extends JScrollPane implements DexTab {
 	 * 
 	 * @param frame
 	 *            The DexFrame reference
-	 * @param clazz
+	 * @param ann
 	 *            The Annotation instance
 	 */
 	public DexTreeTab(DexDisplay frame, Annotation ann) {
@@ -101,7 +101,7 @@ public class DexTreeTab extends JScrollPane implements DexTab {
 	 * 
 	 * @param frame
 	 *            The DexFrame reference
-	 * @param clazz
+	 * @param strs
 	 *            The Set of the strings
 	 */
 	public DexTreeTab(DexDisplay frame, StringSet strs) {
@@ -137,7 +137,7 @@ public class DexTreeTab extends JScrollPane implements DexTab {
 	/**
 	 * Get the title of the tab
 	 * 
-	 * @return
+	 * 
 	 */
 	@Override
 	public String getTitle() {
