@@ -8,47 +8,74 @@ import com.juliasoft.amalia.dex.codegen.istr.BranchInstruction;
 
 public class FlowNode
 {
-	private ArrayList<InstructionHandle> ihs;
+	private InstructionHandle ih;
 	private ArrayList<FlowNode> branches;
+	private boolean branch;
 	private boolean visited;
 	
-	public FlowNode()
+	public FlowNode(InstructionHandle ih)
 	{
-		this(new ArrayList<InstructionHandle>(), new ArrayList<FlowNode>());
+		this(ih, new ArrayList<FlowNode>());
+	}
+	
+	public FlowNode(InstructionHandle ih, ArrayList<FlowNode> branches)
+	{
+		this.ih = ih;
+		this.branches = branches;
+		this.visited = false;
+		this.branch = false;
 	}
 	
 	public FlowNode(FlowNode node)
 	{
-		this.ihs = new ArrayList<InstructionHandle>(node.getInstructionHandles());
+		this.ih = node.getInstructionHandle();
 		for(FlowNode branch : node.getBranches())
 		{
 			this.addBranch(new FlowNode(branch));
 		}
 		this.visited = false;
+		this.branch = node.isBranch();
 	}
-	
-	public FlowNode(ArrayList<InstructionHandle> ihs, ArrayList<FlowNode> branches)
-	{
-		this.ihs = ihs;
-		this.branches = branches;
-		this.visited = false;
-	}
-	
+
+	//Costruttore che crea l'intero grafo a partire da una IstructionList
 	public FlowNode(InstructionList il)
 	{
+		ArrayList<FlowNode> graph = new ArrayList<FlowNode>();
+		FlowNode actual = this;
+		
 		for(InstructionHandle ih : il)
 		{
+			//Controllo se non esiste già il nodo dell'istruzione
+			if(!graph.contains(ih))
+			{
+				//Aggiungo il nodo dell'istruzione
+				graph.add(new FlowNode(ih));
+			}
+			//Collego la precedente con quella appena letta
+			actual.addBranch(graph.get(graph.indexOf(ih)));
+			
+			//L'attuale diventa quella appena letta
+			actual = graph.get(graph.indexOf(ih));
+			
 			//Se l'istruzione è una branch instruction
 			if(ih instanceof BranchInstruction)
 			{
-				//Controllo se esiste
+				//ESEMPIO DI FUNZIONAMENTO
+				//Se il nodo dell'istruzione Target non esiste
+				if(!graph.contains(((BranchInstruction) ih).getTarget()))
+				{
+					//Aggiungo l'istruzione
+					graph.add(new FlowNode(ih));
+					//Collego l'istruzione attuale a tutti i suoi target (AD ESEMPIO)
+					actual.addBranch(graph.get(graph.indexOf(ih)));
+				}
 			}
 		}
 	}
 	
-	public ArrayList<InstructionHandle> getInstructionHandles()
+	public InstructionHandle getInstructionHandle()
 	{
-		return ihs;
+		return ih;
 	}
 	
 	public ArrayList<FlowNode> getBranches()
@@ -66,6 +93,16 @@ public class FlowNode
 		this.visited = true;
 	}
 	
+	public boolean isBranch()
+	{
+		return this.branch;
+	}
+	
+	public void Branch()
+	{
+		this.branch = true;
+	}
+	
 	public int getBranchesCount()
 	{
 		return branches.size();
@@ -74,11 +111,6 @@ public class FlowNode
 	public FlowNode getBranch(int index)
 	{
 		return branches.get(index);
-	}
-	
-	public InstructionHandle getHead()
-	{
-		return ihs.get(0);
 	}
 	
 	public void addBranch(FlowNode branch)
@@ -94,5 +126,15 @@ public class FlowNode
 	public FlowNode getSubGraph()
 	{
 		return new FlowNode(this);
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof InstructionHandle)
+		{
+			return this.getInstructionHandle().equals((InstructionHandle)o);
+		}
+		return false;
 	}
 }

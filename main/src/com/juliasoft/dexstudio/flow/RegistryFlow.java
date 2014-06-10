@@ -4,8 +4,11 @@ import com.juliasoft.amalia.dex.codegen.InstructionList;
 
 public class RegistryFlow
 {
-	public static void lastModifiersOfRegistry(int registry, InstructionList il)
+	public static void lastInstruction(int registry, InstructionList il)
 	{
 		//Creo il grafo
+		FlowNode graph = new FlowNode(il);
+		
+		//
 	}
 }
