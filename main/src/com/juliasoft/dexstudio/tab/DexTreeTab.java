@@ -78,6 +78,7 @@ public class DexTreeTab extends JScrollPane implements DexTab {
 		content.add(new DexMethodHeader(frame, meth));
 		content.add(new DexTable(frame, new DexCodeTableModel(meth)));
 		ico = new ImageIcon("imgs/tab/method.png");
+		
 	}
 
 	/**
@@ -121,7 +122,7 @@ public class DexTreeTab extends JScrollPane implements DexTab {
 		content.add(new DexTable(frame, new DexStringCompareTableModel(ctx)));
 		ico = new ImageIcon("imgs/tab/strings.png");
 	}
-
+	
 	private void initLayout() {
 		this.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
 		this.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
