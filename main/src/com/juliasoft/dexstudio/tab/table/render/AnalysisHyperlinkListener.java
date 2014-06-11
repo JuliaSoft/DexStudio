@@ -1,20 +1,25 @@
 package com.juliasoft.dexstudio.tab.table.render;
 
+import java.util.ArrayList;
+
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkEvent.EventType;
 import javax.swing.event.HyperlinkListener;
 
 import com.juliasoft.amalia.dex.codegen.InstructionHandle;
+import com.juliasoft.dexstudio.flow.FlowNode;
 
 public class AnalysisHyperlinkListener implements HyperlinkListener {
 
 	private InstructionHandle ih;
 	private InstructionRenderer rend;
+	private FlowNode AnalysisGraph;
 	
-	public AnalysisHyperlinkListener(InstructionRenderer rend, InstructionHandle ih){
+	public AnalysisHyperlinkListener(InstructionRenderer rend, InstructionHandle ih, FlowNode graph){
 		
 		this.rend = rend;
 		this.ih = ih;
+		this.AnalysisGraph = graph;
 		
 	}
 	
@@ -26,17 +31,10 @@ public class AnalysisHyperlinkListener implements HyperlinkListener {
 			if (code.matches("v[0-9]+")) {
 				int register = Integer.parseInt(code.substring(1));
 				
-				rend.setSelectedRegister(register);
-				rend.setSelectedInstruction(ih);
+				ArrayList<InstructionHandle> result = AnalysisGraph.lastInstruction(ih, register, null);
 				
-				System.out.println("Selected v" + register + " on instruction " + ih.getInstruction().toHuman());
+				rend.setLastInstructions(result);
 				
-				
-				/*FlowNode graph = new FlowNode(((ExtendedInstructionHandle)value).getMethodGen().getCode().getInstructionList());
-				
-				ArrayList<InstructionHandle> result = graph.lastInstruction(((ExtendedInstructionHandle)value).getInstructionHandle(), register, null); // cacolo le instruzioni 
-				display.openNewTab(new DexTreeTab(display, (ExtendedInstructionHandle)value, register, result));
-				*/
 			} else
 				throw new IllegalArgumentException("Wrong Event");
 		}

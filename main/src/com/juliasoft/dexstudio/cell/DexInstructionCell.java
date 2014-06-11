@@ -19,6 +19,7 @@ public class DexInstructionCell extends JTextPane {
 			+ fontSize
 			+ "pt;color:" + color + ";}"
 			+ ".select{color:red;}"
+			+ ".result{background-color: green;}"
 			+ "</style></head><body>";
 	private final String closeFormat = "</body></html>";
 	
@@ -36,6 +37,12 @@ public class DexInstructionCell extends JTextPane {
 			String selectedRegister = "<a class='select' href='v" + register + "'>v" + register + "</a>";
 			
 			text= text.replaceFirst(registerToSelect, selectedRegister);
+		}
+		
+		else if(state.equals(InstructionState.RESULT)){
+			
+			text = "<div class='result'>" +text +"</div>";
+			
 		}
 		
 		this.setContentType("text/html");

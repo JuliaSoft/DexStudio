@@ -21,6 +21,7 @@ import com.juliasoft.amalia.dex.codegen.Type;
 import com.juliasoft.amalia.dex.codegen.cst.Constant;
 import com.juliasoft.amalia.dex.codegen.diff.DiffState;
 import com.juliasoft.dexstudio.DexDisplay;
+import com.juliasoft.dexstudio.flow.FlowNode;
 import com.juliasoft.dexstudio.tab.table.render.AnnotationRenderer;
 import com.juliasoft.dexstudio.tab.table.render.ClassRenderer;
 import com.juliasoft.dexstudio.tab.table.render.DefaultDexRenderer;
@@ -79,7 +80,6 @@ public class DexTable extends JPanel {
 		AnnotationRenderer aRend = new AnnotationRenderer(display);
 		ClassRenderer cRend = new ClassRenderer(display);
 		StringCompareRenderer sRend = new StringCompareRenderer();
-		InstructionRenderer iRend = new InstructionRenderer(display);
 		
 		table.setDefaultRenderer(Type.class, cRend);
 		table.setDefaultRenderer(String.class, editRend);
@@ -88,7 +88,6 @@ public class DexTable extends JPanel {
 		table.setDefaultRenderer(AnnotationSet.class, aRend);
 		table.setDefaultRenderer(Constant.class, editRend);
 		table.setDefaultRenderer(DiffState.class, sRend);
-		table.setDefaultRenderer(InstructionHandle.class, iRend);
 		
 		table.setDefaultEditor(String.class, editRend);
 		table.setDefaultEditor(Type.class, cRend);
@@ -96,7 +95,6 @@ public class DexTable extends JPanel {
 		table.setDefaultEditor(FieldGen.class, editRend);
 		table.setDefaultEditor(AnnotationSet.class, aRend);
 		table.setDefaultEditor(DiffState.class, sRend);
-		table.setDefaultEditor(InstructionHandle.class, iRend);
 		
 		table.setRowHeight(20);
 		table.setShowGrid(false);
@@ -141,6 +139,15 @@ public class DexTable extends JPanel {
 		content.add(table);
 		this.add(title);
 		this.add(content);
+	}
+	
+	public DexTable(DexDisplay display, DexCodeTableModel model, FlowNode graph) {
+		
+		this(display, model);
+		
+		InstructionRenderer iRend = new InstructionRenderer(display, graph);
+		table.setDefaultEditor(InstructionHandle.class, iRend);
+		table.setDefaultRenderer(InstructionHandle.class, iRend);
 	}
 
 	/**

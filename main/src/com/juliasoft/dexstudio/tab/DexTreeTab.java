@@ -16,6 +16,7 @@ import com.juliasoft.amalia.dex.codegen.ContextGen;
 import com.juliasoft.amalia.dex.codegen.MethodGen;
 import com.juliasoft.amalia.dex.codegen.diff.DiffNode;
 import com.juliasoft.dexstudio.DexDisplay;
+import com.juliasoft.dexstudio.flow.FlowNode;
 import com.juliasoft.dexstudio.tab.header.DexAnnotationHeader;
 import com.juliasoft.dexstudio.tab.header.DexClassHeader;
 import com.juliasoft.dexstudio.tab.header.DexMethodHeader;
@@ -42,6 +43,7 @@ public class DexTreeTab extends JScrollPane implements DexTab {
 	private JPanel content;
 	private String title;
 	private ImageIcon ico;
+	private FlowNode analysisGraph= null;
 
 	/**
 	 * Constructor of ClassGen tab
@@ -75,9 +77,11 @@ public class DexTreeTab extends JScrollPane implements DexTab {
 		initLayout();
 		title = (meth.isConstructor()) ? Library
 				.printType(meth.getOwnerClass()) + "()" : meth.getName() + "()";
+		analysisGraph = new FlowNode(meth.getCode().getInstructionList());
 		content.add(new DexMethodHeader(frame, meth));
-		content.add(new DexTable(frame, new DexCodeTableModel(meth)));
+		content.add(new DexTable(frame, new DexCodeTableModel(meth), analysisGraph));
 		ico = new ImageIcon("imgs/tab/method.png");
+		
 		
 	}
 

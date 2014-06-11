@@ -7,19 +7,22 @@ import javax.swing.JTextPane;
 import com.juliasoft.amalia.dex.codegen.InstructionHandle;
 import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.cell.DexInstructionCell;
+import com.juliasoft.dexstudio.flow.FlowNode;
 import com.juliasoft.dexstudio.utils.InstructionState;
 
 @SuppressWarnings("serial")
 public class InstructionRenderer extends AbstractDexEditorRenderer {
 
 	private final DexDisplay display;
-	InstructionHandle selectedInstruction;
-	int register;
-	ArrayList<InstructionHandle> lastInstructions;
+	private final FlowNode graph;
+	private InstructionHandle selectedInstruction;
+	private int register;
+	private ArrayList<InstructionHandle> lastInstructions;
 	
-	public InstructionRenderer(DexDisplay display) {
+	public InstructionRenderer(DexDisplay display, FlowNode graph) {
 		
 		this.display = display;
+		this.graph = graph;
 		
 	}
 	
@@ -49,11 +52,15 @@ public class InstructionRenderer extends AbstractDexEditorRenderer {
 		
 		if(selectedInstruction != null && selectedInstruction.equals(ih))
 		
-		 cell = new DexInstructionCell(ih, InstructionState.SELECTED, register); 
+			cell = new DexInstructionCell(ih, InstructionState.SELECTED, register); 
 		
+		else if(lastInstructions != null && lastInstructions.contains(ih))
+			
+			cell = new DexInstructionCell(ih, InstructionState.RESULT, 0);
+			
 		else cell = new DexInstructionCell(ih, InstructionState.OFF, 0);
 		
-		cell.addHyperlinkListener(new AnalysisHyperlinkListener(this, ih));
+		cell.addHyperlinkListener(new AnalysisHyperlinkListener(this, ih, graph));
 		return cell;
 		
 	}
