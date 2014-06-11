@@ -123,6 +123,10 @@ public class FlowNode
 		}
 	}
 	
+	/**
+	 * Main Constructor
+	 * @param il
+	 */
 	public FlowNode(InstructionList il)
 	{
 		ArrayList<FlowNode> graph = new ArrayList<FlowNode>();
@@ -162,7 +166,14 @@ public class FlowNode
 		}
 	}
 	
-	public ArrayList<InstructionHandle> lastInstruction(InstructionHandle target, int registry, InstructionHandle last)
+	/**
+	 * Get the closest instructions that can modify a register before the instruction target
+	 * @param target
+	 * @param register
+	 * @param last
+	 * @return
+	 */
+	public ArrayList<InstructionHandle> lastInstruction(InstructionHandle target, int register, InstructionHandle last)
 	{
 		ArrayList<InstructionHandle> result = new ArrayList<InstructionHandle>();
 		
@@ -174,7 +185,7 @@ public class FlowNode
 		{
 			this.visit();
 			
-			if(this.isModifierFor(registry))
+			if(this.isModifierFor(register))
 			{
 				last = this.getInstruction();
 			}
@@ -184,16 +195,14 @@ public class FlowNode
 				for(FlowNode branch : this.getBranches())
 				{
 					if(!branch.isVisited())
-						result.addAll(branch.cloneGraph().lastInstruction(target, registry, last));
+						result.addAll(branch.cloneGraph().lastInstruction(target, register, last));
 				}
 			}
 			else
 			{
 				FlowNode next = this.getNext();
 				if(next != null)
-					result.addAll(next.lastInstruction(target, registry, last));
-				else
-					result.add(last);
+					result.addAll(next.lastInstruction(target, register, last));
 			}
 		}
 		
