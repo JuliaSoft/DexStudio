@@ -2,6 +2,7 @@ package com.juliasoft.dexstudio.flow;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.juliasoft.amalia.dex.codegen.InstructionHandle;
 import com.juliasoft.amalia.dex.codegen.InstructionList;
@@ -43,7 +44,7 @@ public class FlowNode
 	/**
 	 * Array of following nodes/instructions
 	 */
-	private ArrayList<FlowNode> branches;
+	private List<FlowNode> branches;
 	
 	/**
 	 * Indicates if the node has a next instruction (one or more)
@@ -59,7 +60,7 @@ public class FlowNode
 	 * Simple constructor
 	 * @param ih the instruction to put into the node
 	 */
-	public FlowNode(InstructionHandle ih)
+	private FlowNode(InstructionHandle ih)
 	{
 		this(ih, new ArrayList<FlowNode>());
 	}
@@ -67,7 +68,7 @@ public class FlowNode
 	/**
 	 * Full-parameters constructor
 	 */
-	public FlowNode(InstructionHandle ih, ArrayList<FlowNode> branches)
+	private FlowNode(InstructionHandle ih, List<FlowNode> branches)
 	{
 		this.visited = false;
 		this.instruction = ih;
@@ -134,7 +135,7 @@ public class FlowNode
 				actual.addBranch(next);
 			}
 			
-			//Se l'istruzione attuale è una BranchInstruction
+			//Se l'istruzione attuale ï¿½ una BranchInstruction
 			if(ins instanceof BranchInstruction && !(ins instanceof FillArrayData))
 			{
 				InstructionHandle ih = ((BranchInstruction)ins).getTarget();
@@ -156,9 +157,15 @@ public class FlowNode
 	 * @param last
 	 * @return
 	 */
-	public ArrayList<InstructionHandle> lastInstruction(InstructionHandle target, int register, InstructionHandle last)
+	public List<InstructionHandle> lastInstruction(InstructionHandle target, int register)
 	{
-		ArrayList<InstructionHandle> result = new ArrayList<InstructionHandle>();
+		this.unvisit();
+		return this.lastInstruction(target, register, null);
+	}
+	
+	private List<InstructionHandle> lastInstruction(InstructionHandle target, int register, InstructionHandle last)
+	{
+		List<InstructionHandle> result = new ArrayList<InstructionHandle>();
 		
 		if(this.equals(new FlowNode(target)))
 		{
@@ -269,7 +276,7 @@ public class FlowNode
 		return instruction;
 	}
 	
-	public ArrayList<FlowNode> getBranches()
+	public List<FlowNode> getBranches()
 	{
 		return branches;
 	}
@@ -312,12 +319,12 @@ public class FlowNode
 		branches.add(branch);
 	}
 	
+	
+	
 	public FlowNode cloneGraph()
 	{
 		return this.cloneGraphSupport(new ArrayList<FlowNode>());
 	}
-	
-	
 	
 	private FlowNode cloneGraphSupport(ArrayList<FlowNode> graph)
 	{
@@ -331,6 +338,13 @@ public class FlowNode
 			clone.addBranch(branch.cloneGraphSupport(graph));
 		}
 		return clone;
+	}
+	
+	public void unvisit()
+	{
+		this.visited = false;
+		for(FlowNode branch : this.branches)
+			branch.unvisit();
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class AnalysisHyperlinkListener implements HyperlinkListener {
 				rend.setSelectedInstruction(ih);
 				rend.setSelectedRegister(register);
 				
-				ArrayList<InstructionHandle> result = AnalysisGraph.lastInstruction(ih, register, null);
+				ArrayList<InstructionHandle> result = new ArrayList<InstructionHandle>(AnalysisGraph.lastInstruction(ih, register));
 				
 				rend.setLastInstructions(result);
 				rend.showResults();
