@@ -16,17 +16,18 @@ import com.juliasoft.amalia.dex.codegen.MethodGen;
  */
 
 public class DexCodeTableModel implements TableModel {
-	private String[][] data;
+	private Object[][] data;
 	private String[] columnNames = { "Opcode", "Instruction", "DebugInfo" };
 
 	public DexCodeTableModel(MethodGen meth) {
+		
 		if (!(meth.isAbstract())) {
 			InstructionList insts = meth.getCode().getInstructionList();
-			data = new String[insts.size()][columnNames.length];
+			data = new Object[insts.size()][columnNames.length];
 			int i = 0;
 			for (InstructionHandle handle : insts) {
 				data[i][0] = handle.toString();
-				data[i][1] = handle.getInstruction().toHuman();
+				data[i][1] = handle;
 				data[i][2] = handle.getDebugInfoString();
 				i++;
 			}
@@ -51,7 +52,7 @@ public class DexCodeTableModel implements TableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		return false;
+		return (column == 1)? true : false;
 	}
 
 	@Override
@@ -60,7 +61,16 @@ public class DexCodeTableModel implements TableModel {
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		return String.class;
+		switch(columnIndex){
+			
+			case 0:
+			case 2: return String.class;
+			case 1: return InstructionHandle.class;
+			default:
+				throw new IllegalArgumentException();
+				
+			
+		}
 	}
 
 	@Override
