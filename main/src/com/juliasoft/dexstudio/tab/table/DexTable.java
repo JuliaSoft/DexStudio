@@ -145,7 +145,7 @@ public class DexTable extends JPanel {
 		
 		this(display, model);
 		
-		InstructionRenderer iRend = new InstructionRenderer(display, graph);
+		InstructionRenderer iRend = new InstructionRenderer(this, graph);
 		table.setDefaultEditor(InstructionHandle.class, iRend);
 		table.setDefaultRenderer(InstructionHandle.class, iRend);
 	}

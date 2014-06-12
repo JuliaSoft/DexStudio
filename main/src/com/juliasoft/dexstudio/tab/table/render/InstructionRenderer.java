@@ -5,23 +5,23 @@ import java.util.ArrayList;
 import javax.swing.JTextPane;
 
 import com.juliasoft.amalia.dex.codegen.InstructionHandle;
-import com.juliasoft.dexstudio.DexDisplay;
 import com.juliasoft.dexstudio.cell.DexInstructionCell;
 import com.juliasoft.dexstudio.flow.FlowNode;
+import com.juliasoft.dexstudio.tab.table.DexTable;
 import com.juliasoft.dexstudio.utils.InstructionState;
 
 @SuppressWarnings("serial")
 public class InstructionRenderer extends AbstractDexEditorRenderer {
 
-	private final DexDisplay display;
+	private final DexTable table;
 	private final FlowNode graph;
 	private InstructionHandle selectedInstruction;
 	private int register;
 	private ArrayList<InstructionHandle> lastInstructions;
 	
-	public InstructionRenderer(DexDisplay display, FlowNode graph) {
+	public InstructionRenderer(DexTable table, FlowNode graph) {
 		
-		this.display = display;
+		this.table = table;
 		this.graph = graph;
 		
 	}
@@ -39,6 +39,12 @@ public class InstructionRenderer extends AbstractDexEditorRenderer {
 	public void setLastInstructions(ArrayList<InstructionHandle> lastInstructions){
 		
 		this.lastInstructions = lastInstructions;
+	}
+	
+	public void showResults(){
+		
+		table.repaint();
+		
 	}
 	
 	@Override

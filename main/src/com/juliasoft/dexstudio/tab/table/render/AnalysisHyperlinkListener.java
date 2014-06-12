@@ -31,9 +31,13 @@ public class AnalysisHyperlinkListener implements HyperlinkListener {
 			if (code.matches("v[0-9]+")) {
 				int register = Integer.parseInt(code.substring(1));
 				
+				rend.setSelectedInstruction(ih);
+				rend.setSelectedRegister(register);
+				
 				ArrayList<InstructionHandle> result = AnalysisGraph.lastInstruction(ih, register, null);
 				
 				rend.setLastInstructions(result);
+				rend.showResults();
 				
 			} else
 				throw new IllegalArgumentException("Wrong Event");
