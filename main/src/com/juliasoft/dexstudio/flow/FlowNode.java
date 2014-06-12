@@ -21,6 +21,7 @@ import com.juliasoft.amalia.dex.codegen.istr.MoveInstruction;
 import com.juliasoft.amalia.dex.codegen.istr.MoveResultWide;
 import com.juliasoft.amalia.dex.codegen.istr.NewArray;
 import com.juliasoft.amalia.dex.codegen.istr.NewInstance;
+import com.juliasoft.amalia.dex.codegen.istr.ReturnInstruction;
 import com.juliasoft.amalia.dex.codegen.istr.SPut;
 import com.juliasoft.amalia.dex.codegen.istr.SPutBoolean;
 import com.juliasoft.amalia.dex.codegen.istr.SPutByte;
@@ -40,26 +41,14 @@ public class FlowNode
 	private InstructionHandle instruction;
 	
 	/**
-	 * The following node/instruction
-	 * (only if this is not a BranchInstruction)
-	 */
-	private FlowNode next;
-	
-	/**
 	 * Array of following nodes/instructions
-	 * (only if this is a BranchInstruction)
 	 */
 	private ArrayList<FlowNode> branches;
 	
 	/**
-	 * Indicates if the node has a next instruction
+	 * Indicates if the node has a next instruction (one or more)
 	 */
 	private boolean hasNext;
-	
-	/**
-	 * Indicates if the node is a BranchInstruction
-	 */
-	private boolean branchInstruction;
 	
 	/**
 	 * Indicates if the node is already visited
@@ -72,43 +61,18 @@ public class FlowNode
 	 */
 	public FlowNode(InstructionHandle ih)
 	{
-		this(ih, null, null, false);
-	}
-	
-	/**
-	 * 
-	 * @param ih the instruction to put into the node
-	 * @param next the next node/instruction
-	 */
-	public FlowNode(InstructionHandle ih, FlowNode next)
-	{
-		this(ih, next, null, false);
-	}
-	
-	/**
-	 * 
-	 * @param ih the instruction to put into the node
-	 * @param branches Array of branches (this make the node a BranchInstruction node)
-	 */
-	public FlowNode(InstructionHandle ih, ArrayList<FlowNode> branches)
-	{
-		this(ih, null, branches, true);
+		this(ih, new ArrayList<FlowNode>());
 	}
 	
 	/**
 	 * Full-parameters constructor
 	 */
-	private FlowNode(InstructionHandle ih, FlowNode next, ArrayList<FlowNode> branches, boolean branchInstruction)
+	public FlowNode(InstructionHandle ih, ArrayList<FlowNode> branches)
 	{
 		this.visited = false;
 		this.instruction = ih;
-		this.next = next;
 		this.branches = branches;
-		this.branchInstruction = branchInstruction;
-		if(next != null || (branches != null && branches.size() > 0))
-			this.hasNext = true;
-		else
-			this.hasNext = false;
+		this.hasNext = (branches != null && branches.size() > 0) ? true : false;
 	}
 	
 	/**
@@ -119,16 +83,9 @@ public class FlowNode
 	{
 		this.visited = false;
 		this.instruction = node.getInstruction();
-		if(node.isBranchInstruction())
+		for(FlowNode branch : node.getBranches())
 		{
-			for(FlowNode branch : node.getBranches())
-			{
-				this.addBranch(new FlowNode(branch));
-			}
-		}
-		else if(node.hasNext)
-		{
-			this.setNext(new FlowNode(node.getNext()));
+			this.addBranch(new FlowNode(branch));
 		}
 	}
 	
@@ -138,6 +95,10 @@ public class FlowNode
 	 */
 	public FlowNode(InstructionList il)
 	{
+		if(il.size() == 0)
+			throw new IllegalArgumentException("Lista di istruzioni vuota");
+		
+		//Creo tutti i nodi del grafo senza collegamenti
 		ArrayList<FlowNode> graph = new ArrayList<FlowNode>();
 		boolean start = true;
 		for(InstructionHandle ih : il)
@@ -152,35 +113,39 @@ public class FlowNode
 				graph.add(new FlowNode(ih));
 		}
 		
-		if(il.size() > 0)
+		//Scorro le istruzioni
+		Iterator<InstructionHandle> iterator = il.iterator();
+		//Ottengo il nodo dell'istruzione attuale..
+		FlowNode actual = graph.get(graph.indexOf(new FlowNode(iterator.next())));
+		
+		while(actual != null)
 		{
-			Iterator<InstructionHandle> iterator = il.iterator();
-			FlowNode actual = graph.get(graph.indexOf(new FlowNode(iterator.next())));
+			//..e quello della successiva nell'elenco
+			FlowNode next = (iterator.hasNext()) ? graph.get(graph.indexOf(new FlowNode(iterator.next()))) : null;
 			
-			while(actual != null)
+			CodegenInstruction ins = actual.getInstruction().getInstruction();
+			
+			//Unione dell'istruzione attuale con quella successiva
+			if(next!= null
+				&& !(ins instanceof SelectInstruction)
+				&& !(ins instanceof Goto)
+				&& !(ins instanceof ReturnInstruction))
 			{
-				FlowNode next = (iterator.hasNext()) ? graph.get(graph.indexOf(new FlowNode(iterator.next()))) : null;
-				
-				CodegenInstruction ins = actual.getInstruction().getInstruction();
-				
-				//Unisco l'istruzione successiva con quella attuale
-				if(next!= null && !(ins instanceof SelectInstruction) && !(ins instanceof Goto))
-				{
-					actual.setNext(next);
-				}
-				
-				//Capisco se l'istruzione attuale è una branch
-				if(ins instanceof BranchInstruction && !(ins instanceof FillArrayData))
-				{
-					InstructionHandle ih = ((BranchInstruction)ins).getTarget();
-					FlowNode target = graph.get(graph.indexOf(new FlowNode(ih)));
-					actual.addBranch(target);
-				}
-				
-				//TODO: Gestire i PseudoSelect
-				
-				actual = next;
+				actual.addBranch(next);
 			}
+			
+			//Se l'istruzione attuale è una BranchInstruction
+			if(ins instanceof BranchInstruction && !(ins instanceof FillArrayData))
+			{
+				InstructionHandle ih = ((BranchInstruction)ins).getTarget();
+				FlowNode target = graph.get(graph.indexOf(new FlowNode(ih)));
+				actual.addBranch(target);
+			}
+			
+			//TODO: Gestire i PseudoSelect
+			
+			//Il successivo diventa il nuovo attuale
+			actual = next;
 		}
 	}
 	
@@ -209,36 +174,20 @@ public class FlowNode
 				last = this.getInstruction();
 			}
 			
+			boolean isBranched = (this.getBranchesCount() > 1) ? true : false;
+			
 			if(this.hasNext)
 			{
-				if(this.isBranchInstruction())
+				for(FlowNode branch : this.getBranches())
 				{
-					for(FlowNode branch : this.getBranches())
+					if(!branch.isVisited())
 					{
-						if(!branch.isVisited())
-						{
-							addResult(result, branch.cloneGraph().lastInstruction(target, register, last));
-						}
+						result.addAll((isBranched ? branch.cloneGraph() : branch).lastInstruction(target, register, last));
 					}
-				}
-				else
-				{
-					FlowNode next = this.getNext();
-					if(next != null)
-						addResult(result, next.lastInstruction(target, register, last));
 				}
 			}
 		}
 		return result;
-	}
-	
-	private void addResult(ArrayList<InstructionHandle> base, ArrayList<InstructionHandle> add)
-	{
-		for(InstructionHandle ih : add)
-		{
-			if(!base.contains(ih))
-				base.add(ih);
-		}
 	}
 	
 	private boolean isModifierFor(int registry)
@@ -315,11 +264,6 @@ public class FlowNode
 	
 	//Getters
 	
-	public FlowNode getNext()
-	{
-		return this.next;
-	}
-	
 	public InstructionHandle getInstruction()
 	{
 		return instruction;
@@ -335,14 +279,14 @@ public class FlowNode
 		return branches.get(index);
 	}
 	
+	public int getBranchesCount()
+	{
+		return branches.size();
+	}
+	
 	public boolean isVisited()
 	{
 		return visited;
-	}
-	
-	public boolean isBranchInstruction()
-	{
-		return this.branchInstruction;
 	}
 	
 	public boolean hasNext()
@@ -350,25 +294,12 @@ public class FlowNode
 		return this.hasNext;
 	}
 	
+	
 	//Setters
 	
 	public void visit()
 	{
 		this.visited = true;
-	}
-	
-	public void branchInstruction()
-	{
-		this.branchInstruction = true;
-	}
-	
-	public void setNext(FlowNode next)
-	{
-		if(!this.isBranchInstruction() && this.getBranches() == null)
-		{
-			this.next = next;
-			this.hasNext = true;
-		}
 	}
 	
 	public void addBranch(FlowNode branch)
@@ -378,15 +309,7 @@ public class FlowNode
 		this.hasNext = true;
 		if(this.branches == null)
 			branches = new ArrayList<FlowNode>();
-		if(this.getNext() != null)
-		{
-			FlowNode nextNode = this.getNext();
-			this.next = null;
-			branches.add(nextNode);
-		}
 		branches.add(branch);
-		if(!this.isBranchInstruction())
-			this.branchInstruction();
 	}
 	
 	public FlowNode cloneGraph()
@@ -394,23 +317,18 @@ public class FlowNode
 		return this.cloneGraphSupport(new ArrayList<FlowNode>());
 	}
 	
-	public FlowNode cloneGraphSupport(ArrayList<FlowNode> graph)
+	
+	
+	private FlowNode cloneGraphSupport(ArrayList<FlowNode> graph)
 	{
 		FlowNode clone = new FlowNode(this.getInstruction());
 		if(graph.contains(clone))
 			return graph.get(graph.indexOf(clone));
 		graph.add(clone);
 		clone.visited = false;
-		if(this.isBranchInstruction())
+		for(FlowNode branch : this.getBranches())
 		{
-			for(FlowNode branch : this.getBranches())
-			{
-				clone.addBranch(branch.cloneGraphSupport(graph));
-			}
-		}
-		else if(this.hasNext)
-		{
-			clone.setNext(this.next.cloneGraphSupport(graph));
+			clone.addBranch(branch.cloneGraphSupport(graph));
 		}
 		return clone;
 	}
