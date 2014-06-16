@@ -77,7 +77,10 @@ public class DexTreeTab extends JScrollPane implements DexTab {
 		initLayout();
 		title = (meth.isConstructor()) ? Library
 				.printType(meth.getOwnerClass()) + "()" : meth.getName() + "()";
-		analysisGraph = new FlowNode(meth.getCode().getInstructionList());
+		
+		if(!meth.isAbstract())
+			analysisGraph = new FlowNode(meth.getCode().getInstructionList());
+		
 		content.add(new DexMethodHeader(frame, meth));
 		content.add(new DexTable(frame, new DexCodeTableModel(meth), analysisGraph));
 		ico = new ImageIcon("imgs/tab/method.png");
