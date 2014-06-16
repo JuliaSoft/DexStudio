@@ -6,6 +6,14 @@ import java.util.List;
 
 import com.juliasoft.amalia.dex.codegen.InstructionHandle;
 import com.juliasoft.amalia.dex.codegen.InstructionList;
+import com.juliasoft.amalia.dex.codegen.istr.APut;
+import com.juliasoft.amalia.dex.codegen.istr.APutBoolean;
+import com.juliasoft.amalia.dex.codegen.istr.APutByte;
+import com.juliasoft.amalia.dex.codegen.istr.APutChar;
+import com.juliasoft.amalia.dex.codegen.istr.APutObject;
+import com.juliasoft.amalia.dex.codegen.istr.APutShort;
+import com.juliasoft.amalia.dex.codegen.istr.APutWide;
+import com.juliasoft.amalia.dex.codegen.istr.AbstractArrayOp;
 import com.juliasoft.amalia.dex.codegen.istr.AbstractBinOp;
 import com.juliasoft.amalia.dex.codegen.istr.AbstractBinOp2AddrInstruction;
 import com.juliasoft.amalia.dex.codegen.istr.AbstractBinOpLit16Instruction;
@@ -17,8 +25,19 @@ import com.juliasoft.amalia.dex.codegen.istr.BranchInstruction;
 import com.juliasoft.amalia.dex.codegen.istr.CodegenInstruction;
 import com.juliasoft.amalia.dex.codegen.istr.ConstInstruction;
 import com.juliasoft.amalia.dex.codegen.istr.FillArrayData;
+import com.juliasoft.amalia.dex.codegen.istr.IPut;
+import com.juliasoft.amalia.dex.codegen.istr.IPutBoolean;
+import com.juliasoft.amalia.dex.codegen.istr.IPutByte;
+import com.juliasoft.amalia.dex.codegen.istr.IPutChar;
+import com.juliasoft.amalia.dex.codegen.istr.IPutObject;
+import com.juliasoft.amalia.dex.codegen.istr.IPutShort;
+import com.juliasoft.amalia.dex.codegen.istr.IPutWide;
 import com.juliasoft.amalia.dex.codegen.istr.InstanceOf;
+import com.juliasoft.amalia.dex.codegen.istr.InstanceOp;
+import com.juliasoft.amalia.dex.codegen.istr.MoveException;
 import com.juliasoft.amalia.dex.codegen.istr.MoveInstruction;
+import com.juliasoft.amalia.dex.codegen.istr.MoveResult;
+import com.juliasoft.amalia.dex.codegen.istr.MoveResultObject;
 import com.juliasoft.amalia.dex.codegen.istr.MoveResultWide;
 import com.juliasoft.amalia.dex.codegen.istr.NewArray;
 import com.juliasoft.amalia.dex.codegen.istr.NewInstance;
@@ -204,11 +223,23 @@ public class FlowNode
 		{
 			return true;
 		}
-		else if(ins instanceof ConstInstruction && ((ConstInstruction) ins).getRegister() == registry)
+		else if(ins instanceof MoveResult /*&& ((MoveResult) ins).getDstReg() == registry*/)
+		{
+			return true;
+		}
+		else if(ins instanceof MoveResultObject /*&& ((MoveResultObject) ins).getDstReg() == registry*/)
 		{
 			return true;
 		}
 		else if(ins instanceof MoveResultWide && ((MoveResultWide) ins).getRegister() == registry)
+		{
+			return true;
+		}
+		else if(ins instanceof MoveException /*&& ((MoveException) ins).getRegister() == registry*/)
+		{
+			return true;
+		}
+		else if(ins instanceof ConstInstruction && ((ConstInstruction) ins).getRegister() == registry)
 		{
 			return true;
 		}
@@ -222,6 +253,30 @@ public class FlowNode
 			 || staticOp instanceof SPutObject
 			 || staticOp instanceof SPutShort
 			 || staticOp instanceof SPutWide) && staticOp.getRegister() == registry)
+				return true;
+		}
+		else if(ins instanceof InstanceOp)
+		{
+			InstanceOp instanceOp = (InstanceOp) ins;
+			if((instanceOp instanceof IPut
+			 || instanceOp instanceof IPutBoolean
+			 || instanceOp instanceof IPutByte
+			 || instanceOp instanceof IPutChar
+			 || instanceOp instanceof IPutObject
+			 || instanceOp instanceof IPutShort
+			 || instanceOp instanceof IPutWide) && instanceOp.getValueReg() == registry)
+				return true;
+		}
+		else if(ins instanceof AbstractArrayOp)
+		{
+			AbstractArrayOp arrayOp = (AbstractArrayOp) ins;
+			if((arrayOp instanceof APut
+			 || arrayOp instanceof APutBoolean
+			 || arrayOp instanceof APutByte
+			 || arrayOp instanceof APutChar
+			 || arrayOp instanceof APutObject
+			 || arrayOp instanceof APutShort
+			 || arrayOp instanceof APutWide) && arrayOp.getRegisters()[0] == registry)
 				return true;
 		}
 		else if(ins instanceof InstanceOf && ((InstanceOf) ins).getDstReg() == registry)

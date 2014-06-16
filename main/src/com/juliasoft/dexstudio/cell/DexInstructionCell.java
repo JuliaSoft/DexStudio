@@ -19,7 +19,7 @@ public class DexInstructionCell extends JTextPane {
 			+ fontSize
 			+ "pt;color:" + color + ";}"
 			+ ".select{color:red;}"
-			+ ".result{background-color: green;}"
+			+ ".result{background-color: #66FF66;}"
 			+ "</style></head><body>";
 	private final String closeFormat = "</body></html>";
 	
