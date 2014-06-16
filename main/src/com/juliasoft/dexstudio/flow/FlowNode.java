@@ -34,13 +34,11 @@ import com.juliasoft.amalia.dex.codegen.istr.IPutShort;
 import com.juliasoft.amalia.dex.codegen.istr.IPutWide;
 import com.juliasoft.amalia.dex.codegen.istr.InstanceOf;
 import com.juliasoft.amalia.dex.codegen.istr.InstanceOp;
-import com.juliasoft.amalia.dex.codegen.istr.MoveException;
 import com.juliasoft.amalia.dex.codegen.istr.MoveInstruction;
-import com.juliasoft.amalia.dex.codegen.istr.MoveResult;
-import com.juliasoft.amalia.dex.codegen.istr.MoveResultObject;
 import com.juliasoft.amalia.dex.codegen.istr.MoveResultWide;
 import com.juliasoft.amalia.dex.codegen.istr.NewArray;
 import com.juliasoft.amalia.dex.codegen.istr.NewInstance;
+import com.juliasoft.amalia.dex.codegen.istr.PseudoSelect;
 import com.juliasoft.amalia.dex.codegen.istr.ReturnInstruction;
 import com.juliasoft.amalia.dex.codegen.istr.SPut;
 import com.juliasoft.amalia.dex.codegen.istr.SPutBoolean;
@@ -162,7 +160,16 @@ public class FlowNode
 				actual.addBranch(target);
 			}
 			
-			//TODO: Gestire i PseudoSelect
+			if(ins instanceof PseudoSelect)
+			{
+				
+				InstructionHandle[] ihs = ((PseudoSelect)ins).getTargets();
+				for(InstructionHandle ih : ihs)
+				{
+					FlowNode target = graph.get(graph.indexOf(new FlowNode(ih)));
+					actual.addBranch(target);
+				}
+			}
 			
 			//Il successivo diventa il nuovo attuale
 			actual = next;
@@ -223,19 +230,7 @@ public class FlowNode
 		{
 			return true;
 		}
-		else if(ins instanceof MoveResult /*&& ((MoveResult) ins).getDstReg() == registry*/)
-		{
-			return true;
-		}
-		else if(ins instanceof MoveResultObject /*&& ((MoveResultObject) ins).getDstReg() == registry*/)
-		{
-			return true;
-		}
 		else if(ins instanceof MoveResultWide && ((MoveResultWide) ins).getRegister() == registry)
-		{
-			return true;
-		}
-		else if(ins instanceof MoveException /*&& ((MoveException) ins).getRegister() == registry*/)
 		{
 			return true;
 		}
@@ -287,11 +282,11 @@ public class FlowNode
 		{
 			return true;
 		}
-		else if(ins instanceof NewInstance && true)	//TODO: getter di NewInstance
+		else if(ins instanceof NewInstance && ((NewInstance)ins).getDstReg() == registry)
 		{
 			return true;
 		}
-		else if(ins instanceof NewArray && true)	//TODO: getter di NewArray
+		else if(ins instanceof NewArray && ((NewArray)ins).getDstReg() == registry)
 		{
 			return true;
 		}
