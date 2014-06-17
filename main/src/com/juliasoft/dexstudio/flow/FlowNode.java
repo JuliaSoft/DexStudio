@@ -394,7 +394,8 @@ public class FlowNode
 	{
 		this.visited = false;
 		for(FlowNode branch : this.branches)
-			branch.unvisit();
+			if(branch.isVisited())
+				branch.unvisit();
 	}
 
 	@Override
